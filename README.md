@@ -1,5 +1,5 @@
-# n-gram
-A package to generate n-grams
+# Keyword Extractor
+A package to extract keywords from text
 
 [![Latest Stable Version](https://poser.pugx.org/ngram/ngram/v/stable)](https://packagist.org/packages/ngram/ngram)
 [![Build Status](https://travis-ci.org/iranianpep/ngram.svg?branch=master)](https://travis-ci.org/iranianpep/ngram)
@@ -21,5 +21,5 @@ A package to generate n-grams
 ## Usage
 -  To install ths package:
 ```
-composer require ngram/ngram
+composer require keyword-extractor/keyword-extractor
 ```

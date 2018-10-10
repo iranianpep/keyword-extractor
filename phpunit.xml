@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" backupGlobals="false" verbose="true" debug="true" processIsolation="true">
   <testsuites>
-    <testsuite name="Ngram Test Suite">
-      <directory suffix="Test.php">tests/Ngram/</directory>
+    <testsuite name="Keyword Extractor Test Suite">
+      <directory suffix="Test.php">tests/KeywordExtractor/</directory>
     </testsuite>
   </testsuites>
 
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">src/Ngram/</directory>
+      <directory suffix=".php">src/KeywordExtractor/</directory>
     </whitelist>
   </filter>
 

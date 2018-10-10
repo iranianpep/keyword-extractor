@@ -1,7 +1,7 @@
 {
-  "name": "ngram/ngram",
-  "description": "A packagist to generate n-grams",
-  "homepage": "https://github.com/iranianpep/ngram",
+  "name": "keyword-extractor/keyword-extractor",
+  "description": "A package to extract keywords from text",
+  "homepage": "https://github.com/iranianpep/keyword-extractor",
   "license": "MIT",
   "authors": [
     { "name": "Ehsan Abbasi", "email": "ehsan.abb@gmail.com" }
@@ -17,10 +17,10 @@
   },
   "autoload": {
     "psr-4": {
-      "Ngram\\": ["src/Ngram"]
+      "KeywordExtractor\\": ["src/KeywordExtractor"]
     }
   },
   "autoload-dev": {
-    "psr-4": {"Ngram\\": "tests/Ngram"}
+    "psr-4": {"KeywordExtractor\\": "tests/KeywordExtractor"}
   }
 }

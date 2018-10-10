@@ -1,14 +1,14 @@
 <?php
 
-namespace Ngram;
+namespace KeywordExtractor;
 
 use PHPUnit\Framework\TestCase;
 
-class GreetingTest extends TestCase
+class KeywordExtractorTest extends TestCase
 {
     public function testHello()
     {
-        $greeting = new Greeting();
+        $greeting = new KeywordExtractor();
 
         $this->assertEquals('hi', $greeting->hello());
     }

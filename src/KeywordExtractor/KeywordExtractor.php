@@ -1,8 +1,8 @@
 <?php
 
-namespace Ngram;
+namespace KeywordExtractor;
 
-class Greeting
+class KeywordExtractor
 {
     public function hello(): string
     {
