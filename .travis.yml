@@ -1,6 +1,6 @@
 env:
   global:
-    - CC_TEST_REPORTER_ID=70cdde47ba839105e434d9b932e5cdf3a070db2128c5b95fd23a3da131075197
+    - CC_TEST_REPORTER_ID=c516503883184828f7cf4f3768e665f0ec8b25241bb17be609c0004117de5eb0
 
 language: php
 
@@ -13,7 +13,7 @@ sudo: false
 
 addons:
   code_climate:
-    repo_token: 70cdde47ba839105e434d9b932e5cdf3a070db2128c5b95fd23a3da131075197
+    repo_token: c516503883184828f7cf4f3768e665f0ec8b25241bb17be609c0004117de5eb0
 
 install:
     - composer install
