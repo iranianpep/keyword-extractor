@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" backupGlobals="false" verbose="true" debug="true" processIsolation="true">
   <testsuites>
-    <testsuite name="PhpBaseProject Test Suite">
-      <directory suffix="Test.php">tests/PhpBaseProject/</directory>
+    <testsuite name="Ngram Test Suite">
+      <directory suffix="Test.php">tests/Ngram/</directory>
     </testsuite>
   </testsuites>
 
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">src/PhpBaseProject/</directory>
+      <directory suffix=".php">src/Ngram/</directory>
     </whitelist>
   </filter>
 
