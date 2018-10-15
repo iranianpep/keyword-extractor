@@ -22,7 +22,6 @@ class KeywordExtractor
      *
      * @param array  $tokens
      * @param        $ngramSize
-     * @param string $separator
      *
      * @return array
      */
@@ -142,15 +141,9 @@ class KeywordExtractor
         foreach ($words as $word) {
             if ($this->isWhitelisted($word) === true) {
                 $existingKeywords[] = $word;
-                continue;
+            } elseif ($this->isStopWord($word) === false && $this->isBlackListed($word) === false) {
+                $existingKeywords[] = $stemmer->stem($word);
             }
-
-            // remove stop words AND blocked ones
-            if ($this->isStopWord($word) === true || $this->isBlackListed($word) === true) {
-                continue;
-            }
-
-            $existingKeywords[] = $stemmer->stem($word);
         }
 
         return $existingKeywords;
