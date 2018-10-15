@@ -7,7 +7,8 @@
     { "name": "Ehsan Abbasi", "email": "ehsan.abb@gmail.com" }
   ],
   "require": {
-    "php": ">=7.1"
+    "php": ">=7.1",
+    "nlp-tools/nlp-tools": "^0.1.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^6",

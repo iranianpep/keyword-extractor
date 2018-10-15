@@ -6,53 +6,110 @@ use PHPUnit\Framework\TestCase;
 
 class KeywordExtractorTest extends TestCase
 {
-    public function testGenerateNgram()
+    public function testRun()
     {
         $keywordExtractor = new KeywordExtractor();
-        $input = ['this', 'is', 'an', 'example'];
+        $text = 'This is a simple sentence.';
+        $result = $keywordExtractor->run($text);
 
-        $ngrams = $keywordExtractor->generateNgrams($input, 1);
-        $this->assertEquals($input, $ngrams);
+        $this->assertEquals(['simpl', 'sentenc'], $result);
 
-        $expected = ['this is', 'is an', 'an example'];
+        $text = '';
+        $result = $keywordExtractor->run($text);
 
-        $ngrams = $keywordExtractor->generateNgrams($input, 2);
-        $this->assertEquals($expected, $ngrams);
-
-        $expected = ['this is an', 'is an example'];
-
-        $ngrams = $keywordExtractor->generateNgrams($input, 3);
-        $this->assertEquals($expected, $ngrams);
-
-        $expected = ['this is an example'];
-
-        $ngrams = $keywordExtractor->generateNgrams($input, 4);
-        $this->assertEquals($expected, $ngrams);
-
-        $input = ['this', 'is'];
-
-        $ngrams = $keywordExtractor->generateNgrams($input, 4);
-        $this->assertEquals([], $ngrams);
+        $this->assertEquals([], $result);
     }
-    
-    public function testRemovePunctuations()
+
+    public function testRunWithWhitelist()
     {
         $keywordExtractor = new KeywordExtractor();
-        $text = 'this is an example.';
+        $text = 'This is a simple sentence.';
+        $keywordExtractor->setWhitelist([]);
+        $result = $keywordExtractor->run($text);
 
-        $result = $keywordExtractor->removePunctuations($text);
-        $this->assertEquals('this is an example', $result);
+        $this->assertEquals(['simpl', 'sentenc'], $result);
 
+        $keywordExtractor->setWhitelist(['simple']);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['simple', 'sentenc'], $result);
+
+        $keywordExtractor->setWhitelist(['simple', 'is', 'dummy']);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['is', 'simple', 'sentenc'], $result);
+
+        $keywordExtractor->setWhitelist(['simple sentence']);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['simple sentence'], $result);
+    }
+
+    public function testRunWithBlacklist()
+    {
         $keywordExtractor = new KeywordExtractor();
-        $text = 'this is, an example.';
+        $text = 'This is a simple sentence.';
+        $keywordExtractor->setBlacklist([]);
+        $result = $keywordExtractor->run($text);
 
-        $result = $keywordExtractor->removePunctuations($text);
-        $this->assertEquals('this is an example', $result);
+        $this->assertEquals(['simpl', 'sentenc'], $result);
 
+        $keywordExtractor->setBlacklist(['simple']);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['sentenc'], $result);
+
+        $keywordExtractor->setBlacklist(['simple', 'is', 'dummy']);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['sentenc'], $result);
+
+        $keywordExtractor->setBlacklist(['simple sentence']);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals([], $result);
+    }
+
+    public function testRunWithWhitelistAndBlackList()
+    {
         $keywordExtractor = new KeywordExtractor();
-        $text = 'this is a text containing node.js.';
 
-        $result = $keywordExtractor->removePunctuations($text);
-        $this->assertEquals('this is a text containing nodejs', $result);
+        $text = 'Experience with all of the following technologies is a requirement:
+Linux
+PHP (incl. Composer, PHPUnit, Xdebug)
+nginx
+MySQL
+HTML, CSS, JavaScript
+Version Control Software (git, bzr, etc)
+
+Magento
+JavaScript libraries and frameworks such as jQuery, Ember or ReactJS
+PHP frameworks such as Zend, Laravel or CodeIgniter
+Phing, Ant, Grunt or other build management tools
+Docker, Kubernetes or other container environments
+Cloud services such as AWS, Google Cloud or Azure
+C, Python or other programming languages
+PostgreSQL, MongoDB
+PhpStorm, Eclipse or other IDE';
+
+        $keywordExtractor->setWhitelist(['version control', 'php', 'composer', 'google cloud']);
+        $keywordExtractor->setBlacklist(['software', 'etc']);
+
+        //for ($i = 0; $i < 500; $i++) {
+            $result = $keywordExtractor->run($text);
+        //}
+
+        $this->assertTrue(in_array('linux', $result));
+        $this->assertTrue(in_array('php', $result));
+        $this->assertTrue(in_array('composer', $result));
+        $this->assertTrue(in_array('css', $result));
+        $this->assertTrue(in_array('mongodb', $result));
+
+        $this->assertTrue(in_array('environ', $result));
+
+        $keywordExtractor->setBlacklist(['software', 'etc', 'environments']);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertFalse(in_array('environ', $result));
     }
 }
