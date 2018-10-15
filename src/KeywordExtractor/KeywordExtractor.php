@@ -614,10 +614,7 @@ class KeywordExtractor
                 }
             }
 
-            $ngrams[] = [
-                'token' => $token,
-                'indexes' => $subIndexes
-            ];
+            $ngrams[] = ['token' => $token, 'indexes' => $subIndexes];
         }
 
         return $ngrams;
@@ -662,7 +659,6 @@ class KeywordExtractor
     {
         $text = mb_strtolower($text, 'utf-8');
 
-        $stemmer = new PorterStemmer();
         $words = (new WhitespaceTokenizer())->tokenize($text);
 
         foreach ($words as $key => $word) {
@@ -671,7 +667,7 @@ class KeywordExtractor
 
         $keywords = [];
         foreach (self::NGRAM_SIZES as $ngramSize) {
-            $triNgrams = $this->generateNgrams($words, $ngramSize, ' ');
+            $triNgrams = $this->generateNgrams($words, $ngramSize);
 
             foreach ($triNgrams as $wordAndIndexes) {
                 $word = $wordAndIndexes['token'];
@@ -687,9 +683,15 @@ class KeywordExtractor
             }
         }
 
+        return $this->extractKeywordsFromWords($words, $keywords);
+    }
+
+    private function extractKeywordsFromWords($words, $existingKeywords = [])
+    {
+        $stemmer = new PorterStemmer();
         foreach ($words as $word) {
             if ($this->isWhitelisted($word) === true) {
-                $keywords[] = $word;
+                $existingKeywords[] = $word;
                 continue;
             }
 
@@ -698,10 +700,10 @@ class KeywordExtractor
                 continue;
             }
 
-            $keywords[] = $stemmer->stem($word);
+            $existingKeywords[] = $stemmer->stem($word);
         }
 
-        return $keywords;
+        return $existingKeywords;
     }
 
     /**
