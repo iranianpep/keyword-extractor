@@ -117,16 +117,11 @@ class KeywordExtractor
         $keywords = [];
         foreach (self::NGRAM_SIZES as $ngramSize) {
             foreach ($this->generateNgrams($words, $ngramSize) as $wordAndIndexes) {
-                $filter = false;
                 if ($this->isWhitelisted($wordAndIndexes['word']) === true) {
                     // can be added
                     $keywords[] = $wordAndIndexes['word'];
-                    $filter = true;
+                    $words = $this->filterWordsByIndexes($words, $wordAndIndexes['indexes']);
                 } elseif ($this->isBlackListed($wordAndIndexes['word']) === true) {
-                    $filter = true;
-                }
-
-                if ($filter === true) {
                     $words = $this->filterWordsByIndexes($words, $wordAndIndexes['indexes']);
                 }
             }
