@@ -26,9 +26,8 @@ class KeywordExtractor
      *
      * @return array
      */
-    private function generateNgrams(array $tokens, $ngramSize, $separator = ' '): array
+    private function generateNgrams(array $tokens, $ngramSize): array
     {
-        $separatorLength = strlen($separator);
         $length = count($tokens) - $ngramSize + 1;
 
         if ($length < 1) {
@@ -37,23 +36,27 @@ class KeywordExtractor
 
         $ngrams = [];
         for ($i = 0; $i < $length; $i++) {
-            // reset token and sub indexes
-            $word = '';
-            $subIndexes = [];
-            for ($j = 0; $j < $ngramSize; $j++) {
-                $subIndex = $i + $j;
-                $subIndexes[] = $subIndex;
-                $word .= $tokens[$subIndex];
-
-                if ($j < $ngramSize - $separatorLength) {
-                    $word .= $separator;
-                }
-            }
-
-            $ngrams[] = ['word' => $word, 'indexes' => $subIndexes];
+            $ngrams[] = $this->extractNgram($tokens, $ngramSize, $i);
         }
 
         return $ngrams;
+    }
+
+    private function extractNgram(array $tokens, $ngramSize, $currentIndex)
+    {
+        $word = '';
+        $subIndexes = [];
+        for ($j = 0; $j < $ngramSize; $j++) {
+            $subIndex = $currentIndex + $j;
+            $subIndexes[] = $subIndex;
+            $word .= $tokens[$subIndex];
+
+            if ($j < $ngramSize - 1) {
+                $word .= ' ';
+            }
+        }
+
+        return ['word' => $word, 'indexes' => $subIndexes];
     }
 
     private function removePunctuation($word): string
