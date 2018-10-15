@@ -602,19 +602,19 @@ class KeywordExtractor
         $ngrams = [];
         for ($i = 0; $i < $length; $i++) {
             // reset token and sub indexes
-            $token = '';
+            $word = '';
             $subIndexes = [];
             for ($j = 0; $j < $ngramSize; $j++) {
                 $subIndex = $i + $j;
                 $subIndexes[] = $subIndex;
-                $token .= $tokens[$subIndex];
+                $word .= $tokens[$subIndex];
 
                 if ($j < $ngramSize - $separatorLength) {
-                    $token .= $separator;
+                    $word .= $separator;
                 }
             }
 
-            $ngrams[] = ['token' => $token, 'indexes' => $subIndexes];
+            $ngrams[] = ['word' => $word, 'indexes' => $subIndexes];
         }
 
         return $ngrams;
@@ -629,6 +629,15 @@ class KeywordExtractor
         ];
 
         return trim($word, " \t\n\r\0\x0B" . implode('', $searchFor));
+    }
+
+    private function removePunctuations($words)
+    {
+        foreach ($words as $key => $word) {
+            $words[$key] = $this->removePunctuation($word);
+        }
+
+        return $words;
     }
 
     private function isStopWord($word): bool
@@ -658,19 +667,21 @@ class KeywordExtractor
     public function run($text)
     {
         $text = mb_strtolower($text, 'utf-8');
-
         $words = (new WhitespaceTokenizer())->tokenize($text);
+        $words = $this->removePunctuations($words);
+        $result = $this->processNgrams($words);
 
-        foreach ($words as $key => $word) {
-            $words[$key] = $this->removePunctuation($word);
-        }
+        return $this->extractKeywordsFromWords($result['words'], $result['keywords']);
+    }
 
+    private function processNgrams($words)
+    {
         $keywords = [];
         foreach (self::NGRAM_SIZES as $ngramSize) {
             $triNgrams = $this->generateNgrams($words, $ngramSize);
 
             foreach ($triNgrams as $wordAndIndexes) {
-                $word = $wordAndIndexes['token'];
+                $word = $wordAndIndexes['word'];
 
                 if ($this->isWhitelisted($word) === true) {
                     // can be added
@@ -683,7 +694,7 @@ class KeywordExtractor
             }
         }
 
-        return $this->extractKeywordsFromWords($words, $keywords);
+        return ['words' => $words, 'keywords' => $keywords];
     }
 
     private function extractKeywordsFromWords($words, $existingKeywords = [])
