@@ -23,3 +23,18 @@ A package to extract keywords from text
 ```
 composer require keyword-extractor/keyword-extractor
 ```
+
+- Extract the keywords:
+```
+$keywordExtractor = new KeywordExtractor();
+$text = 'This is a simple sentence.';
+$result = $keywordExtractor->run($text);
+```
+
+The stemmed result after removing stop words and punctuations will be:
+```
+array (
+  0 => 'simpl',
+  1 => 'sentenc',
+)
+```
