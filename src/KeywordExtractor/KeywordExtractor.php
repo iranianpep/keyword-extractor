@@ -16,6 +16,9 @@ class KeywordExtractor
      */
     const NGRAM_SIZES = [3, 2];
 
+    const INDEXES_KEY = 'indexes';
+    const WORD_KEY = 'word';
+
     /**
      * Generate n-grams
      * Credits to https://github.com/yooper/php-text-analysis/blob/master/src/NGrams/NGramFactory.php
@@ -41,7 +44,14 @@ class KeywordExtractor
         return $ngrams;
     }
 
-    private function extractNgram(array $tokens, $ngramSize, $currentIndex)
+    /**
+     * @param array $tokens
+     * @param       $ngramSize
+     * @param       $currentIndex
+     *
+     * @return array
+     */
+    private function extractNgram(array $tokens, $ngramSize, $currentIndex): array
     {
         $word = '';
         $subIndexes = [];
@@ -55,9 +65,14 @@ class KeywordExtractor
             }
         }
 
-        return ['word' => $word, 'indexes' => $subIndexes];
+        return [self::WORD_KEY => $word, self::INDEXES_KEY => $subIndexes];
     }
 
+    /**
+     * @param $word
+     *
+     * @return string
+     */
     private function removePunctuation($word): string
     {
         $searchFor = [
@@ -69,7 +84,12 @@ class KeywordExtractor
         return trim($word, " \t\n\r\0\x0B" . implode('', $searchFor));
     }
 
-    private function removePunctuations($words)
+    /**
+     * @param $words
+     *
+     * @return mixed
+     */
+    private function removePunctuations($words): array
     {
         foreach ($words as $key => $word) {
             $words[$key] = $this->removePunctuation($word);
@@ -78,22 +98,43 @@ class KeywordExtractor
         return $words;
     }
 
+    /**
+     * @param $word
+     *
+     * @return bool
+     */
     private function isStopWord($word): bool
     {
         return in_array($word, $this->getStopWords());
     }
-    
+
+    /**
+     * @param $word
+     *
+     * @return bool
+     */
     private function isWhitelisted($word): bool
     {
         return in_array($word, $this->getWhitelist());
     }
 
+    /**
+     * @param $word
+     *
+     * @return bool
+     */
     private function isBlackListed($word): bool
     {
         return in_array($word, $this->getBlacklist());
     }
 
-    private function filterWordsByIndexes($words, $indexes)
+    /**
+     * @param $words
+     * @param $indexes
+     *
+     * @return mixed
+     */
+    private function filterWordsByIndexes($words, $indexes): array
     {
         foreach ($indexes as $index) {
             unset($words[$index]);
@@ -102,7 +143,12 @@ class KeywordExtractor
         return $words;
     }
 
-    public function run($text)
+    /**
+     * @param $text
+     *
+     * @return array
+     */
+    public function run($text): array
     {
         $text = mb_strtolower($text, 'utf-8');
         $words = (new WhitespaceTokenizer())->tokenize($text);
@@ -112,17 +158,22 @@ class KeywordExtractor
         return $this->extractKeywordsFromWords($result['words'], $result['keywords']);
     }
 
-    private function processNgrams($words)
+    /**
+     * @param $words
+     *
+     * @return array
+     */
+    private function processNgrams($words): array
     {
         $keywords = [];
         foreach (self::NGRAM_SIZES as $ngramSize) {
             foreach ($this->generateNgrams($words, $ngramSize) as $wordAndIndexes) {
-                if ($this->isWhitelisted($wordAndIndexes['word']) === true) {
+                if ($this->isWhitelisted($wordAndIndexes[self::WORD_KEY]) === true) {
                     // can be added
-                    $keywords[] = $wordAndIndexes['word'];
-                    $words = $this->filterWordsByIndexes($words, $wordAndIndexes['indexes']);
-                } elseif ($this->isBlackListed($wordAndIndexes['word']) === true) {
-                    $words = $this->filterWordsByIndexes($words, $wordAndIndexes['indexes']);
+                    $keywords[] = $wordAndIndexes[self::WORD_KEY];
+                    $words = $this->filterWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+                } elseif ($this->isBlackListed($wordAndIndexes[self::WORD_KEY]) === true) {
+                    $words = $this->filterWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
                 }
             }
         }
@@ -130,7 +181,13 @@ class KeywordExtractor
         return ['words' => $words, 'keywords' => $keywords];
     }
 
-    private function extractKeywordsFromWords($words, $existingKeywords = [])
+    /**
+     * @param       $words
+     * @param array $existingKeywords
+     *
+     * @return array
+     */
+    private function extractKeywordsFromWords($words, $existingKeywords = []): array
     {
         $stemmer = new PorterStemmer();
         foreach ($words as $word) {
