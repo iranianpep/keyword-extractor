@@ -18,6 +18,19 @@ class KeywordExtractorTest extends TestCase
         $result = $keywordExtractor->run($text);
 
         $this->assertEquals([], $result);
+
+        $text = '123 this text has got visual studio 2018 and 2019 and more numbers like 12 13 145';
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['text', 'visual', 'studio', 'number'], $result);
+
+        $keywordExtractor->setWhitelist(['visual studio 2018']);
+        $result = $keywordExtractor->run($text);
+        $this->assertEquals(['visual studio 2018', 'text', 'number'], $result);
+
+        $keywordExtractor->setWhitelist(['2018 and 2019']);
+        $result = $keywordExtractor->run($text);
+        $this->assertEquals(['2018 and 2019', 'text', 'visual', 'studio', 'number'], $result);
     }
 
     public function testRunWithWhitelist()

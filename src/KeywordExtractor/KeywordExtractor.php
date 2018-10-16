@@ -58,7 +58,10 @@ class KeywordExtractor
         for ($j = 0; $j < $ngramSize; $j++) {
             $subIndex = $currentIndex + $j;
             $subIndexes[] = $subIndex;
-            $word .= $tokens[$subIndex];
+
+            if (isset($tokens[$subIndex])) {
+                $word .= $tokens[$subIndex];
+            }
 
             if ($j < $ngramSize - 1) {
                 $word .= ' ';
@@ -93,6 +96,22 @@ class KeywordExtractor
     {
         foreach ($words as $key => $word) {
             $words[$key] = $this->removePunctuation($word);
+        }
+
+        return $words;
+    }
+
+    /**
+     * @param $words
+     *
+     * @return array
+     */
+    private function removeNumbers($words): array
+    {
+        foreach ($words as $key => $word) {
+            if (is_numeric($word) === true) {
+                unset($words[$key]);
+            }
         }
 
         return $words;
@@ -154,8 +173,9 @@ class KeywordExtractor
         $words = (new WhitespaceTokenizer())->tokenize($text);
         $words = $this->removePunctuations($words);
         $result = $this->processNgrams($words);
+        $words = $this->removeNumbers($result['words']);
 
-        return $this->extractKeywordsFromWords($result['words'], $result['keywords']);
+        return $this->extractKeywordsFromWords($words, $result['keywords']);
     }
 
     /**
@@ -167,7 +187,9 @@ class KeywordExtractor
     {
         $result = [];
         foreach (self::NGRAM_SIZES as $ngramSize) {
-            $result = array_merge($result, $this->processNgram($words, $ngramSize));
+            $keywords = isset($result['keywords']) ? $result['keywords'] : [];
+            $words = isset($result['words']) ? $result['words'] : $words;
+            $result = array_merge($result, $this->processNgram($words, $ngramSize, $keywords));
         }
 
         return $result;
@@ -176,12 +198,12 @@ class KeywordExtractor
     /**
      * @param array $words
      * @param       $ngramSize
+     * @param array $keywords
      *
      * @return array
      */
-    private function processNgram(array $words, $ngramSize)
+    private function processNgram(array $words, $ngramSize, array $keywords)
     {
-        $keywords = [];
         foreach ($this->generateNgrams($words, $ngramSize) as $wordAndIndexes) {
             if ($this->isWhitelisted($wordAndIndexes[self::WORD_KEY]) === true) {
                 // can be added
