@@ -165,16 +165,30 @@ class KeywordExtractor
      */
     private function processNgrams($words): array
     {
-        $keywords = [];
+        $result = [];
         foreach (self::NGRAM_SIZES as $ngramSize) {
-            foreach ($this->generateNgrams($words, $ngramSize) as $wordAndIndexes) {
-                if ($this->isWhitelisted($wordAndIndexes[self::WORD_KEY]) === true) {
-                    // can be added
-                    $keywords[] = $wordAndIndexes[self::WORD_KEY];
-                    $words = $this->filterWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
-                } elseif ($this->isBlackListed($wordAndIndexes[self::WORD_KEY]) === true) {
-                    $words = $this->filterWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
-                }
+            $result = array_merge($result, $this->processNgram($words, $ngramSize));
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $words
+     * @param       $ngramSize
+     *
+     * @return array
+     */
+    private function processNgram(array $words, $ngramSize)
+    {
+        $keywords = [];
+        foreach ($this->generateNgrams($words, $ngramSize) as $wordAndIndexes) {
+            if ($this->isWhitelisted($wordAndIndexes[self::WORD_KEY]) === true) {
+                // can be added
+                $keywords[] = $wordAndIndexes[self::WORD_KEY];
+                $words = $this->filterWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+            } elseif ($this->isBlackListed($wordAndIndexes[self::WORD_KEY]) === true) {
+                $words = $this->filterWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
             }
         }
 
