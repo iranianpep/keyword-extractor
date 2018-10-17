@@ -119,7 +119,7 @@ PhpStorm, Eclipse or other IDE';
         $keywordExtractor->setBlacklist(['software', 'etc']);
 
         //for ($i = 0; $i < 500; $i++) {
-            $result = $keywordExtractor->run($text);
+        $result = $keywordExtractor->run($text);
         //}
 
         $this->assertTrue(in_array('linux', $result));
