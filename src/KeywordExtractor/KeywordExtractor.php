@@ -12,7 +12,7 @@ class KeywordExtractor
     private $stopWords;
 
     /**
-     * order is important
+     * order is important.
      */
     const NGRAM_SIZES = [3, 2];
 
@@ -21,10 +21,10 @@ class KeywordExtractor
 
     /**
      * Generate n-grams
-     * Credits to https://github.com/yooper/php-text-analysis/blob/master/src/NGrams/NGramFactory.php
+     * Credits to https://github.com/yooper/php-text-analysis/blob/master/src/NGrams/NGramFactory.php.
      *
-     * @param array  $tokens
-     * @param        $ngramSize
+     * @param array $tokens
+     * @param       $ngramSize
      *
      * @return array
      */
@@ -79,16 +79,16 @@ class KeywordExtractor
     private function removePunctuation($word): string
     {
         $searchFor = [
-            '!','#','$','%','&','(',')','*','+',"'",',',
-            '\\','-','.','/',':',';','<','=','>','?','@',
-            '^','_','`','{','|','}','~','[',']'
+            '!', '#', '$', '%', '&', '(', ')', '*', '+', "'", ',',
+            '\\', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
+            '^', '_', '`', '{', '|', '}', '~', '[', ']',
         ];
 
         if (in_array($word, $searchFor) === true) {
             return '';
         }
 
-        return trim($word, " \t\n\r\0\x0B" . implode('', $searchFor));
+        return trim($word, " \t\n\r\0\x0B".implode('', $searchFor));
     }
 
     /**
@@ -180,7 +180,7 @@ class KeywordExtractor
 
         /**
          * get rid of empty elements in the array
-         * it happens when there is a punctuation after an email, and email and then punctuation get deleted
+         * it happens when there is a punctuation after an email, and email and then punctuation get deleted.
          */
         $words = $this->removeEmptyArrayElements($words);
         $result = $this->processNgrams($words);
@@ -295,7 +295,7 @@ class KeywordExtractor
     {
         if (!isset($this->stopWords)) {
             $stopWordsPath = __DIR__.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'stopwords-en.json';
-            $content = json_decode(file_get_contents($stopWordsPath), true) ;
+            $content = json_decode(file_get_contents($stopWordsPath), true);
 
             $this->setStopWords($content);
         }
@@ -319,6 +319,7 @@ class KeywordExtractor
     private function removeEmails($string):? string
     {
         $pattern = '/(?:[A-Za-z0-9!#$%&\'*+=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&\'*+=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[A-Za-z0-9-]*[A-Za-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/';
+
         return preg_replace($pattern, '', $string);
     }
 
