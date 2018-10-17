@@ -178,7 +178,10 @@ class KeywordExtractor
         $words = (new WhitespaceTokenizer())->tokenize($text);
         $words = $this->removePunctuations($words);
 
-        // get rid of empty elements in the array - it happens when there is a punctuation after an email, and email and then punctuation get deleted
+        /**
+         * get rid of empty elements in the array
+         * it happens when there is a punctuation after an email, and email and then punctuation get deleted
+         */
         $words = $this->removeEmptyArrayElements($words);
         $result = $this->processNgrams($words);
         $words = $this->removeNumbers($result['words']);
