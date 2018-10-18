@@ -10,6 +10,7 @@ class KeywordExtractor
     private $blacklist;
     private $whitelist;
     private $stopWords;
+    private $filter;
 
     /**
      * order is important
@@ -74,52 +75,6 @@ class KeywordExtractor
     /**
      * @param $word
      *
-     * @return string
-     */
-    private function removePunctuation($word): string
-    {
-        $searchFor = [
-            '!','#','$','%','&','(',')','*','+',"'",',',
-            '\\','-','.','/',':',';','<','=','>','?','@',
-            '^','_','`','{','|','}','~','[',']'
-        ];
-
-        return trim($word, " \t\n\r\0\x0B" . implode('', $searchFor));
-    }
-
-    /**
-     * @param $words
-     *
-     * @return mixed
-     */
-    private function removePunctuations($words): array
-    {
-        foreach ($words as $key => $word) {
-            $words[$key] = $this->removePunctuation($word);
-        }
-
-        return $words;
-    }
-
-    /**
-     * @param $words
-     *
-     * @return array
-     */
-    private function removeNumbers($words): array
-    {
-        foreach ($words as $key => $word) {
-            if (is_numeric($word) === true) {
-                unset($words[$key]);
-            }
-        }
-
-        return $words;
-    }
-
-    /**
-     * @param $word
-     *
      * @return bool
      */
     private function isStopWord($word): bool
@@ -148,21 +103,6 @@ class KeywordExtractor
     }
 
     /**
-     * @param $words
-     * @param $indexes
-     *
-     * @return mixed
-     */
-    private function filterWordsByIndexes($words, $indexes): array
-    {
-        foreach ($indexes as $index) {
-            unset($words[$index]);
-        }
-
-        return $words;
-    }
-
-    /**
      * @param $text
      *
      * @return array
@@ -171,9 +111,9 @@ class KeywordExtractor
     {
         $text = mb_strtolower($text, 'utf-8');
         $words = (new WhitespaceTokenizer())->tokenize($text);
-        $words = $this->removePunctuations($words);
+        $words = $this->getFilter()->removePunctuations($words);
         $result = $this->processNgrams($words);
-        $words = $this->removeNumbers($result['words']);
+        $words = $this->getFilter()->removeNumbers($result['words']);
 
         return $this->extractKeywordsFromWords($words, $result['keywords']);
     }
@@ -208,9 +148,9 @@ class KeywordExtractor
             if ($this->isWhitelisted($wordAndIndexes[self::WORD_KEY]) === true) {
                 // can be added
                 $keywords[] = $wordAndIndexes[self::WORD_KEY];
-                $words = $this->filterWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+                $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
             } elseif ($this->isBlackListed($wordAndIndexes[self::WORD_KEY]) === true) {
-                $words = $this->filterWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+                $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
             }
         }
 
@@ -298,5 +238,25 @@ class KeywordExtractor
     public function setStopWords(array $stopWords): void
     {
         $this->stopWords = $stopWords;
+    }
+
+    /**
+     * @return Filter|null
+     */
+    public function getFilter():? Filter
+    {
+        if (!isset($this->filter)) {
+            $this->setFilter(new Filter());
+        }
+
+        return $this->filter;
+    }
+
+    /**
+     * @param Filter $filter
+     */
+    public function setFilter(Filter $filter): void
+    {
+        $this->filter = $filter;
     }
 }
