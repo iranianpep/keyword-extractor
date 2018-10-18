@@ -104,4 +104,56 @@ class FilterTest extends TestCase
             );
         }
     }
+
+    public function testRemoveEmails()
+    {
+        $filter = new Filter();
+
+        $inputsOutputs = [
+            [
+                'i' => 'test@example.com.',
+                'o' => '.'
+            ],
+            [
+                'i' => 'this contains an email e.g. test@example.com.',
+                'o' => 'this contains an email e.g. .'
+            ],
+            [
+                'i' => 'this contains an email e.g. invalid@email.',
+                'o' => 'this contains an email e.g. invalid@email.'
+            ],
+            [
+                'i' => 'this contains two emails valid@gmail.com and valid2@gmail.com',
+                'o' => 'this contains two emails  and '
+            ],
+        ];
+
+        foreach ($inputsOutputs as $inputOutput) {
+            $this->assertEquals($inputOutput['o'], $filter->removeEmails($inputOutput['i']));
+        }
+    }
+
+    public function testRemoveEmptyArrayElements()
+    {
+        $filter = new Filter();
+
+        $inputsOutputs = [
+            [
+                'i' => [],
+                'o' => []
+            ],
+            [
+                'i' => ['test', 1, 0, '', '0'],
+                'o' => ['test', 1, 0, '0']
+            ],
+            [
+                'i' => ['test 0', 1, 0, ' test', '0', ' '],
+                'o' => ['test 0', 1, 0, ' test', '0']
+            ],
+        ];
+
+        foreach ($inputsOutputs as $inputOutput) {
+            $this->assertEquals($inputOutput['o'], $filter->removeEmptyArrayElements($inputOutput['i']));
+        }
+    }
 }
