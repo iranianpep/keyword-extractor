@@ -31,6 +31,16 @@ class KeywordExtractorTest extends TestCase
         $keywordExtractor->setWhitelist(['2018 and 2019']);
         $result = $keywordExtractor->run($text);
         $this->assertEquals(['2018 and 2019', 'text', 'visual', 'studio', 'number'], $result);
+
+        $text = 'This is a text with an email like: example@example.com in it.';
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['text', 'email'], $result);
+
+        $text = 'This is a text with two emails: example.example@example.com, and another@example.com.';
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['text', 'email'], $result);
     }
 
     public function testRunWithWhitelist()
@@ -109,7 +119,7 @@ PhpStorm, Eclipse or other IDE';
         $keywordExtractor->setBlacklist(['software', 'etc']);
 
         //for ($i = 0; $i < 500; $i++) {
-            $result = $keywordExtractor->run($text);
+        $result = $keywordExtractor->run($text);
         //}
 
         $this->assertTrue(in_array('linux', $result));

@@ -13,7 +13,7 @@ class KeywordExtractor
     private $filter;
 
     /**
-     * order is important
+     * order is important.
      */
     const NGRAM_SIZES = [3, 2];
 
@@ -22,10 +22,10 @@ class KeywordExtractor
 
     /**
      * Generate n-grams
-     * Credits to https://github.com/yooper/php-text-analysis/blob/master/src/NGrams/NGramFactory.php
+     * Credits to https://github.com/yooper/php-text-analysis/blob/master/src/NGrams/NGramFactory.php.
      *
-     * @param array  $tokens
-     * @param        $ngramSize
+     * @param array $tokens
+     * @param       $ngramSize
      *
      * @return array
      */
@@ -75,6 +75,59 @@ class KeywordExtractor
     /**
      * @param $word
      *
+<<<<<<< HEAD
+=======
+     * @return string
+     */
+    private function removePunctuation($word): string
+    {
+        $searchFor = [
+            '!', '#', '$', '%', '&', '(', ')', '*', '+', "'", ',',
+            '\\', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
+            '^', '_', '`', '{', '|', '}', '~', '[', ']',
+        ];
+
+        if (in_array($word, $searchFor) === true) {
+            return '';
+        }
+
+        return trim($word, " \t\n\r\0\x0B".implode('', $searchFor));
+    }
+
+    /**
+     * @param $words
+     *
+     * @return mixed
+     */
+    private function removePunctuations($words): array
+    {
+        foreach ($words as $key => $word) {
+            $words[$key] = $this->removePunctuation($word);
+        }
+
+        return $words;
+    }
+
+    /**
+     * @param $words
+     *
+     * @return array
+     */
+    private function removeNumbers($words): array
+    {
+        foreach ($words as $key => $word) {
+            if (is_numeric($word) === true) {
+                unset($words[$key]);
+            }
+        }
+
+        return $words;
+    }
+
+    /**
+     * @param $word
+     *
+>>>>>>> 4fca0c12d5c4c5acd3a1823b4a6c84240f8fece4
      * @return bool
      */
     private function isStopWord($word): bool
@@ -110,8 +163,19 @@ class KeywordExtractor
     public function run($text): array
     {
         $text = mb_strtolower($text, 'utf-8');
+        $text = $this->removeEmails($text);
         $words = (new WhitespaceTokenizer())->tokenize($text);
+<<<<<<< HEAD
         $words = $this->getFilter()->removePunctuations($words);
+=======
+        $words = $this->removePunctuations($words);
+
+        /**
+         * get rid of empty elements in the array
+         * it happens when there is a punctuation after an email, and email and then punctuation get deleted.
+         */
+        $words = $this->removeEmptyArrayElements($words);
+>>>>>>> 4fca0c12d5c4c5acd3a1823b4a6c84240f8fece4
         $result = $this->processNgrams($words);
         $words = $this->getFilter()->removeNumbers($result['words']);
 
@@ -224,7 +288,7 @@ class KeywordExtractor
     {
         if (!isset($this->stopWords)) {
             $stopWordsPath = __DIR__.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'stopwords-en.json';
-            $content = json_decode(file_get_contents($stopWordsPath), true) ;
+            $content = json_decode(file_get_contents($stopWordsPath), true);
 
             $this->setStopWords($content);
         }
@@ -241,6 +305,7 @@ class KeywordExtractor
     }
 
     /**
+<<<<<<< HEAD
      * @return Filter|null
      */
     public function getFilter():? Filter
@@ -258,5 +323,26 @@ class KeywordExtractor
     public function setFilter(Filter $filter): void
     {
         $this->filter = $filter;
+=======
+     * @param $string
+     *
+     * @return null|string
+     */
+    private function removeEmails($string):? string
+    {
+        $pattern = '/(?:[A-Za-z0-9!#$%&\'*+=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&\'*+=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[A-Za-z0-9-]*[A-Za-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/';
+
+        return preg_replace($pattern, '', $string);
+    }
+
+    /**
+     * @param array $words
+     *
+     * @return array
+     */
+    private function removeEmptyArrayElements(array $words): array
+    {
+        return array_filter($words, 'strlen');
+>>>>>>> 4fca0c12d5c4c5acd3a1823b4a6c84240f8fece4
     }
 }
