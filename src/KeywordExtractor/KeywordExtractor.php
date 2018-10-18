@@ -75,59 +75,6 @@ class KeywordExtractor
     /**
      * @param $word
      *
-<<<<<<< HEAD
-=======
-     * @return string
-     */
-    private function removePunctuation($word): string
-    {
-        $searchFor = [
-            '!', '#', '$', '%', '&', '(', ')', '*', '+', "'", ',',
-            '\\', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
-            '^', '_', '`', '{', '|', '}', '~', '[', ']',
-        ];
-
-        if (in_array($word, $searchFor) === true) {
-            return '';
-        }
-
-        return trim($word, " \t\n\r\0\x0B".implode('', $searchFor));
-    }
-
-    /**
-     * @param $words
-     *
-     * @return mixed
-     */
-    private function removePunctuations($words): array
-    {
-        foreach ($words as $key => $word) {
-            $words[$key] = $this->removePunctuation($word);
-        }
-
-        return $words;
-    }
-
-    /**
-     * @param $words
-     *
-     * @return array
-     */
-    private function removeNumbers($words): array
-    {
-        foreach ($words as $key => $word) {
-            if (is_numeric($word) === true) {
-                unset($words[$key]);
-            }
-        }
-
-        return $words;
-    }
-
-    /**
-     * @param $word
-     *
->>>>>>> 4fca0c12d5c4c5acd3a1823b4a6c84240f8fece4
      * @return bool
      */
     private function isStopWord($word): bool
