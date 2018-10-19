@@ -143,7 +143,7 @@ PhpStorm, Eclipse or other IDE';
         $keywordExtractor->setWhitelist(['jquery', 'iis']);
         $result = $keywordExtractor->run($text);
 
-        /**
+        /*
          * Did not use loop because if one of the tests fail, it's easier to find out which one failed
          */
         $this->assertTrue(in_array('javascript', $result) === true);
