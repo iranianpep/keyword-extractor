@@ -112,7 +112,7 @@ class KeywordExtractor
         $text = mb_strtolower($text, 'utf-8');
         $text = $this->getFilter()->removeEmails($text);
         $words = (new WhitespaceTokenizer())->tokenize($text);
-        $words = $this->getFilter()->removePunctuations($words);
+        $words = $this->getFilter()->removeRightPunctuations($words, $this->getWhitelist());
 
         /**
          * get rid of empty elements in the array

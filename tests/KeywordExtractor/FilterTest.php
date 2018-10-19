@@ -6,14 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class FilterTest extends TestCase
 {
-    public function testRemovePunctuations()
+    public function testRemoveRightPunctuations()
     {
         $filter = new Filter();
 
         $inputsOutputs = [
             [
                 'i' => ['test.', '.test', '.', '.test.', '', 'node.js?', 'node.js???', 'c#'],
-                'o' => ['test', 'test', '', 'test', '', 'node.js', 'node.js', 'c#'],
+                'o' => ['test', '.test', '', '.test', '', 'node.js', 'node.js', 'c#'],
             ],
             [
                 'i' => [],
@@ -25,12 +25,12 @@ class FilterTest extends TestCase
             ],
             [
                 'i' => ['visual studio 2018', 'knockout.js', '- knockout...js?'],
-                'o' => ['visual studio 2018', 'knockout.js', 'knockout...js'],
+                'o' => ['visual studio 2018', 'knockout.js', '- knockout...js'],
             ],
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->removePunctuations($inputOutput['i']));
+            $this->assertEquals($inputOutput['o'], $filter->removeRightPunctuations($inputOutput['i']));
         }
     }
 

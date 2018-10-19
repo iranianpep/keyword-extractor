@@ -9,26 +9,31 @@ class Filter
      *
      * @return string
      */
-    public function removePunctuation($word): string
+    public function removeRightPunctuation($word): string
     {
         $searchFor = [
-            '!', '$', '%', '&', '(', ')', '*', '+', "'", ',',
+            '!', '$', '%', '&', '(', ')', '*', "'", ',',
             '\\', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
             '^', '_', '`', '{', '|', '}', '~', '[', ']',
         ];
 
-        return trim($word, " \t\n\r\0\x0B".implode('', $searchFor));
+        return rtrim($word, " \t\n\r\0\x0B".implode('', $searchFor));
     }
 
     /**
-     * @param $words
+     * @param array $words
+     * @param array $whitelist
      *
      * @return array
      */
-    public function removePunctuations(array $words): array
+    public function removeRightPunctuations(array $words, array $whitelist = []): array
     {
         foreach ($words as $key => $word) {
-            $words[$key] = $this->removePunctuation($word);
+            if (in_array($word, $whitelist)) {
+                continue;
+            }
+
+            $words[$key] = $this->removeRightPunctuation($word);
         }
 
         return $words;
