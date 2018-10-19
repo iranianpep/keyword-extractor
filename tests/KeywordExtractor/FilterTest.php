@@ -13,20 +13,20 @@ class FilterTest extends TestCase
         $inputsOutputs = [
             [
                 'i' => ['test.', '.test', '.', '.test.', '', 'node.js?', 'node.js???', 'c#'],
-                'o' => ['test', 'test', '', 'test', '', 'node.js', 'node.js', 'c#']
+                'o' => ['test', 'test', '', 'test', '', 'node.js', 'node.js', 'c#'],
             ],
             [
                 'i' => [],
-                'o' => []
+                'o' => [],
             ],
             [
                 'i' => ['0', 0, '', 1],
-                'o' => ['0', 0, '', 1]
+                'o' => ['0', 0, '', 1],
             ],
             [
                 'i' => ['visual studio 2018', 'knockout.js', '- knockout...js?'],
-                'o' => ['visual studio 2018', 'knockout.js', 'knockout...js']
-            ]
+                'o' => ['visual studio 2018', 'knockout.js', 'knockout...js'],
+            ],
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
@@ -41,20 +41,20 @@ class FilterTest extends TestCase
         $inputsOutputs = [
             [
                 'i' => ['1'],
-                'o' => []
+                'o' => [],
             ],
             [
                 'i' => [1],
-                'o' => []
+                'o' => [],
             ],
             [
                 'i' => [1, 2, '1', '0', 0, '', 'test1', '1test', 'test1test', 'c#'],
-                'o' => ['', 'test1', '1test', 'test1test', 'c#']
+                'o' => ['', 'test1', '1test', 'test1test', 'c#'],
             ],
             [
                 'i' => [],
-                'o' => []
-            ]
+                'o' => [],
+            ],
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
@@ -69,31 +69,31 @@ class FilterTest extends TestCase
         $inputsOutputs = [
             [
                 'i' => [
-                    'words' => [1, 2, 'test', '1test', ''],
+                    'words'   => [1, 2, 'test', '1test', ''],
                     'indexes' => [1, 3],
                 ],
-                'o' => [1, 'test', '']
+                'o' => [1, 'test', ''],
             ],
             [
                 'i' => [
-                    'words' => [1, 2, 'test', '1test', ''],
+                    'words'   => [1, 2, 'test', '1test', ''],
                     'indexes' => [0, 1, 2, 3, 4, 5, 6],
                 ],
-                'o' => []
+                'o' => [],
             ],
             [
                 'i' => [
-                    'words' => [],
+                    'words'   => [],
                     'indexes' => [0, 1, 2, 3, 4, 5, 6],
                 ],
-                'o' => []
+                'o' => [],
             ],
             [
                 'i' => [
-                    'words' => [1, 2, 'test', '1test', ''],
+                    'words'   => [1, 2, 'test', '1test', ''],
                     'indexes' => [],
                 ],
-                'o' => [1, 2, 'test', '1test', '']
+                'o' => [1, 2, 'test', '1test', ''],
             ],
         ];
 
@@ -112,19 +112,19 @@ class FilterTest extends TestCase
         $inputsOutputs = [
             [
                 'i' => 'test@example.com.',
-                'o' => '.'
+                'o' => '.',
             ],
             [
                 'i' => 'this contains an email e.g. test@example.com.',
-                'o' => 'this contains an email e.g. .'
+                'o' => 'this contains an email e.g. .',
             ],
             [
                 'i' => 'this contains an email e.g. invalid@email.',
-                'o' => 'this contains an email e.g. invalid@email.'
+                'o' => 'this contains an email e.g. invalid@email.',
             ],
             [
                 'i' => 'this contains two emails valid@gmail.com and valid2@gmail.com',
-                'o' => 'this contains two emails  and '
+                'o' => 'this contains two emails  and ',
             ],
         ];
 
@@ -140,15 +140,15 @@ class FilterTest extends TestCase
         $inputsOutputs = [
             [
                 'i' => [],
-                'o' => []
+                'o' => [],
             ],
             [
                 'i' => ['test', 1, 0, '', '0', 'c#'],
-                'o' => ['test', 1, 0, '0', 'c#']
+                'o' => ['test', 1, 0, '0', 'c#'],
             ],
             [
                 'i' => ['test 0', 1, 0, ' test', '0', ' '],
-                'o' => ['test 0', 1, 0, ' test', '0']
+                'o' => ['test 0', 1, 0, ' test', '0'],
             ],
         ];
 
