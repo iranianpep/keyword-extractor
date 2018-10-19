@@ -12,8 +12,8 @@ class FilterTest extends TestCase
 
         $inputsOutputs = [
             [
-                'i' => ['test.', '.test', '.', '.test.', '', 'node.js?', 'node.js???'],
-                'o' => ['test', 'test', '', 'test', '', 'node.js', 'node.js']
+                'i' => ['test.', '.test', '.', '.test.', '', 'node.js?', 'node.js???', 'c#'],
+                'o' => ['test', 'test', '', 'test', '', 'node.js', 'node.js', 'c#']
             ],
             [
                 'i' => [],
@@ -48,8 +48,8 @@ class FilterTest extends TestCase
                 'o' => []
             ],
             [
-                'i' => [1, 2, '1', '0', 0, '', 'test1', '1test', 'test1test'],
-                'o' => ['', 'test1', '1test', 'test1test']
+                'i' => [1, 2, '1', '0', 0, '', 'test1', '1test', 'test1test', 'c#'],
+                'o' => ['', 'test1', '1test', 'test1test', 'c#']
             ],
             [
                 'i' => [],
@@ -143,8 +143,8 @@ class FilterTest extends TestCase
                 'o' => []
             ],
             [
-                'i' => ['test', 1, 0, '', '0'],
-                'o' => ['test', 1, 0, '0']
+                'i' => ['test', 1, 0, '', '0', 'c#'],
+                'o' => ['test', 1, 0, '0', 'c#']
             ],
             [
                 'i' => ['test 0', 1, 0, ' test', '0', ' '],
