@@ -91,6 +91,19 @@ class KeywordExtractorTest extends TestCase
         $result = $keywordExtractor->run($text);
 
         $this->assertEquals([], $result);
+
+        $text = 'Exciting opportunity';
+        $keywordExtractor->setBlacklist([]);
+        $keywordExtractor->setWhitelist([]);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['excit', 'opportun'], $result);
+
+        $keywordExtractor->setBlacklist(['opportun']);
+
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals(['excit'], $result);
     }
 
     public function testRunWithWhitelistAndBlackList()

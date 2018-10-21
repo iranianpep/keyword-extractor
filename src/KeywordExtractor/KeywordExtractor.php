@@ -2,6 +2,7 @@
 
 namespace KeywordExtractor;
 
+use KeywordExtractor\Modifiers\ModifierInterface;
 use NlpTools\Stemmers\PorterStemmer;
 use NlpTools\Tokenizers\WhitespaceTokenizer;
 
@@ -11,6 +12,7 @@ class KeywordExtractor
     private $whitelist;
     private $stopWords;
     private $filter;
+    private $modifiers;
 
     /**
      * order is important.
@@ -177,6 +179,12 @@ class KeywordExtractor
             if ($this->isWhitelisted($word) === true) {
                 $existingKeywords[] = $word;
             } elseif ($this->isStopWord($word) === false && $this->isBlackListed($word) === false) {
+                $stemmedWord = $stemmer->stem($word);
+
+                if ($this->isBlackListed($stemmedWord) === true) {
+                    continue;
+                }
+
                 $existingKeywords[] = $stemmer->stem($word);
             }
         }
@@ -265,5 +273,32 @@ class KeywordExtractor
     public function setFilter(Filter $filter): void
     {
         $this->filter = $filter;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getModifiers():? array
+    {
+        return $this->modifiers;
+    }
+
+    /**
+     * @param array $modifiers
+     */
+    public function setModifiers(array $modifiers): void
+    {
+        $this->modifiers = $modifiers;
+    }
+
+    /**
+     * @param ModifierInterface $modifier
+     */
+    public function addModifier(ModifierInterface $modifier): void
+    {
+        $existingModifiers = $this->getModifiers();
+        $existingModifiers[] = $modifier;
+
+        $this->setModifiers($existingModifiers);
     }
 }
