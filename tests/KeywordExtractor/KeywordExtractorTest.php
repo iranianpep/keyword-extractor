@@ -184,12 +184,12 @@ PhpStorm, Eclipse or other IDE';
         $this->assertTrue(in_array('ios7', $result) === true);
         $this->assertTrue(in_array('f#', $result) === true);
 
-        $text = 'Milestone IT is an industry leader in the provision of the highest quality software engineers. 
+        $text = 'Milestone IT is an industry leader in the provision of the highest quality software engineers.
         Right now,  we are seeking 2 developers to work on-site delivering Backend Microservices in Node.
-  
+
 What do you need for these ones?
 
-Demonstrated experience delivering in React or React Native - if you don\'t have React Native, this is a great opportunity to learn 
+Demonstrated experience delivering in React or React Native - if you don\'t have React Native, this is a great opportunity to learn
 Proven experience in end-to-end app development, with a natural flair for UX (PHP, HTML5, JavaScript, Node, CSS and/or equivalents)
 Experience in best practice UI and responsive design with a passion for detail and aesthetics
 Experience in rapid prototyping within frameworks such as React.js or React Native
@@ -199,7 +199,7 @@ Experience managing applications on Amazon Web Services is held in high regard
 Experience integrating chatbots and/or virtual assistants is a plus
 Examples of work on GitHub is highly regarded
 Redux, React, Angular, Node, etc etc.
-If you want to be a part of this exciting and high-octane time, with a great business 
+If you want to be a part of this exciting and high-octane time, with a great business
 who has great people than this is an opportunity you need to explore further...';
 
         // reset whitelist and blacklist
