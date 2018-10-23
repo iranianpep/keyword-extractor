@@ -129,21 +129,42 @@ class KeywordExtractor
 
         //$words = $this->processNgrams($words);
 
-        //$words = $this->getFilter()->removeNumbers($words);
-
+        $stemmer = new PorterStemmer();
         foreach ([3, 2, 1] as $ngramSize) {
             foreach ($this->generateNgrams($words, $ngramSize) as $wordAndIndexes) {
-                if ($this->isWhitelisted($wordAndIndexes[self::WORD_KEY]) === true) {
-                    // can be added
-                    $this->addKeyword($wordAndIndexes[self::WORD_KEY]);
-                    $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
-                } elseif ($this->isBlackListed($wordAndIndexes[self::WORD_KEY]) === true) {
-                    $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+                $word = $wordAndIndexes[self::WORD_KEY];
+                if ($ngramSize === 1) {
+                    if (is_numeric($word)) {
+                        continue;
+                    }
+
+                    if ($this->isWhitelisted($word) === true) {
+                        $this->addKeyword($word);
+                    } elseif ($this->isStopWord($word) === false && $this->isBlackListed($word) === false) {
+                        $stemmedWord = $stemmer->stem($word);
+
+                        if ($this->isBlackListed($stemmedWord) === true) {
+                            continue;
+                        }
+
+                        $this->addKeyword($stemmer->stem($word));
+                    }
+                } else {
+                    if ($this->isWhitelisted($word) === true) {
+                        // can be added
+                        $this->addKeyword($word);
+                        $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+                    } elseif ($this->isBlackListed($word) === true) {
+                        $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+                    }
                 }
             }
         }
 
-        return $this->extractKeywordsFromWords($words);
+        //$words = $this->getFilter()->removeNumbers($words);
+
+        return $this->getKeywords();
+        //return $this->extractKeywordsFromWords($words);
     }
 
     /**
