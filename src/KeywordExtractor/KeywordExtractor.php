@@ -2,7 +2,12 @@
 
 namespace KeywordExtractor;
 
+use KeywordExtractor\Modifiers\Filters\EmailFilter;
+use KeywordExtractor\Modifiers\Filters\EmptyFilter;
+use KeywordExtractor\Modifiers\Filters\PunctuationFilter;
 use KeywordExtractor\Modifiers\ModifierInterface;
+use KeywordExtractor\Modifiers\Transformers\LowerCaseTransformer;
+use KeywordExtractor\Modifiers\Transformers\TokenTransformer;
 use NlpTools\Stemmers\PorterStemmer;
 use NlpTools\Tokenizers\WhitespaceTokenizer;
 
@@ -105,33 +110,38 @@ class KeywordExtractor
         return in_array($word, $this->getBlacklist());
     }
 
+    private function getDefaultModifiers()
+    {
+        return [
+            new LowerCaseTransformer(),
+            new EmailFilter(),
+            new TokenTransformer(),
+            new PunctuationFilter(),
+            new EmptyFilter()
+        ];
+    }
+
     /**
-     * @param $text
+     * @param $input
      *
      * @return array
      */
-    public function run($text): array
+    public function run($input): array
     {
         // reset the keywords
         $this->keywords = [];
 
-        $text = mb_strtolower($text, 'utf-8');
-        $text = $this->getFilter()->removeEmails($text);
-        $words = (new WhitespaceTokenizer())->tokenize($text);
-        $words = $this->getFilter()->removeRightPunctuations($words, $this->getWhitelist());
+        foreach ($this->getDefaultModifiers() as $modifier) {
+            if (!$modifier instanceof ModifierInterface) {
+                continue;
+            }
 
-        /**
-         * get rid of empty elements in the array
-         * it happens when there is a punctuation after an email, and email and then punctuation get deleted.
-         */
-        $words = $this->getFilter()->removeEmptyArrayElements($words);
-
-
-        //$words = $this->processNgrams($words);
+            $input = $modifier->modify($input);
+        }
 
         $stemmer = new PorterStemmer();
         foreach ([3, 2, 1] as $ngramSize) {
-            foreach ($this->generateNgrams($words, $ngramSize) as $wordAndIndexes) {
+            foreach ($this->generateNgrams($input, $ngramSize) as $wordAndIndexes) {
                 $word = $wordAndIndexes[self::WORD_KEY];
                 if ($ngramSize === 1) {
                     if (is_numeric($word)) {
@@ -147,80 +157,17 @@ class KeywordExtractor
                             continue;
                         }
 
-                        $this->addKeyword($stemmer->stem($word));
+                        $this->addKeyword($stemmedWord);
                     }
                 } else {
                     if ($this->isWhitelisted($word) === true) {
                         // can be added
                         $this->addKeyword($word);
-                        $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+                        $input = $this->getFilter()->removeWordsByIndexes($input, $wordAndIndexes[self::INDEXES_KEY]);
                     } elseif ($this->isBlackListed($word) === true) {
-                        $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
+                        $input = $this->getFilter()->removeWordsByIndexes($input, $wordAndIndexes[self::INDEXES_KEY]);
                     }
                 }
-            }
-        }
-
-        //$words = $this->getFilter()->removeNumbers($words);
-
-        return $this->getKeywords();
-        //return $this->extractKeywordsFromWords($words);
-    }
-
-    /**
-     * @param $words
-     *
-     * @return array
-     */
-    private function processNgrams($words): array
-    {
-        foreach (self::NGRAM_SIZES as $ngramSize) {
-            $words = $this->processNgram($words, $ngramSize);
-        }
-
-        return $words;
-    }
-
-    /**
-     * @param array $words
-     * @param       $ngramSize
-     *
-     * @return array
-     */
-    private function processNgram(array $words, $ngramSize)
-    {
-        foreach ($this->generateNgrams($words, $ngramSize) as $wordAndIndexes) {
-            if ($this->isWhitelisted($wordAndIndexes[self::WORD_KEY]) === true) {
-                // can be added
-                $this->addKeyword($wordAndIndexes[self::WORD_KEY]);
-                $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
-            } elseif ($this->isBlackListed($wordAndIndexes[self::WORD_KEY]) === true) {
-                $words = $this->getFilter()->removeWordsByIndexes($words, $wordAndIndexes[self::INDEXES_KEY]);
-            }
-        }
-
-        return $words;
-    }
-
-    /**
-     * @param       $words
-     *
-     * @return array
-     */
-    private function extractKeywordsFromWords($words): array
-    {
-        $stemmer = new PorterStemmer();
-        foreach ($words as $word) {
-            if ($this->isWhitelisted($word) === true) {
-                $this->addKeyword($word);
-            } elseif ($this->isStopWord($word) === false && $this->isBlackListed($word) === false) {
-                $stemmedWord = $stemmer->stem($word);
-
-                if ($this->isBlackListed($stemmedWord) === true) {
-                    continue;
-                }
-
-                $this->addKeyword($stemmer->stem($word));
             }
         }
 
