@@ -13,7 +13,7 @@ class PunctuationFilterTest extends TestCase
         $inputsOutputs = [
             [
                 'i' => ['test.', '.test', '.', '.test.', '', 'node.js?', 'node.js???', 'c#'],
-                'o' => ['test', '.test', '', '.test', '', 'node.js', 'node.js', 'c#'],
+                'o' => ['test', '.test', '.test', 'node.js', 'node.js', 'c#'],
             ],
             [
                 'i' => [],
@@ -21,7 +21,7 @@ class PunctuationFilterTest extends TestCase
             ],
             [
                 'i' => ['0', 0, '', 1],
-                'o' => ['0', 0, '', 1],
+                'o' => ['0', 0, 1],
             ],
             [
                 'i' => ['visual studio 2018', 'knockout.js', '- knockout...js?'],
@@ -30,7 +30,7 @@ class PunctuationFilterTest extends TestCase
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyArray($inputOutput['i']));
+            $this->assertEquals($inputOutput['o'], $filter->modifyTokens($inputOutput['i']));
         }
     }
 }

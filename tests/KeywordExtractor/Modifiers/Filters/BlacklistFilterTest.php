@@ -4,36 +4,28 @@ namespace KeywordExtractor\Modifiers\Filters;
 
 use PHPUnit\Framework\TestCase;
 
-class NumberFilterTest extends TestCase
+class BlacklistFilterTest extends TestCase
 {
     public function testModifyText()
     {
-        $filter = new NumberFilter();
+        $filter = new BlacklistFilter(['team', 'lead', 'net', 'leading team']);
 
         $inputsOutputs = [
             [
-                'i' => '1',
+                'i' => 'leading',
+                'o' => 'leading',
+            ],
+            [
+                'i' => 'team',
                 'o' => '',
             ],
             [
-                'i' => '123',
+                'i' => 'leading team',
                 'o' => '',
             ],
             [
-                'i' => 1,
-                'o' => '',
-            ],
-            [
-                'i' => 123,
-                'o' => '',
-            ],
-            [
-                'i' => 'test1',
-                'o' => 'test1',
-            ],
-            [
-                'i' => 'test 1',
-                'o' => 'test 1',
+                'i' => 'a leading team',
+                'o' => 'a leading team',
             ],
         ];
 

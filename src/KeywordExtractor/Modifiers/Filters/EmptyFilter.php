@@ -4,25 +4,12 @@ namespace KeywordExtractor\Modifiers\Filters;
 
 class EmptyFilter extends AbstractFilter
 {
-    public function modifyArray(array $array)
+    public function modifyToken($token)
     {
-        foreach ($array as $key => $word) {
-            $word = $this->modifyText($word);
-
-            if ($word === '') {
-                unset($array[$key]);
-            }
-        }
-
-        return array_values($array);
-    }
-
-    public function modifyText($text)
-    {
-        if ($text === '' || ctype_space($text)) {
+        if ($token === '' || ctype_space($token)) {
             return '';
         }
 
-        return $text;
+        return $token;
     }
 }

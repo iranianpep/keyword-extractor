@@ -38,7 +38,7 @@ class EmptyFilterTest extends TestCase
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyText($inputOutput['i']));
+            $this->assertEquals($inputOutput['o'], $filter->modifyToken($inputOutput['i']));
         }
     }
 
@@ -62,7 +62,7 @@ class EmptyFilterTest extends TestCase
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyArray($inputOutput['i']));
+            $this->assertEquals($inputOutput['o'], $filter->modifyTokens($inputOutput['i']));
         }
     }
 }

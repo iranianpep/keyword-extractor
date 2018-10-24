@@ -11,9 +11,9 @@ class PunctuationFilter extends AbstractFilter
         $this->setPunctuations($punctuations);
     }
 
-    public function modifyText($text)
+    public function modifyToken($token)
     {
-        return rtrim($text, " \t\n\r\0\x0B".implode('', $this->getPunctuations()));
+        return rtrim($token, " \t\n\r\0\x0B".implode('', $this->getPunctuations()));
     }
 
     /**

@@ -15,9 +15,9 @@ class EmailFilter extends AbstractFilter
         $this->setPattern($pattern);
     }
 
-    public function modifyText($text)
+    public function modifyToken($token)
     {
-        return preg_replace($this->getPattern(), '', $text);
+        return preg_replace($this->getPattern(), '', $token);
     }
 
     /**

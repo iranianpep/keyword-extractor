@@ -30,7 +30,7 @@ class EmailFilterTest extends TestCase
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyText($inputOutput['i']));
+            $this->assertEquals($inputOutput['o'], $filter->modifyToken($inputOutput['i']));
         }
     }
 }

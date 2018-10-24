@@ -6,7 +6,7 @@ use NlpTools\Tokenizers\WhitespaceTokenizer;
 
 class TokenTransformer extends AbstractTransformer
 {
-    public function modifyText($text)
+    public function modifyToken($text)
     {
         return (new WhitespaceTokenizer())->tokenize($text);
     }

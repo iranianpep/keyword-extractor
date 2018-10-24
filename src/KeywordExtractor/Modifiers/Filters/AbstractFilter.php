@@ -9,18 +9,22 @@ abstract class AbstractFilter implements ModifierInterface
     public function modify($input)
     {
         if (is_array($input) === true) {
-            return $this->modifyArray($input);
+            return $this->modifyTokens($input);
         } else {
-            return $this->modifyText($input);
+            return $this->modifyToken($input);
         }
     }
 
-    public function modifyArray(array $array)
+    public function modifyTokens(array $array)
     {
         foreach ($array as $key => $value) {
-            $array[$key] = $this->modifyText($value);
+            $array[$key] = $this->modifyToken($value);
+
+            if ($array[$key] === '') {
+                unset($array[$key]);
+            }
         }
 
-        return $array;
+        return array_values($array);
     }
 }

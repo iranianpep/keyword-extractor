@@ -4,12 +4,12 @@ namespace KeywordExtractor\Modifiers\Filters;
 
 class NumberFilter extends AbstractFilter
 {
-    public function modifyText($text)
+    public function modifyToken($token)
     {
-        if (is_numeric($text) === true) {
+        if (is_numeric($token) === true) {
             return '';
         }
 
-        return $text;
+        return $token;
     }
 }

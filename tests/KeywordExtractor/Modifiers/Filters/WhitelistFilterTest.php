@@ -4,36 +4,40 @@ namespace KeywordExtractor\Modifiers\Filters;
 
 use PHPUnit\Framework\TestCase;
 
-class NumberFilterTest extends TestCase
+class WhitelistFilterTest extends TestCase
 {
     public function testModifyText()
     {
-        $filter = new NumberFilter();
+        $filter = new WhitelistFilter(['php', 'c#', '.net']);
 
         $inputsOutputs = [
             [
-                'i' => '1',
+                'i' => 'leading',
                 'o' => '',
             ],
             [
-                'i' => '123',
+                'i' => 'team',
                 'o' => '',
             ],
             [
-                'i' => 1,
+                'i' => 'leading team',
                 'o' => '',
             ],
             [
-                'i' => 123,
+                'i' => 'c# dev',
                 'o' => '',
             ],
             [
-                'i' => 'test1',
-                'o' => 'test1',
+                'i' => 'c#',
+                'o' => 'c#',
             ],
             [
-                'i' => 'test 1',
-                'o' => 'test 1',
+                'i' => 'php',
+                'o' => 'php',
+            ],
+            [
+                'i' => 'a leading team',
+                'o' => '',
             ],
         ];
 
