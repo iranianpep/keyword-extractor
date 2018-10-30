@@ -114,9 +114,9 @@ class KeywordExtractor
     private function getDefaultModifiers()
     {
         return [
-            new LowerCaseTransformer(),
+            //new LowerCaseTransformer(),
             new EmailFilter(),
-            new TokenTransformer(),
+            //new TokenTransformer(),
             new PunctuationFilter(),
             new EmptyFilter(),
             new BlacklistFilter($this->getBlacklist())
@@ -171,12 +171,12 @@ class KeywordExtractor
                     if ($ngramSize > 1 && ($modifier instanceof BlacklistFilter || $modifier instanceof WhitelistFilter)) {
                         if ($modifier instanceof WhitelistFilter && !empty($word)) {
                             $this->addKeyword($word);
-
-                            // since it's whitelisted, ignore other modifiers
-                            break;
                         } elseif ($modifier instanceof BlacklistFilter && empty($word)) {
                             $input = $this->getFilter()->removeWordsByIndexes($input, $wordAndIndexes[self::INDEXES_KEY]);
                         }
+
+                        // since it's whitelisted or blacklisted, ignore other modifiers
+                        break;
                     }
                 }
 
