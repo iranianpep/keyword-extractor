@@ -6,6 +6,8 @@ use KeywordExtractor\Modifiers\ModifierInterface;
 
 abstract class AbstractFilter implements ModifierInterface
 {
+    abstract public function isInFilter($token) : bool;
+
     public function modify($input)
     {
         if (is_array($input) === true) {

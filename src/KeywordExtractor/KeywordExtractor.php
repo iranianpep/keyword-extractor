@@ -115,10 +115,11 @@ class KeywordExtractor
     {
         return [
             //new LowerCaseTransformer(),
-            new EmailFilter(),
+            //new EmailFilter(),
             //new TokenTransformer(),
             new PunctuationFilter(),
-            new EmptyFilter(),
+            //new EmptyFilter(),
+            //new WhitelistFilter($this->getWhitelist()),
             new BlacklistFilter($this->getBlacklist())
         ];
     }
@@ -156,7 +157,6 @@ class KeywordExtractor
         // n grams can be passed as an arg to the constructor
         foreach ([3, 2, 1] as $ngramSize) {
             foreach ($this->generateNgrams($input, $ngramSize) as $key => $wordAndIndexes) {
-
                 $word = $wordAndIndexes[self::WORD_KEY];
 
                 foreach ($this->getDefaultModifiers() as $modifier) {
@@ -164,14 +164,22 @@ class KeywordExtractor
                         continue;
                     }
 
+                    // for ngrams higher than 1, ignore the modifiers
+//                    if ($ngramSize > 1 && (!$modifier instanceof BlacklistFilter && !$modifier instanceof WhitelistFilter)) {
+//                        continue;
+//                    }
+
                     // TODO skip if $ngramSize > 1 and something else than BlacklistFilter or WhitelistFilter
 
-                    $word = $modifier->modify($word);
+                    $modifiedWord = $modifier->modify($word);
+
+                    if ($modifier instanceof WhitelistFilter && !empty($modifiedWord)) {
+                        $this->addKeyword($modifiedWord);
+                        break;
+                    }
 
                     if ($ngramSize > 1 && ($modifier instanceof BlacklistFilter || $modifier instanceof WhitelistFilter)) {
-                        if ($modifier instanceof WhitelistFilter && !empty($word)) {
-                            $this->addKeyword($word);
-                        } elseif ($modifier instanceof BlacklistFilter && empty($word)) {
+                        if ($modifier instanceof BlacklistFilter && empty($modifiedWord)) {
                             $input = $this->getFilter()->removeWordsByIndexes($input, $wordAndIndexes[self::INDEXES_KEY]);
                         }
 
@@ -182,8 +190,8 @@ class KeywordExtractor
 
 
                 // if the word survives after applying all the filters it's deserved to be added to the keywords!
-                if ($ngramSize === 1 && !empty($word)) {
-                    $this->addKeyword($word);
+                if ($ngramSize === 1 && !empty($modifiedWord)) {
+                    $this->addKeyword($modifiedWord);
                 }
                 // if $ngramSize > 1 it can only have whitelist and blacklist modifier
                 // if is whitelisted
