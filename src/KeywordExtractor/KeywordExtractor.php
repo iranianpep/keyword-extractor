@@ -18,8 +18,6 @@ class KeywordExtractor
 {
     private $blacklist;
     private $whitelist;
-    private $stopWords;
-    private $filter;
     private $modifiers;
     private $keywords;
 
@@ -92,7 +90,6 @@ class KeywordExtractor
             new BlacklistFilter($this->getBlacklist()),
             new StopWordFilter(),
             new NumberFilter(),
-            //new EmptyFilter(),
             new StemFilter(),
             // run the blacklist even after stemming too
             new BlacklistFilter($this->getBlacklist()),
@@ -199,49 +196,6 @@ class KeywordExtractor
     public function setWhitelist(array $whitelist): void
     {
         $this->whitelist = $whitelist;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getStopWords():? array
-    {
-        if (!isset($this->stopWords)) {
-            $stopWordsPath = __DIR__.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'stopwords-en.json';
-            $content = json_decode(file_get_contents($stopWordsPath), true);
-
-            $this->setStopWords($content);
-        }
-
-        return $this->stopWords;
-    }
-
-    /**
-     * @param array $stopWords
-     */
-    public function setStopWords(array $stopWords): void
-    {
-        $this->stopWords = $stopWords;
-    }
-
-    /**
-     * @return Filter|null
-     */
-    public function getFilter():? Filter
-    {
-        if (!isset($this->filter)) {
-            $this->setFilter(new Filter());
-        }
-
-        return $this->filter;
-    }
-
-    /**
-     * @param Filter $filter
-     */
-    public function setFilter(Filter $filter): void
-    {
-        $this->filter = $filter;
     }
 
     /**
