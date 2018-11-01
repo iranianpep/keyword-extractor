@@ -104,7 +104,7 @@ class KeywordExtractor
     public function run($input): array
     {
         // reset the keywords
-        $this->keywords = [];
+        $this->setKeywords([]);
 
         // lowercase and tokenize
         $input = (new LowerCaseTransformer())->modify($input);
@@ -114,6 +114,8 @@ class KeywordExtractor
         foreach (self::NGRAM_SIZES as $ngramSize) {
             foreach ($this->generateNgrams($input, $ngramSize) as $wordAndIndexes) {
                 $word = $wordAndIndexes[self::WORD_KEY];
+                $indexes = $wordAndIndexes[self::INDEXES_KEY];
+
                 $alreadyAdded = false;
 
                 foreach ($this->getDefaultModifiers() as $modifier) {
@@ -129,8 +131,7 @@ class KeywordExtractor
                             // word is whitelisted
                             $this->addKeyword($word);
 
-                            $indexBlacklist = new IndexBlacklistFilter($wordAndIndexes[self::INDEXES_KEY]);
-                            $input = $indexBlacklist->modifyTokens($input);
+                            $input = (new IndexBlacklistFilter($indexes))->modifyTokens($input);
                             $alreadyAdded = true;
                             break;
                         }
@@ -140,8 +141,7 @@ class KeywordExtractor
                     }
 
                     if ($modifier instanceof BlacklistFilter && empty($word)) {
-                        $indexBlacklist = new IndexBlacklistFilter($wordAndIndexes[self::INDEXES_KEY]);
-                        $input = $indexBlacklist->modifyTokens($input);
+                        $input = (new IndexBlacklistFilter($indexes))->modifyTokens($input);
 
                         // since it's blacklisted, ignore other modifiers
                         break;
@@ -199,10 +199,14 @@ class KeywordExtractor
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function getModifiers():? array
+    public function getModifiers(): array
     {
+        if (empty($this->modifiers)) {
+            return [];
+        }
+
         return $this->modifiers;
     }
 
@@ -215,21 +219,14 @@ class KeywordExtractor
     }
 
     /**
-     * @param ModifierInterface $modifier
+     * @return array
      */
-    public function addModifier(ModifierInterface $modifier): void
+    private function getKeywords(): array
     {
-        $existingModifiers = $this->getModifiers();
-        $existingModifiers[] = $modifier;
+        if (empty($this->keywords)) {
+            return [];
+        }
 
-        $this->setModifiers($existingModifiers);
-    }
-
-    /**
-     * @return array|null
-     */
-    private function getKeywords():? array
-    {
         return $this->keywords;
     }
 
@@ -239,5 +236,13 @@ class KeywordExtractor
     public function addKeyword($keyword): void
     {
         $this->keywords[] = $keyword;
+    }
+
+    /**
+     * @param array $keywords
+     */
+    public function setKeywords(array $keywords)
+    {
+        $this->keywords = $keywords;
     }
 }
