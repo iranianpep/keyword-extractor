@@ -12,4 +12,15 @@ class EmptyFilter extends AbstractFilter
 
         return $token;
     }
+
+    public function modifyTokens(array $array)
+    {
+        foreach ($array as $key => $value) {
+            if ($this->modifyToken($value) === '') {
+                unset($array[$key]);
+            }
+        }
+
+        return $array;
+    }
 }

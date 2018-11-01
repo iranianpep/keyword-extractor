@@ -4,7 +4,6 @@ namespace KeywordExtractor;
 
 use KeywordExtractor\Modifiers\Filters\BlacklistFilter;
 use KeywordExtractor\Modifiers\Filters\EmailFilter;
-use KeywordExtractor\Modifiers\Filters\EmptyFilter;
 use KeywordExtractor\Modifiers\Filters\NumberFilter;
 use KeywordExtractor\Modifiers\Filters\PunctuationFilter;
 use KeywordExtractor\Modifiers\Filters\StemFilter;
@@ -13,7 +12,6 @@ use KeywordExtractor\Modifiers\Filters\WhitelistFilter;
 use KeywordExtractor\Modifiers\ModifierInterface;
 use KeywordExtractor\Modifiers\Transformers\LowerCaseTransformer;
 use KeywordExtractor\Modifiers\Transformers\TokenTransformer;
-use NlpTools\Stemmers\PorterStemmer;
 
 class KeywordExtractor
 {
@@ -27,7 +25,7 @@ class KeywordExtractor
     /**
      * order is important.
      */
-    const NGRAM_SIZES = [3, 2];
+    const NGRAM_SIZES = [3, 2, 1];
 
     const INDEXES_KEY = 'indexes';
     const WORD_KEY = 'word';
@@ -84,42 +82,10 @@ class KeywordExtractor
         return [self::WORD_KEY => $word, self::INDEXES_KEY => $subIndexes];
     }
 
-    /**
-     * @param $word
-     *
-     * @return bool
-     */
-    private function isStopWord($word): bool
-    {
-        return in_array($word, $this->getStopWords());
-    }
-
-    /**
-     * @param $word
-     *
-     * @return bool
-     */
-    private function isWhitelisted($word): bool
-    {
-        return in_array($word, $this->getWhitelist());
-    }
-
-    /**
-     * @param $word
-     *
-     * @return bool
-     */
-    private function isBlackListed($word): bool
-    {
-        return in_array($word, $this->getBlacklist());
-    }
-
     private function getDefaultModifiers()
     {
         return [
-            //new LowerCaseTransformer(),
             new EmailFilter(),
-            //new TokenTransformer(),
             new PunctuationFilter(),
             new WhitelistFilter($this->getWhitelist()),
             new BlacklistFilter($this->getBlacklist()),
@@ -146,9 +112,8 @@ class KeywordExtractor
         $input = (new LowerCaseTransformer())->modify($input);
         $input = (new TokenTransformer())->modify($input);
 
-        //$stemmer = new PorterStemmer();
         // n grams can be passed as an arg to the constructor
-        foreach ([3, 2, 1] as $ngramSize) {
+        foreach (self::NGRAM_SIZES as $ngramSize) {
             foreach ($this->generateNgrams($input, $ngramSize) as $key => $wordAndIndexes) {
                 $word = $wordAndIndexes[self::WORD_KEY];
                 $alreadyAdded = false;
@@ -157,11 +122,6 @@ class KeywordExtractor
                     if (!$modifier instanceof ModifierInterface) {
                         continue;
                     }
-
-                    // for ngrams higher than 1, ignore the modifiers
-//                    if ($ngramSize > 1 && (!$modifier instanceof BlacklistFilter && !$modifier instanceof WhitelistFilter)) {
-//                        continue;
-//                    }
 
                     $toBeModified = $word;
                     $word = $modifier->modify($word);
@@ -186,49 +146,10 @@ class KeywordExtractor
                     }
                 }
 
-
                 // if the word survives after applying all the filters it's deserved to be added to the keywords!
                 if ($ngramSize === 1 && !empty($word) && $alreadyAdded === false) {
-                    //$stemmedWord = $stemmer->stem($word);
                     $this->addKeyword($word);
                 }
-                // if $ngramSize > 1 it can only have whitelist and blacklist modifier
-                // if is whitelisted
-                // ... add to keyword list
-                // ... remove it from $input
-
-
-                // if is blacklisted
-                // ... remove it from $input
-
-                // if $ngramSize === 1, apply the rest of modifiers too
-
-
-//                if ($ngramSize === 1) {
-//                    if (is_numeric($word)) {
-//                        continue;
-//                    }
-//
-//                    if ($this->isWhitelisted($word) === true) {
-//                        $this->addKeyword($word);
-//                    } elseif ($this->isStopWord($word) === false && $this->isBlackListed($word) === false) {
-//                        $stemmedWord = $stemmer->stem($word);
-//
-//                        if ($this->isBlackListed($stemmedWord) === true) {
-//                            continue;
-//                        }
-//
-//                        $this->addKeyword($stemmedWord);
-//                    }
-//                } else {
-//                    if ($this->isWhitelisted($word) === true) {
-//                        // can be added
-//                        $this->addKeyword($word);
-//                        $input = $this->getFilter()->removeWordsByIndexes($input, $wordAndIndexes[self::INDEXES_KEY]);
-//                    } elseif ($this->isBlackListed($word) === true) {
-//                        $input = $this->getFilter()->removeWordsByIndexes($input, $wordAndIndexes[self::INDEXES_KEY]);
-//                    }
-//                }
             }
         }
 

@@ -19,13 +19,8 @@ abstract class AbstractFilter implements ModifierInterface
     {
         foreach ($array as $key => $value) {
             $array[$key] = $this->modifyToken($value);
-
-//            if ($array[$key] === '') {
-//                unset($array[$key]);
-//            }
         }
 
-        //return array_values($array);
         return $array;
     }
 }

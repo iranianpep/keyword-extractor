@@ -72,7 +72,7 @@ class FilterTest extends TestCase
                     'words'   => [1, 2, 'test', '1test', ''],
                     'indexes' => [1, 3],
                 ],
-                'o' => [1, 'test', ''],
+                'o' => [0 => 1, 2 => 'test', 4 => ''],
             ],
             [
                 'i' => [

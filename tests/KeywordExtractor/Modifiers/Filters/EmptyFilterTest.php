@@ -53,7 +53,7 @@ class EmptyFilterTest extends TestCase
             ],
             [
                 'i' => ['test', 1, 0, '', '0', 'c#'],
-                'o' => ['test', 1, 0, '0', 'c#'],
+                'o' => [0 => 'test', 1 => 1, 2 => 0, 4 => '0', 5 => 'c#'],
             ],
             [
                 'i' => ['test 0', 1, 0, ' test', '0', ' '],

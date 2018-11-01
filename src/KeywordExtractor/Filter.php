@@ -68,8 +68,6 @@ class Filter
             unset($words[$index]);
         }
 
-        // re-index the array
-        //return array_values($words);
         return $words;
     }
 
