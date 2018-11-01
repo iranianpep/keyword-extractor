@@ -69,7 +69,8 @@ class Filter
         }
 
         // re-index the array
-        return array_values($words);
+        //return array_values($words);
+        return $words;
     }
 
     /*

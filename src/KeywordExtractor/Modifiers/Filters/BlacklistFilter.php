@@ -11,14 +11,9 @@ class BlacklistFilter extends AbstractFilter
         $this->setBlacklist($blacklist);
     }
 
-    public function isInFilter($token): bool
-    {
-        return in_array($token, $this->getBlacklist());
-    }
-
     public function modifyToken($token)
     {
-        if ($this->isInFilter($token) === true) {
+        if (in_array($token, $this->getBlacklist()) === true) {
             return '';
         }
 

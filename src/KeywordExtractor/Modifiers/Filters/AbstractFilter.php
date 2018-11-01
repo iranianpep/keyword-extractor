@@ -6,8 +6,6 @@ use KeywordExtractor\Modifiers\ModifierInterface;
 
 abstract class AbstractFilter implements ModifierInterface
 {
-    abstract public function isInFilter($token) : bool;
-
     public function modify($input)
     {
         if (is_array($input) === true) {
@@ -22,11 +20,12 @@ abstract class AbstractFilter implements ModifierInterface
         foreach ($array as $key => $value) {
             $array[$key] = $this->modifyToken($value);
 
-            if ($array[$key] === '') {
-                unset($array[$key]);
-            }
+//            if ($array[$key] === '') {
+//                unset($array[$key]);
+//            }
         }
 
-        return array_values($array);
+        //return array_values($array);
+        return $array;
     }
 }
