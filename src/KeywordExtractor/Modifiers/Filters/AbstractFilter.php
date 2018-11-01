@@ -10,9 +10,9 @@ abstract class AbstractFilter implements ModifierInterface
     {
         if (is_array($input) === true) {
             return $this->modifyTokens($input);
-        } else {
-            return $this->modifyToken($input);
         }
+
+        return $this->modifyToken($input);
     }
 
     public function modifyTokens(array $array)

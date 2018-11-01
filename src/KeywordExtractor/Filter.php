@@ -18,20 +18,4 @@ class Filter
 
         return $words;
     }
-
-    /**
-     * @param array $words
-     *
-     * @return array
-     */
-    public function removeEmptyArrayElements(array $words): array
-    {
-        foreach ($words as $key => $word) {
-            if ($word === '' || ctype_space($word)) {
-                unset($words[$key]);
-            }
-        }
-
-        return array_values($words);
-    }
 }

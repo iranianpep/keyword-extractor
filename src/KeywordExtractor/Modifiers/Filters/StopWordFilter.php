@@ -4,6 +4,9 @@ namespace KeywordExtractor\Modifiers\Filters;
 
 class StopWordFilter extends AbstractFilter
 {
+    const DS = DIRECTORY_SEPARATOR;
+    const STORAGE_DIR = 'storage';
+
     private $stopWordList;
 
     public function modifyToken($token)
@@ -21,7 +24,7 @@ class StopWordFilter extends AbstractFilter
     public function getStopWordList(): array
     {
         if (!isset($this->stopWordList)) {
-            $stopWordsPath = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'stopwords-en.json';
+            $stopWordsPath = dirname(dirname(__DIR__)).self::DS.self::STORAGE_DIR.self::DS.'stopwords-en.json';
             $content = json_decode(file_get_contents($stopWordsPath), true);
 
             if (empty($content)) {

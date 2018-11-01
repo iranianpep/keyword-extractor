@@ -4,6 +4,7 @@ namespace KeywordExtractor;
 
 use KeywordExtractor\Modifiers\Filters\BlacklistFilter;
 use KeywordExtractor\Modifiers\Filters\EmailFilter;
+use KeywordExtractor\Modifiers\Filters\IndexBlacklistFilter;
 use KeywordExtractor\Modifiers\Filters\NumberFilter;
 use KeywordExtractor\Modifiers\Filters\PunctuationFilter;
 use KeywordExtractor\Modifiers\Filters\StemFilter;
@@ -114,7 +115,7 @@ class KeywordExtractor
 
         // n grams can be passed as an arg to the constructor
         foreach (self::NGRAM_SIZES as $ngramSize) {
-            foreach ($this->generateNgrams($input, $ngramSize) as $key => $wordAndIndexes) {
+            foreach ($this->generateNgrams($input, $ngramSize) as $wordAndIndexes) {
                 $word = $wordAndIndexes[self::WORD_KEY];
                 $alreadyAdded = false;
 
@@ -130,17 +131,21 @@ class KeywordExtractor
                         if (!empty($word) === true) {
                             // word is whitelisted
                             $this->addKeyword($word);
-                            $input = $this->getFilter()->removeWordsByIndexes($input, $wordAndIndexes[self::INDEXES_KEY]);
+
+                            $indexBlacklist = new IndexBlacklistFilter($wordAndIndexes[self::INDEXES_KEY]);
+                            $input = $indexBlacklist->modifyTokens($input);
                             $alreadyAdded = true;
                             break;
-                        } else {
-                            // word is NOT whitelisted - reset the empty word to the state before applying the whitelist
-                            $word = $toBeModified;
                         }
+
+                        // word is NOT whitelisted - reset the empty word to the state before applying the whitelist
+                        $word = $toBeModified;
                     }
 
                     if ($modifier instanceof BlacklistFilter && empty($word)) {
-                        $input = $this->getFilter()->removeWordsByIndexes($input, $wordAndIndexes[self::INDEXES_KEY]);
+                        $indexBlacklist = new IndexBlacklistFilter($wordAndIndexes[self::INDEXES_KEY]);
+                        $input = $indexBlacklist->modifyTokens($input);
+
                         // since it's blacklisted, ignore other modifiers
                         break;
                     }

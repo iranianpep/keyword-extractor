@@ -1,15 +1,13 @@
 <?php
 
-namespace KeywordExtractor;
+namespace KeywordExtractor\Modifiers\Filters;
 
 use PHPUnit\Framework\TestCase;
 
-class FilterTest extends TestCase
+class IndexBlacklistFilterTest extends TestCase
 {
-    public function testRemoveWordsByIndexes()
+    public function testModifyTokens()
     {
-        $filter = new Filter();
-
         $inputsOutputs = [
             [
                 'i' => [
@@ -42,34 +40,12 @@ class FilterTest extends TestCase
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
+            $filter = new IndexBlacklistFilter($inputOutput['i']['indexes']);
+
             $this->assertEquals(
                 $inputOutput['o'],
-                $filter->removeWordsByIndexes($inputOutput['i']['words'], $inputOutput['i']['indexes'])
+                $filter->modifyTokens($inputOutput['i']['words'])
             );
-        }
-    }
-
-    public function testRemoveEmptyArrayElements()
-    {
-        $filter = new Filter();
-
-        $inputsOutputs = [
-            [
-                'i' => [],
-                'o' => [],
-            ],
-            [
-                'i' => ['test', 1, 0, '', '0', 'c#'],
-                'o' => ['test', 1, 0, '0', 'c#'],
-            ],
-            [
-                'i' => ['test 0', 1, 0, ' test', '0', ' '],
-                'o' => ['test 0', 1, 0, ' test', '0'],
-            ],
-        ];
-
-        foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->removeEmptyArrayElements($inputOutput['i']));
         }
     }
 }
