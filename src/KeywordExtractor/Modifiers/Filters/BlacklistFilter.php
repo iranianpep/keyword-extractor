@@ -2,7 +2,9 @@
 
 namespace KeywordExtractor\Modifiers\Filters;
 
-class BlacklistFilter extends AbstractFilter
+use KeywordExtractor\Modifiers\AbstractModifier;
+
+class BlacklistFilter extends AbstractModifier
 {
     private $blacklist;
 

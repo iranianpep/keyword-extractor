@@ -1,10 +1,8 @@
 <?php
 
-namespace KeywordExtractor\Modifiers\Transformers;
+namespace KeywordExtractor\Modifiers;
 
-use KeywordExtractor\Modifiers\ModifierInterface;
-
-abstract class AbstractTransformer implements ModifierInterface
+abstract class AbstractModifier implements ModifierInterface
 {
     public function modify($input)
     {

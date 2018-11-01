@@ -2,7 +2,9 @@
 
 namespace KeywordExtractor\Modifiers\Filters;
 
-class NumberFilter extends AbstractFilter
+use KeywordExtractor\Modifiers\AbstractModifier;
+
+class NumberFilter extends AbstractModifier
 {
     public function modifyToken($token)
     {

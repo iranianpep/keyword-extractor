@@ -2,7 +2,9 @@
 
 namespace KeywordExtractor\Modifiers\Filters;
 
-class EmptyFilter extends AbstractFilter
+use KeywordExtractor\Modifiers\AbstractModifier;
+
+class EmptyFilter extends AbstractModifier
 {
     public function modifyToken($token)
     {

@@ -2,7 +2,9 @@
 
 namespace KeywordExtractor\Modifiers\Transformers;
 
-class LowerCaseTransformer extends AbstractTransformer
+use KeywordExtractor\Modifiers\AbstractModifier;
+
+class LowerCaseTransformer extends AbstractModifier
 {
     public function modifyToken($text)
     {

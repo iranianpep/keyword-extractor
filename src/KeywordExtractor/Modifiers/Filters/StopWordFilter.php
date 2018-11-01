@@ -2,7 +2,9 @@
 
 namespace KeywordExtractor\Modifiers\Filters;
 
-class StopWordFilter extends AbstractFilter
+use KeywordExtractor\Modifiers\AbstractModifier;
+
+class StopWordFilter extends AbstractModifier
 {
     const DS = DIRECTORY_SEPARATOR;
     const STORAGE_DIR = 'storage';

@@ -2,7 +2,9 @@
 
 namespace KeywordExtractor\Modifiers\Filters;
 
-class PunctuationFilter extends AbstractFilter
+use KeywordExtractor\Modifiers\AbstractModifier;
+
+class PunctuationFilter extends AbstractModifier
 {
     private $punctuations;
 

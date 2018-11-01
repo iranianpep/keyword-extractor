@@ -2,7 +2,9 @@
 
 namespace KeywordExtractor\Modifiers\Filters;
 
-class EmailFilter extends AbstractFilter
+use KeywordExtractor\Modifiers\AbstractModifier;
+
+class EmailFilter extends AbstractModifier
 {
     private $pattern;
 

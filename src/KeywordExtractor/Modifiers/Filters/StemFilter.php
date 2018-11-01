@@ -2,9 +2,10 @@
 
 namespace KeywordExtractor\Modifiers\Filters;
 
+use KeywordExtractor\Modifiers\AbstractModifier;
 use NlpTools\Stemmers\PorterStemmer;
 
-class StemFilter extends AbstractFilter
+class StemFilter extends AbstractModifier
 {
     public function modifyToken($token)
     {
