@@ -20,7 +20,6 @@ class KeywordExtractor
     private $whitelist;
     private $modifiers;
     private $keywords;
-    private $currentToken;
 
     /**
      * order is important.
