@@ -20,6 +20,7 @@ class KeywordExtractor
     private $whitelist;
     private $modifiers;
     private $keywords;
+    private $currentToken;
 
     /**
      * order is important.
@@ -97,56 +98,30 @@ class KeywordExtractor
     }
 
     /**
-     * @param $input
+     * @param $string
      *
      * @return array
      */
-    public function run($input): array
+    public function run(string $string): array
     {
         // reset the keywords
         $this->setKeywords([]);
 
         // lowercase and tokenize
-        $input = (new LowerCaseTransformer())->modify($input);
-        $input = (new TokenTransformer())->modify($input);
+        $string = (new LowerCaseTransformer())->modify($string);
+        $tokens = (new TokenTransformer())->modify($string);
 
         // n grams can be passed as an arg to the constructor
         foreach (self::NGRAM_SIZES as $ngramSize) {
-            foreach ($this->generateNgrams($input, $ngramSize) as $wordAndIndexes) {
+            foreach ($this->generateNgrams($tokens, $ngramSize) as $wordAndIndexes) {
                 $word = $wordAndIndexes[self::WORD_KEY];
                 $indexes = $wordAndIndexes[self::INDEXES_KEY];
 
-                $alreadyAdded = false;
+                $result = $this->applyModifiers($tokens, $word, $indexes);
 
-                foreach ($this->getDefaultModifiers() as $modifier) {
-                    if (!$modifier instanceof ModifierInterface) {
-                        continue;
-                    }
-
-                    $toBeModified = $word;
-                    $word = $modifier->modify($word);
-
-                    if ($modifier instanceof WhitelistFilter) {
-                        if (!empty($word) === true) {
-                            // word is whitelisted
-                            $this->addKeyword($word);
-
-                            $input = (new IndexBlacklistFilter($indexes))->modifyTokens($input);
-                            $alreadyAdded = true;
-                            break;
-                        }
-
-                        // word is NOT whitelisted - reset the empty word to the state before applying the whitelist
-                        $word = $toBeModified;
-                    }
-
-                    if ($modifier instanceof BlacklistFilter && empty($word)) {
-                        $input = (new IndexBlacklistFilter($indexes))->modifyTokens($input);
-
-                        // since it's blacklisted, ignore other modifiers
-                        break;
-                    }
-                }
+                $tokens = $result['tokens'];
+                $word = $result['word'];
+                $alreadyAdded = $result['alreadyAdded'];
 
                 // if the word survives after applying all the filters it's deserved to be added to the keywords!
                 if ($ngramSize === 1 && !empty($word) && $alreadyAdded === false) {
@@ -156,6 +131,52 @@ class KeywordExtractor
         }
 
         return $this->getKeywords();
+    }
+
+    /**
+     * @param $tokens
+     * @param $word
+     * @param $indexes
+     * @return array
+     */
+    private function applyModifiers(array $tokens, string $word, array $indexes): array
+    {
+        $alreadyAdded = false;
+        foreach ($this->getDefaultModifiers() as $modifier) {
+            if (!$modifier instanceof ModifierInterface) {
+                continue;
+            }
+
+            $toBeModified = $word;
+            $word = $modifier->modify($word);
+
+            if ($modifier instanceof WhitelistFilter) {
+                if (!empty($word) === true) {
+                    // word is whitelisted
+                    $this->addKeyword($word);
+
+                    $tokens = (new IndexBlacklistFilter($indexes))->modifyTokens($tokens);
+                    $alreadyAdded = true;
+                    break;
+                }
+
+                // word is NOT whitelisted - reset the empty word to the state before applying the whitelist
+                $word = $toBeModified;
+            }
+
+            if ($modifier instanceof BlacklistFilter && empty($word)) {
+                $tokens = (new IndexBlacklistFilter($indexes))->modifyTokens($tokens);
+
+                // since it's blacklisted, ignore other modifiers
+                break;
+            }
+        }
+
+        return [
+            'tokens' => $tokens,
+            'word' => $word,
+            'alreadyAdded' => $alreadyAdded
+        ];
     }
 
     /**
