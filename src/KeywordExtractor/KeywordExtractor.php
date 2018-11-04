@@ -152,6 +152,7 @@ class KeywordExtractor
      * @param $tokens
      * @param $word
      * @param $indexes
+     *
      * @return array
      */
     private function applyModifiers(array $tokens, string $word, array $indexes): array
@@ -187,9 +188,9 @@ class KeywordExtractor
         }
 
         return [
-            'tokens' => $tokens,
-            'word' => $word,
-            'alreadyAdded' => $alreadyAdded
+            'tokens'       => $tokens,
+            'word'         => $word,
+            'alreadyAdded' => $alreadyAdded,
         ];
     }
 
