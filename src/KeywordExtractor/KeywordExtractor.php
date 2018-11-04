@@ -161,7 +161,7 @@ class KeywordExtractor
     {
         $alreadyAdded = false;
 
-        /**
+        /*
          * @var ModifierInterface
          */
         foreach ($this->getModifiers() as $modifier) {
