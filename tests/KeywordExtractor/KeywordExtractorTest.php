@@ -12,7 +12,20 @@ class KeywordExtractorTest extends TestCase
         $text = 'This is a simple sentence.';
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['simpl', 'sentenc'], $result);
+        $this->assertEquals([
+            'simpl' => [
+                'frequency' => 1,
+                'originals' => [
+                    'simple'
+                ]
+            ],
+            'sentenc' => [
+                'frequency' => 1,
+                'originals' => [
+                    'sentence.'
+                ]
+            ]
+        ], $result);
 
         $text = '';
         $result = $keywordExtractor->run($text);
@@ -22,50 +35,206 @@ class KeywordExtractorTest extends TestCase
         $text = '123 this text has got visual studio 2018 and 2019 and more numbers like 12 13 145';
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['text', 'visual', 'studio', 'number'], $result);
+        $this->assertEquals([
+            'text' => [
+                'frequency' => 1,
+                'originals' => [
+                    'text'
+                ]
+            ],
+            'visual' => [
+                'frequency' => 1,
+                'originals' => [
+                    'visual'
+                ]
+            ],
+            'studio' => [
+                'frequency' => 1,
+                'originals' => [
+                    'studio'
+                ]
+            ],
+            'number' => [
+                'frequency' => 1,
+                'originals' => [
+                    'numbers'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setWhitelist(['visual studio 2018']);
         $result = $keywordExtractor->run($text);
-        $this->assertEquals(['visual studio 2018', 'text', 'number'], $result);
+        $this->assertEquals([
+            'visual studio 2018' => [
+                'frequency' => 1,
+                'originals' => [
+                    'visual studio 2018'
+                ]
+            ],
+            'text' => [
+                'frequency' => 1,
+                'originals' => [
+                    'text'
+                ]
+            ],
+            'number' => [
+                'frequency' => 1,
+                'originals' => [
+                    'numbers'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setWhitelist(['2018 and 2019']);
         $result = $keywordExtractor->run($text);
-        $this->assertEquals(['2018 and 2019', 'text', 'visual', 'studio', 'number'], $result);
+        $this->assertEquals([
+            '2018 and 2019' => [
+                'frequency' => 1,
+                'originals' => [
+                    '2018 and 2019'
+                ]
+            ],
+            'text' => [
+                'frequency' => 1,
+                'originals' => [
+                    'text'
+                ]
+            ],
+            'visual' => [
+                'frequency' => 1,
+                'originals' => [
+                    'visual'
+                ]
+            ],
+            'studio' => [
+                'frequency' => 1,
+                'originals' => [
+                    'studio'
+                ]
+            ],
+            'number' => [
+                'frequency' => 1,
+                'originals' => [
+                    'numbers'
+                ]
+            ]
+        ], $result);
 
         $text = 'This is a text with an email like: example@example.com in it.';
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['text', 'email'], $result);
+        $this->assertEquals([
+            'text' => [
+                'frequency' => 1,
+                'originals' => [
+                    'text'
+                ]
+            ],
+            'email' => [
+                'frequency' => 1,
+                'originals' => [
+                    'email'
+                ]
+            ]
+        ], $result);
 
         $text = 'This is a text with two emails: example.example@example.com, and another@example.com.';
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['text', 'email'], $result);
+        $this->assertEquals([
+            'text' => [
+                'frequency' => 1,
+                'originals' => [
+                    'text'
+                ]
+            ],
+            'email' => [
+                'frequency' => 1,
+                'originals' => [
+                    'emails:'
+                ]
+            ]
+        ], $result);
     }
 
     public function testRunWithWhitelist()
     {
         $keywordExtractor = new KeywordExtractor();
-        $text = 'This is a simple sentence.';
+        $text = 'This is a simple sentence and simple sentence.';
         $keywordExtractor->setWhitelist([]);
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['simpl', 'sentenc'], $result);
+        $this->assertEquals([
+            'simpl' => [
+                'frequency' => 2,
+                'originals' => [
+                    'simple'
+                ]
+            ],
+            'sentenc' => [
+                'frequency' => 2,
+                'originals' => [
+                    'sentence',
+                    'sentence.'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setWhitelist(['simple']);
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['simple', 'sentenc'], $result);
+        $this->assertEquals([
+            'simple' => [
+                'frequency' => 2,
+                'originals' => [
+                    'simple'
+                ]
+            ],
+            'sentenc' => [
+                'frequency' => 2,
+                'originals' => [
+                    'sentence',
+                    'sentence.'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setWhitelist(['simple', 'is', 'dummy']);
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['is', 'simple', 'sentenc'], $result);
+        $this->assertEquals([
+            'is' => [
+                'frequency' => 1,
+                'originals' => [
+                    'is'
+                ]
+            ],
+            'simple' => [
+                'frequency' => 2,
+                'originals' => [
+                    'simple'
+                ]
+            ],
+            'sentenc' => [
+                'frequency' => 2,
+                'originals' => [
+                    'sentence',
+                    'sentence.'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setWhitelist(['simple sentence']);
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['simple sentence'], $result);
+        $this->assertEquals([
+            'simple sentence' => [
+                'frequency' => 2,
+                'originals' => [
+                    'simple sentence'
+                ]
+            ],
+        ], $result);
     }
 
     public function testRunWithBlacklist()
@@ -75,17 +244,44 @@ class KeywordExtractorTest extends TestCase
         $keywordExtractor->setBlacklist([]);
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['simpl', 'sentenc'], $result);
+        $this->assertEquals([
+            'simpl' => [
+                'frequency' => 1,
+                'originals' => [
+                    'simple'
+                ]
+            ],
+            'sentenc' => [
+                'frequency' => 1,
+                'originals' => [
+                    'sentence.'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setBlacklist(['simple']);
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['sentenc'], $result);
+        $this->assertEquals([
+            'sentenc' => [
+                'frequency' => 1,
+                'originals' => [
+                    'sentence.'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setBlacklist(['simple', 'is', 'dummy']);
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['sentenc'], $result);
+        $this->assertEquals([
+            'sentenc' => [
+                'frequency' => 1,
+                'originals' => [
+                    'sentence.'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setBlacklist(['simple sentence']);
         $result = $keywordExtractor->run($text);
@@ -97,13 +293,33 @@ class KeywordExtractorTest extends TestCase
         $keywordExtractor->setWhitelist([]);
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['excit', 'opportun'], $result);
+        $this->assertEquals([
+            'excit' => [
+                'frequency' => 1,
+                'originals' => [
+                    'exciting'
+                ]
+            ],
+            'opportun' => [
+                'frequency' => 1,
+                'originals' => [
+                    'opportunity'
+                ]
+            ]
+        ], $result);
 
         $keywordExtractor->setBlacklist(['opportun']);
 
         $result = $keywordExtractor->run($text);
 
-        $this->assertEquals(['excit'], $result);
+        $this->assertEquals([
+            'excit' => [
+                'frequency' => 1,
+                'originals' => [
+                    'exciting'
+                ]
+            ],
+        ], $result);
     }
 
     public function testRunWithWhitelistAndBlackList()
@@ -135,18 +351,18 @@ PhpStorm, Eclipse or other IDE';
         $result = $keywordExtractor->run($text);
         //}
 
-        $this->assertTrue(in_array('linux', $result));
-        $this->assertTrue(in_array('php', $result));
-        $this->assertTrue(in_array('composer', $result));
-        $this->assertTrue(in_array('css', $result));
-        $this->assertTrue(in_array('mongodb', $result));
+        $this->assertTrue(array_key_exists('linux', $result));
+        $this->assertTrue(array_key_exists('php', $result));
+        $this->assertTrue(array_key_exists('composer', $result));
+        $this->assertTrue(array_key_exists('css', $result));
+        $this->assertTrue(array_key_exists('mongodb', $result));
 
-        $this->assertTrue(in_array('environ', $result));
+        $this->assertTrue(array_key_exists('environ', $result));
 
         $keywordExtractor->setBlacklist(['software', 'etc', 'environments']);
         $result = $keywordExtractor->run($text);
 
-        $this->assertFalse(in_array('environ', $result));
+        $this->assertFalse(array_key_exists('environ', $result));
 
         $text = 'This includes some keywords such as javascript,
         java, c#, php, android, python, jquery, c++, ruby-on-rails, c, r, objective-c,
@@ -159,30 +375,30 @@ PhpStorm, Eclipse or other IDE';
         /*
          * Did not use loop because if one of the tests fail, it's easier to find out which one failed
          */
-        $this->assertTrue(in_array('javascript', $result) === true);
-        $this->assertTrue(in_array('java', $result) === true);
-        $this->assertTrue(in_array('c#', $result) === true);
-        $this->assertTrue(in_array('php', $result) === true);
-        $this->assertTrue(in_array('android', $result) === true);
-        $this->assertTrue(in_array('python', $result) === true);
-        $this->assertTrue(in_array('jquery', $result) === true);
-        $this->assertTrue(in_array('c++', $result) === true);
-        $this->assertTrue(in_array('c', $result) === true);
-        $this->assertTrue(in_array('r', $result) === true);
-        $this->assertTrue(in_array('objective-c', $result) === true);
-        $this->assertTrue(in_array('wpf', $result) === true);
-        $this->assertTrue(in_array('asp.net-mvc', $result) === true);
-        $this->assertTrue(in_array('python-3.x', $result) === true);
-        $this->assertTrue(in_array('html5', $result) === true);
-        $this->assertTrue(in_array('python-2.7', $result) === true);
-        $this->assertTrue(in_array('.htaccess', $result) === true);
-        $this->assertTrue(in_array('django', $result) === true);
-        $this->assertTrue(in_array('jsp', $result) === true);
-        $this->assertTrue(in_array('oop', $result) === true);
-        $this->assertTrue(in_array('go', $result) === true);
-        $this->assertTrue(in_array('iis', $result) === true);
-        $this->assertTrue(in_array('ios7', $result) === true);
-        $this->assertTrue(in_array('f#', $result) === true);
+        $this->assertTrue(array_key_exists('javascript', $result) === true);
+        $this->assertTrue(array_key_exists('java', $result) === true);
+        $this->assertTrue(array_key_exists('c#', $result) === true);
+        $this->assertTrue(array_key_exists('php', $result) === true);
+        $this->assertTrue(array_key_exists('android', $result) === true);
+        $this->assertTrue(array_key_exists('python', $result) === true);
+        $this->assertTrue(array_key_exists('jquery', $result) === true);
+        $this->assertTrue(array_key_exists('c++', $result) === true);
+        $this->assertTrue(array_key_exists('c', $result) === true);
+        $this->assertTrue(array_key_exists('r', $result) === true);
+        $this->assertTrue(array_key_exists('objective-c', $result) === true);
+        $this->assertTrue(array_key_exists('wpf', $result) === true);
+        $this->assertTrue(array_key_exists('asp.net-mvc', $result) === true);
+        $this->assertTrue(array_key_exists('python-3.x', $result) === true);
+        $this->assertTrue(array_key_exists('html5', $result) === true);
+        $this->assertTrue(array_key_exists('python-2.7', $result) === true);
+        $this->assertTrue(array_key_exists('.htaccess', $result) === true);
+        $this->assertTrue(array_key_exists('django', $result) === true);
+        $this->assertTrue(array_key_exists('jsp', $result) === true);
+        $this->assertTrue(array_key_exists('oop', $result) === true);
+        $this->assertTrue(array_key_exists('go', $result) === true);
+        $this->assertTrue(array_key_exists('iis', $result) === true);
+        $this->assertTrue(array_key_exists('ios7', $result) === true);
+        $this->assertTrue(array_key_exists('f#', $result) === true);
 
         $text = 'Milestone IT is an industry leader in the provision of the highest quality software engineers.
         Right now,  we are seeking 2 developers to work on-site delivering Backend Microservices in Node.
@@ -208,11 +424,11 @@ who has great people than this is an opportunity you need to explore further...'
 
         $result = $keywordExtractor->run($text);
 
-        $this->assertTrue(in_array('microservic', $result) === true);
-        $this->assertTrue(in_array('react', $result) === true);
-        $this->assertTrue(in_array('react native', $result) === true);
-        $this->assertTrue(in_array('css', $result) === true);
-        $this->assertTrue(in_array('devop', $result) === true);
-        $this->assertTrue(in_array('redux', $result) === true);
+        $this->assertTrue(array_key_exists('microservic', $result) === true);
+        $this->assertTrue(array_key_exists('react', $result) === true);
+        $this->assertTrue(array_key_exists('react native', $result) === true);
+        $this->assertTrue(array_key_exists('css', $result) === true);
+        $this->assertTrue(array_key_exists('devop', $result) === true);
+        $this->assertTrue(array_key_exists('redux', $result) === true);
     }
 }

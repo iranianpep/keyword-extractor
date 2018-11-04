@@ -131,6 +131,8 @@ class KeywordExtractor
     {
         foreach ($this->generateNgrams($tokens, $ngramSize) as $wordAndIndexes) {
             $word = $wordAndIndexes[self::WORD_KEY];
+            $original = $word;
+
             $indexes = $wordAndIndexes[self::INDEXES_KEY];
 
             $result = $this->applyModifiers($tokens, $word, $indexes);
@@ -141,7 +143,7 @@ class KeywordExtractor
 
             // if the word survives after applying all the filters it's deserved to be added to the keywords!
             if ($ngramSize === 1 && !empty($word) && $alreadyAdded === false) {
-                $this->addKeyword($word);
+                $this->addKeyword($word, $original);
             }
         }
 
@@ -158,6 +160,7 @@ class KeywordExtractor
     private function applyModifiers(array $tokens, string $word, array $indexes): array
     {
         $alreadyAdded = false;
+
         /**
          * @var $modifier ModifierInterface
          */
@@ -168,7 +171,7 @@ class KeywordExtractor
             if ($modifier instanceof WhitelistFilter) {
                 if (!empty($word) === true) {
                     // word is whitelisted
-                    $this->addKeyword($word);
+                    $this->addKeyword($word, $toBeModified);
 
                     $tokens = (new IndexBlacklistFilter($indexes))->modifyTokens($tokens);
                     $alreadyAdded = true;
@@ -279,10 +282,36 @@ class KeywordExtractor
 
     /**
      * @param $keyword
+     * @param $original
      */
-    public function addKeyword($keyword): void
+    public function addKeyword($keyword, $original): void
     {
-        $this->keywords[] = $keyword;
+        if ($this->keywordExists($keyword) === true) {
+            $frequency = $this->keywords[$keyword]['frequency'] + 1;
+            $originals = $this->keywords[$keyword]['originals'];
+        } else {
+            $frequency = 1;
+            $originals = [];
+        }
+
+        if (in_array($original, $originals) === false) {
+            $originals[] = $original;
+        }
+
+        $this->keywords[$keyword] = [
+            'frequency' => $frequency,
+            'originals' => $originals
+        ];
+    }
+
+    /**
+     * @param $keyword
+     *
+     * @return bool
+     */
+    private function keywordExists($keyword): bool
+    {
+        return array_key_exists($keyword, $this->getKeywords());
     }
 
     /**
