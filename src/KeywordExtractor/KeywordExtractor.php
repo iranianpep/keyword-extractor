@@ -81,7 +81,10 @@ class KeywordExtractor
         return [self::WORD_KEY => $word, self::INDEXES_KEY => $subIndexes];
     }
 
-    private function getDefaultModifiers()
+    /**
+     * @return array
+     */
+    private function getDefaultModifiers(): array
     {
         return [
             new EmailFilter(),
@@ -112,24 +115,37 @@ class KeywordExtractor
 
         // n grams can be passed as an arg to the constructor
         foreach (self::NGRAM_SIZES as $ngramSize) {
-            foreach ($this->generateNgrams($tokens, $ngramSize) as $wordAndIndexes) {
-                $word = $wordAndIndexes[self::WORD_KEY];
-                $indexes = $wordAndIndexes[self::INDEXES_KEY];
-
-                $result = $this->applyModifiers($tokens, $word, $indexes);
-
-                $tokens = $result['tokens'];
-                $word = $result['word'];
-                $alreadyAdded = $result['alreadyAdded'];
-
-                // if the word survives after applying all the filters it's deserved to be added to the keywords!
-                if ($ngramSize === 1 && !empty($word) && $alreadyAdded === false) {
-                    $this->addKeyword($word);
-                }
-            }
+            $tokens = $this->extractNgramKeywords($tokens, $ngramSize);
         }
 
         return $this->getKeywords();
+    }
+
+    /**
+     * @param array $tokens
+     * @param int   $ngramSize
+     *
+     * @return array
+     */
+    private function extractNgramKeywords(array $tokens, int $ngramSize): array
+    {
+        foreach ($this->generateNgrams($tokens, $ngramSize) as $wordAndIndexes) {
+            $word = $wordAndIndexes[self::WORD_KEY];
+            $indexes = $wordAndIndexes[self::INDEXES_KEY];
+
+            $result = $this->applyModifiers($tokens, $word, $indexes);
+
+            $tokens = $result['tokens'];
+            $word = $result['word'];
+            $alreadyAdded = $result['alreadyAdded'];
+
+            // if the word survives after applying all the filters it's deserved to be added to the keywords!
+            if ($ngramSize === 1 && !empty($word) && $alreadyAdded === false) {
+                $this->addKeyword($word);
+            }
+        }
+
+        return $tokens;
     }
 
     /**
@@ -141,11 +157,10 @@ class KeywordExtractor
     private function applyModifiers(array $tokens, string $word, array $indexes): array
     {
         $alreadyAdded = false;
-        foreach ($this->getDefaultModifiers() as $modifier) {
-            if (!$modifier instanceof ModifierInterface) {
-                continue;
-            }
-
+        /**
+         * @var $modifier ModifierInterface
+         */
+        foreach ($this->getModifiers() as $modifier) {
             $toBeModified = $word;
             $word = $modifier->modify($word);
 
@@ -223,11 +238,19 @@ class KeywordExtractor
      */
     public function getModifiers(): array
     {
-        if (empty($this->modifiers)) {
-            return [];
+        if (!isset($this->modifiers)) {
+            return $this->getDefaultModifiers();
         }
 
         return $this->modifiers;
+    }
+
+    /**
+     * @param ModifierInterface $modifier
+     */
+    public function addModifier(ModifierInterface $modifier): void
+    {
+        $this->modifiers[] = $modifier;
     }
 
     /**
@@ -235,7 +258,10 @@ class KeywordExtractor
      */
     public function setModifiers(array $modifiers): void
     {
-        $this->modifiers = $modifiers;
+        $this->modifiers = [];
+        foreach ($modifiers as $modifier) {
+            $this->addModifier($modifier);
+        }
     }
 
     /**
