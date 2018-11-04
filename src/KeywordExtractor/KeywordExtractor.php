@@ -286,12 +286,11 @@ class KeywordExtractor
      */
     public function addKeyword($keyword, $original): void
     {
+        $frequency = 1;
+        $originals = [];
         if ($this->keywordExists($keyword) === true) {
             $frequency = $this->keywords[$keyword]['frequency'] + 1;
             $originals = $this->keywords[$keyword]['originals'];
-        } else {
-            $frequency = 1;
-            $originals = [];
         }
 
         if (in_array($original, $originals) === false) {
