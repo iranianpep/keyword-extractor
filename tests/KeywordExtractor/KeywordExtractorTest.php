@@ -16,15 +16,15 @@ class KeywordExtractorTest extends TestCase
             'simpl' => [
                 'frequency' => 1,
                 'originals' => [
-                    'simple'
-                ]
+                    'simple',
+                ],
             ],
             'sentenc' => [
                 'frequency' => 1,
                 'originals' => [
-                    'sentence.'
-                ]
-            ]
+                    'sentence.',
+                ],
+            ],
         ], $result);
 
         $text = '';
@@ -39,27 +39,27 @@ class KeywordExtractorTest extends TestCase
             'text' => [
                 'frequency' => 1,
                 'originals' => [
-                    'text'
-                ]
+                    'text',
+                ],
             ],
             'visual' => [
                 'frequency' => 1,
                 'originals' => [
-                    'visual'
-                ]
+                    'visual',
+                ],
             ],
             'studio' => [
                 'frequency' => 1,
                 'originals' => [
-                    'studio'
-                ]
+                    'studio',
+                ],
             ],
             'number' => [
                 'frequency' => 1,
                 'originals' => [
-                    'numbers'
-                ]
-            ]
+                    'numbers',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setWhitelist(['visual studio 2018']);
@@ -68,21 +68,21 @@ class KeywordExtractorTest extends TestCase
             'visual studio 2018' => [
                 'frequency' => 1,
                 'originals' => [
-                    'visual studio 2018'
-                ]
+                    'visual studio 2018',
+                ],
             ],
             'text' => [
                 'frequency' => 1,
                 'originals' => [
-                    'text'
-                ]
+                    'text',
+                ],
             ],
             'number' => [
                 'frequency' => 1,
                 'originals' => [
-                    'numbers'
-                ]
-            ]
+                    'numbers',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setWhitelist(['2018 and 2019']);
@@ -91,33 +91,33 @@ class KeywordExtractorTest extends TestCase
             '2018 and 2019' => [
                 'frequency' => 1,
                 'originals' => [
-                    '2018 and 2019'
-                ]
+                    '2018 and 2019',
+                ],
             ],
             'text' => [
                 'frequency' => 1,
                 'originals' => [
-                    'text'
-                ]
+                    'text',
+                ],
             ],
             'visual' => [
                 'frequency' => 1,
                 'originals' => [
-                    'visual'
-                ]
+                    'visual',
+                ],
             ],
             'studio' => [
                 'frequency' => 1,
                 'originals' => [
-                    'studio'
-                ]
+                    'studio',
+                ],
             ],
             'number' => [
                 'frequency' => 1,
                 'originals' => [
-                    'numbers'
-                ]
-            ]
+                    'numbers',
+                ],
+            ],
         ], $result);
 
         $text = 'This is a text with an email like: example@example.com in it.';
@@ -127,15 +127,15 @@ class KeywordExtractorTest extends TestCase
             'text' => [
                 'frequency' => 1,
                 'originals' => [
-                    'text'
-                ]
+                    'text',
+                ],
             ],
             'email' => [
                 'frequency' => 1,
                 'originals' => [
-                    'email'
-                ]
-            ]
+                    'email',
+                ],
+            ],
         ], $result);
 
         $text = 'This is a text with two emails: example.example@example.com, and another@example.com.';
@@ -145,15 +145,15 @@ class KeywordExtractorTest extends TestCase
             'text' => [
                 'frequency' => 1,
                 'originals' => [
-                    'text'
-                ]
+                    'text',
+                ],
             ],
             'email' => [
                 'frequency' => 1,
                 'originals' => [
-                    'emails:'
-                ]
-            ]
+                    'emails:',
+                ],
+            ],
         ], $result);
     }
 
@@ -168,16 +168,16 @@ class KeywordExtractorTest extends TestCase
             'simpl' => [
                 'frequency' => 2,
                 'originals' => [
-                    'simple'
-                ]
+                    'simple',
+                ],
             ],
             'sentenc' => [
                 'frequency' => 2,
                 'originals' => [
                     'sentence',
-                    'sentence.'
-                ]
-            ]
+                    'sentence.',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setWhitelist(['simple']);
@@ -187,16 +187,16 @@ class KeywordExtractorTest extends TestCase
             'simple' => [
                 'frequency' => 2,
                 'originals' => [
-                    'simple'
-                ]
+                    'simple',
+                ],
             ],
             'sentenc' => [
                 'frequency' => 2,
                 'originals' => [
                     'sentence',
-                    'sentence.'
-                ]
-            ]
+                    'sentence.',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setWhitelist(['simple', 'is', 'dummy']);
@@ -206,22 +206,22 @@ class KeywordExtractorTest extends TestCase
             'is' => [
                 'frequency' => 1,
                 'originals' => [
-                    'is'
-                ]
+                    'is',
+                ],
             ],
             'simple' => [
                 'frequency' => 2,
                 'originals' => [
-                    'simple'
-                ]
+                    'simple',
+                ],
             ],
             'sentenc' => [
                 'frequency' => 2,
                 'originals' => [
                     'sentence',
-                    'sentence.'
-                ]
-            ]
+                    'sentence.',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setWhitelist(['simple sentence']);
@@ -231,8 +231,8 @@ class KeywordExtractorTest extends TestCase
             'simple sentence' => [
                 'frequency' => 2,
                 'originals' => [
-                    'simple sentence'
-                ]
+                    'simple sentence',
+                ],
             ],
         ], $result);
     }
@@ -248,15 +248,15 @@ class KeywordExtractorTest extends TestCase
             'simpl' => [
                 'frequency' => 1,
                 'originals' => [
-                    'simple'
-                ]
+                    'simple',
+                ],
             ],
             'sentenc' => [
                 'frequency' => 1,
                 'originals' => [
-                    'sentence.'
-                ]
-            ]
+                    'sentence.',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setBlacklist(['simple']);
@@ -266,9 +266,9 @@ class KeywordExtractorTest extends TestCase
             'sentenc' => [
                 'frequency' => 1,
                 'originals' => [
-                    'sentence.'
-                ]
-            ]
+                    'sentence.',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setBlacklist(['simple', 'is', 'dummy']);
@@ -278,9 +278,9 @@ class KeywordExtractorTest extends TestCase
             'sentenc' => [
                 'frequency' => 1,
                 'originals' => [
-                    'sentence.'
-                ]
-            ]
+                    'sentence.',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setBlacklist(['simple sentence']);
@@ -297,15 +297,15 @@ class KeywordExtractorTest extends TestCase
             'excit' => [
                 'frequency' => 1,
                 'originals' => [
-                    'exciting'
-                ]
+                    'exciting',
+                ],
             ],
             'opportun' => [
                 'frequency' => 1,
                 'originals' => [
-                    'opportunity'
-                ]
-            ]
+                    'opportunity',
+                ],
+            ],
         ], $result);
 
         $keywordExtractor->setBlacklist(['opportun']);
@@ -316,8 +316,8 @@ class KeywordExtractorTest extends TestCase
             'excit' => [
                 'frequency' => 1,
                 'originals' => [
-                    'exciting'
-                ]
+                    'exciting',
+                ],
             ],
         ], $result);
     }

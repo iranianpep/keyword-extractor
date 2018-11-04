@@ -162,7 +162,7 @@ class KeywordExtractor
         $alreadyAdded = false;
 
         /**
-         * @var $modifier ModifierInterface
+         * @var ModifierInterface
          */
         foreach ($this->getModifiers() as $modifier) {
             $toBeModified = $word;
@@ -299,7 +299,7 @@ class KeywordExtractor
 
         $this->keywords[$keyword] = [
             'frequency' => $frequency,
-            'originals' => $originals
+            'originals' => $originals,
         ];
     }
 
