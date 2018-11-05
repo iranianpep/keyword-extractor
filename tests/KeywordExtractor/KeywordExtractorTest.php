@@ -234,7 +234,7 @@ class KeywordExtractorTest extends TestCase
                 'frequency' => 2,
                 'originals' => [
                     'simple sentence',
-                    'simple sentence.'
+                    'simple sentence.',
                 ],
             ],
         ], $result);
