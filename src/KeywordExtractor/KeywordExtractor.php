@@ -160,6 +160,7 @@ class KeywordExtractor
     private function applyModifiers(array $tokens, string $word, array $indexes): array
     {
         $alreadyAdded = false;
+        $original = $word;
 
         /*
          * @var ModifierInterface
@@ -171,7 +172,7 @@ class KeywordExtractor
             if ($modifier instanceof WhitelistFilter) {
                 if (!empty($word) === true) {
                     // word is whitelisted
-                    $this->addKeyword($word, $toBeModified);
+                    $this->addKeyword($word, $original);
 
                     $tokens = (new IndexBlacklistFilter($indexes))->modifyTokens($tokens);
                     $alreadyAdded = true;

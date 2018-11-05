@@ -234,6 +234,7 @@ class KeywordExtractorTest extends TestCase
                 'frequency' => 2,
                 'originals' => [
                     'simple sentence',
+                    'simple sentence.'
                 ],
             ],
         ], $result);
@@ -432,6 +433,34 @@ who has great people than this is an opportunity you need to explore further...'
         $this->assertTrue(array_key_exists('css', $result) === true);
         $this->assertTrue(array_key_exists('devop', $result) === true);
         $this->assertTrue(array_key_exists('redux', $result) === true);
+
+        $text = "What we're interested is c#, .net and asp but mainly c# and c#.";
+        $keywordExtractor->setWhitelist(['c#', '.net', 'asp']);
+        $keywordExtractor->setBlacklist(['interest', 'c#,']);
+        $result = $keywordExtractor->run($text);
+
+        $this->assertEquals([
+            'c#' => [
+                'frequency' => 3,
+                'originals' => [
+                    'c#,',
+                    'c#',
+                    'c#.',
+                ],
+            ],
+            '.net' => [
+                'frequency' => 1,
+                'originals' => [
+                    '.net',
+                ],
+            ],
+            'asp' => [
+                'frequency' => 1,
+                'originals' => [
+                    'asp',
+                ],
+            ],
+        ], $result);
     }
 
     public function testGetModifiers()

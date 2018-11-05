@@ -31,10 +31,97 @@ $text = 'This is a simple sentence.';
 $result = $keywordExtractor->run($text);
 ```
 
-The stemmed result after removing stop words and punctuations will be:
+The result with the default modifiers will be:
 ```
 array (
-  0 => 'simpl',
-  1 => 'sentenc',
+  'simpl' => 
+  array (
+    'frequency' => 1,
+    'originals' => 
+    array (
+      0 => 'simple',
+    ),
+  ),
+  'sentenc' => 
+  array (
+    'frequency' => 1,
+    'originals' => 
+    array (
+      0 => 'sentence.',
+    ),
+  ),
+)
+```
+
+Currently the default modifiers are as follow (they will be applied to the tokens in order):
+```
+[
+    new EmailFilter(),
+    new PunctuationFilter(),
+    new WhitelistFilter($this->getWhitelist()),
+    new BlacklistFilter($this->getBlacklist()),
+    new StopWordFilter(),
+    new NumberFilter(),
+    new StemFilter(),
+    // run the blacklist even after stemming too
+    new BlacklistFilter($this->getBlacklist()),
+]
+```
+
+Obviously, you can set your own modifiers:
+```
+$keywordExtractor->setModifiers([new PunctuationFilter()]);
+```
+
+Also whitelist can be used as follow:
+```
+$keywordExtractor = new KeywordExtractor();
+$text = 'This is a simple sentence and simple sentence.';
+$keywordExtractor->setWhitelist(['simple']);
+$result = $keywordExtractor->run($text);
+```
+
+Which results in:
+```
+array (
+  'simple' => 
+  array (
+    'frequency' => 2,
+    'originals' => 
+    array (
+      0 => 'simple',
+    ),
+  ),
+  'sentenc' => 
+  array (
+    'frequency' => 2,
+    'originals' => 
+    array (
+      0 => 'sentence',
+      1 => 'sentence.',
+    ),
+  ),
+)
+```
+
+Blacklist can also be used in the same way as whitelist:
+```
+$keywordExtractor = new KeywordExtractor();
+$text = 'This is a simple sentence.';
+$keywordExtractor->setBlacklist(['simple']);
+$result = $keywordExtractor->run($text);
+```
+
+And the result is:
+```
+array (
+  'sentenc' => 
+  array (
+    'frequency' => 1,
+    'originals' => 
+    array (
+      0 => 'sentence.',
+    ),
+  ),
 )
 ```
