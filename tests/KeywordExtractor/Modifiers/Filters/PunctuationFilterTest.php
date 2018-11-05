@@ -33,4 +33,13 @@ class PunctuationFilterTest extends TestCase
             $this->assertEquals($inputOutput['o'], $filter->modifyTokens($inputOutput['i']));
         }
     }
+
+    public function testGetPunctuations()
+    {
+        $filter = new PunctuationFilter();
+        $punctuations = ['.', ','];
+        $filter->setPunctuations($punctuations);
+
+        $this->assertEquals($punctuations, $filter->getPunctuations());
+    }
 }

@@ -4,9 +4,21 @@ namespace KeywordExtractor\Modifiers;
 
 interface ModifierInterface
 {
+    /**
+     * @param $input
+     * @return mixed
+     */
     public function modify($input);
 
+    /**
+     * @param $token
+     * @return mixed
+     */
     public function modifyToken($token);
 
-    public function modifyTokens(array $tokens);
+    /**
+     * @param array $tokens
+     * @return array
+     */
+    public function modifyTokens(array $tokens): array;
 }

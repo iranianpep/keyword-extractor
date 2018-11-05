@@ -28,11 +28,6 @@ class StopWordFilter extends AbstractModifier
         if (!isset($this->stopWordList)) {
             $stopWordsPath = dirname(dirname(__DIR__)).self::DS.self::STORAGE_DIR.self::DS.'stopwords-en.json';
             $content = json_decode(file_get_contents($stopWordsPath), true);
-
-            if (empty($content)) {
-                $content = [];
-            }
-
             $this->setStopWordList($content);
         }
 

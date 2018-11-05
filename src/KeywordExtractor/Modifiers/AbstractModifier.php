@@ -13,7 +13,7 @@ abstract class AbstractModifier implements ModifierInterface
         return $this->modifyToken($input);
     }
 
-    public function modifyTokens(array $array)
+    public function modifyTokens(array $array): array
     {
         foreach ($array as $key => $value) {
             $array[$key] = $this->modifyToken($value);

@@ -15,7 +15,7 @@ class EmptyFilter extends AbstractModifier
         return $token;
     }
 
-    public function modifyTokens(array $array)
+    public function modifyTokens(array $array): array
     {
         foreach ($array as $key => $value) {
             if ($this->modifyToken($value) === '') {

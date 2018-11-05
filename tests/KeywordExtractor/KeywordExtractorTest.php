@@ -2,6 +2,8 @@
 
 namespace KeywordExtractor;
 
+use KeywordExtractor\Modifiers\Filters\EmailFilter;
+use KeywordExtractor\Modifiers\Filters\PunctuationFilter;
 use PHPUnit\Framework\TestCase;
 
 class KeywordExtractorTest extends TestCase
@@ -430,5 +432,18 @@ who has great people than this is an opportunity you need to explore further...'
         $this->assertTrue(array_key_exists('css', $result) === true);
         $this->assertTrue(array_key_exists('devop', $result) === true);
         $this->assertTrue(array_key_exists('redux', $result) === true);
+    }
+
+    public function testGetModifiers()
+    {
+        $modifiers = [
+            new EmailFilter(),
+            new PunctuationFilter(),
+        ];
+
+        $keywordExtractor = new KeywordExtractor();
+        $keywordExtractor->setModifiers($modifiers);
+
+        $this->assertEquals($modifiers, $keywordExtractor->getModifiers());
     }
 }

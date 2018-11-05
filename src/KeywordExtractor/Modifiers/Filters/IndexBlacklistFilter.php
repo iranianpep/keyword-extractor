@@ -18,7 +18,7 @@ class IndexBlacklistFilter extends AbstractModifier
         return $token;
     }
 
-    public function modifyTokens(array $array)
+    public function modifyTokens(array $array): array
     {
         foreach ($this->getIndexBlacklist() as $index) {
             unset($array[$index]);

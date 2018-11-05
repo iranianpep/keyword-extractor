@@ -48,4 +48,10 @@ class IndexBlacklistFilterTest extends TestCase
             );
         }
     }
+
+    public function testModifyToken()
+    {
+        $filter = new IndexBlacklistFilter([1, 2, 3]);
+        $this->assertEquals('dummy', $filter->modifyToken('dummy'));
+    }
 }
