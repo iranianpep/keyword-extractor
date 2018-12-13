@@ -7,8 +7,10 @@ use KeywordExtractor\Modifiers\Filters\EmailFilter;
 use KeywordExtractor\Modifiers\Filters\IndexBlacklistFilter;
 use KeywordExtractor\Modifiers\Filters\NumberFilter;
 use KeywordExtractor\Modifiers\Filters\PunctuationFilter;
+use KeywordExtractor\Modifiers\Filters\SalaryFilter;
 use KeywordExtractor\Modifiers\Filters\StemFilter;
 use KeywordExtractor\Modifiers\Filters\StopWordFilter;
+use KeywordExtractor\Modifiers\Filters\UrlFilter;
 use KeywordExtractor\Modifiers\Filters\WhitelistFilter;
 use KeywordExtractor\Modifiers\ModifierInterface;
 use KeywordExtractor\Modifiers\Transformers\LowerCaseTransformer;
@@ -87,12 +89,14 @@ class KeywordExtractor
     private function getDefaultModifiers(): array
     {
         return [
+            new UrlFilter(),
             new EmailFilter(),
             new PunctuationFilter(),
             new WhitelistFilter($this->getWhitelist()),
             new BlacklistFilter($this->getBlacklist()),
             new StopWordFilter(),
             new NumberFilter(),
+            new SalaryFilter(),
             new StemFilter(),
             // run the blacklist even after stemming too
             new BlacklistFilter($this->getBlacklist()),
