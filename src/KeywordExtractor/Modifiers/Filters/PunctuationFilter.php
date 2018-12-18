@@ -17,6 +17,7 @@ class PunctuationFilter extends AbstractModifier
     public function modifyToken($token)
     {
         $token = rtrim($token, " \t\n\r\0\x0B".implode('', $this->getRightPunctuations()));
+
         return ltrim($token, implode('', $this->getLeftPunctuations()));
     }
 
