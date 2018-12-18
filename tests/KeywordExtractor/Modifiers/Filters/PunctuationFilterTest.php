@@ -27,6 +27,10 @@ class PunctuationFilterTest extends TestCase
                 'i' => ['visual studio 2018', 'knockout.js', '- knockout...js?'],
                 'o' => ['visual studio 2018', 'knockout.js', '- knockout...js'],
             ],
+            [
+                'i' => ['(visual studio 2018', '(c#', '"c'],
+                'o' => ['visual studio 2018', 'c#', 'c'],
+            ],
         ];
 
         foreach ($inputsOutputs as $inputOutput) {
@@ -34,12 +38,21 @@ class PunctuationFilterTest extends TestCase
         }
     }
 
-    public function testGetPunctuations()
+    public function testGetRightPunctuations()
     {
         $filter = new PunctuationFilter();
         $punctuations = ['.', ','];
-        $filter->setPunctuations($punctuations);
+        $filter->setRightPunctuations($punctuations);
 
-        $this->assertEquals($punctuations, $filter->getPunctuations());
+        $this->assertEquals($punctuations, $filter->getRightPunctuations());
+    }
+
+    public function testGetLeftPunctuations()
+    {
+        $filter = new PunctuationFilter();
+        $punctuations = ['.', ','];
+        $filter->setLeftPunctuations($punctuations);
+
+        $this->assertEquals($punctuations, $filter->getLeftPunctuations());
     }
 }
