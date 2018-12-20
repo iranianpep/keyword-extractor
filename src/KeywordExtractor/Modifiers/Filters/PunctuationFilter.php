@@ -72,6 +72,6 @@ class PunctuationFilter extends AbstractModifier
 
     private function getDefaultLeftPunctuations()
     {
-        return ['(', "'", '`', '"', "“", "‘"];
+        return ['(', "'", '`', '"', '“', '‘'];
     }
 }
