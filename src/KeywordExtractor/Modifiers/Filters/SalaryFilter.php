@@ -8,7 +8,8 @@ class SalaryFilter extends AbstractModifier
 {
     public function modifyToken($token)
     {
-        if (preg_match('/^\$?[0-9]*[,]*[0-9]*(\.[0-9]*)?(k|(\/)*hr|(\/)*hour|(\/)*ph|(\/)*b|(\/)*m|(\/)*day)*$/', $token)) {
+        $regex = '/^\$?[0-9]*[,]*[0-9]*(\.[0-9]*)?(k|(\/)*hr|(\/)*hour|(\/)*ph|(\/)*b|(\/)*m|(\/)*day)*$/';
+        if (preg_match($regex, $token)) {
             return '';
         }
 
