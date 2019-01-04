@@ -354,18 +354,18 @@ PhpStorm, Eclipse or other IDE';
         $result = $keywordExtractor->run($text);
         //}
 
-        $this->assertTrue(array_key_exists('linux', $result));
-        $this->assertTrue(array_key_exists('php', $result));
-        $this->assertTrue(array_key_exists('composer', $result));
-        $this->assertTrue(array_key_exists('css', $result));
-        $this->assertTrue(array_key_exists('mongodb', $result));
+        $this->assertArrayHasKey('linux', $result);
+        $this->assertArrayHasKey('php', $result);
+        $this->assertArrayHasKey('composer', $result);
+        $this->assertArrayHasKey('css', $result);
+        $this->assertArrayHasKey('mongodb', $result);
 
-        $this->assertTrue(array_key_exists('environ', $result));
+        $this->assertArrayHasKey('environ', $result);
 
         $keywordExtractor->setBlacklist(['software', 'etc', 'environments']);
         $result = $keywordExtractor->run($text);
 
-        $this->assertFalse(array_key_exists('environ', $result));
+        $this->assertArrayNotHasKey('environ', $result);
 
         $text = 'This includes some keywords such as javascript,
         java, c#, php, android, python, jquery, c++, ruby-on-rails, c, r, objective-c,
@@ -378,30 +378,30 @@ PhpStorm, Eclipse or other IDE';
         /*
          * Did not use loop because if one of the tests fail, it's easier to find out which one failed
          */
-        $this->assertTrue(array_key_exists('javascript', $result) === true);
-        $this->assertTrue(array_key_exists('java', $result) === true);
-        $this->assertTrue(array_key_exists('c#', $result) === true);
-        $this->assertTrue(array_key_exists('php', $result) === true);
-        $this->assertTrue(array_key_exists('android', $result) === true);
-        $this->assertTrue(array_key_exists('python', $result) === true);
-        $this->assertTrue(array_key_exists('jquery', $result) === true);
-        $this->assertTrue(array_key_exists('c++', $result) === true);
-        $this->assertTrue(array_key_exists('c', $result) === true);
-        $this->assertTrue(array_key_exists('r', $result) === true);
-        $this->assertTrue(array_key_exists('objective-c', $result) === true);
-        $this->assertTrue(array_key_exists('wpf', $result) === true);
-        $this->assertTrue(array_key_exists('asp.net-mvc', $result) === true);
-        $this->assertTrue(array_key_exists('python-3.x', $result) === true);
-        $this->assertTrue(array_key_exists('html5', $result) === true);
-        $this->assertTrue(array_key_exists('python-2.7', $result) === true);
-        $this->assertTrue(array_key_exists('.htaccess', $result) === true);
-        $this->assertTrue(array_key_exists('django', $result) === true);
-        $this->assertTrue(array_key_exists('jsp', $result) === true);
-        $this->assertTrue(array_key_exists('oop', $result) === true);
-        $this->assertTrue(array_key_exists('go', $result) === true);
-        $this->assertTrue(array_key_exists('iis', $result) === true);
-        $this->assertTrue(array_key_exists('ios7', $result) === true);
-        $this->assertTrue(array_key_exists('f#', $result) === true);
+        $this->assertArrayHasKey('javascript', $result);
+        $this->assertArrayHasKey('java', $result);
+        $this->assertArrayHasKey('c#', $result);
+        $this->assertArrayHasKey('php', $result);
+        $this->assertArrayHasKey('android', $result);
+        $this->assertArrayHasKey('python', $result);
+        $this->assertArrayHasKey('jquery', $result);
+        $this->assertArrayHasKey('c++', $result);
+        $this->assertArrayHasKey('c', $result);
+        $this->assertArrayHasKey('r', $result);
+        $this->assertArrayHasKey('objective-c', $result);
+        $this->assertArrayHasKey('wpf', $result);
+        $this->assertArrayHasKey('asp.net-mvc', $result);
+        $this->assertArrayHasKey('python-3.x', $result);
+        $this->assertArrayHasKey('html5', $result);
+        $this->assertArrayHasKey('python-2.7', $result);
+        $this->assertArrayHasKey('.htaccess', $result);
+        $this->assertArrayHasKey('django', $result);
+        $this->assertArrayHasKey('jsp', $result);
+        $this->assertArrayHasKey('oop', $result);
+        $this->assertArrayHasKey('go', $result);
+        $this->assertArrayHasKey('iis', $result);
+        $this->assertArrayHasKey('ios7', $result);
+        $this->assertArrayHasKey('f#', $result);
 
         $text = 'Milestone IT is an industry leader in the provision of the highest quality software engineers.
         Right now,  we are seeking 2 developers to work on-site delivering Backend Microservices in Node.
@@ -427,12 +427,12 @@ who has great people than this is an opportunity you need to explore further...'
 
         $result = $keywordExtractor->run($text);
 
-        $this->assertTrue(array_key_exists('microservic', $result) === true);
-        $this->assertTrue(array_key_exists('react', $result) === true);
-        $this->assertTrue(array_key_exists('react native', $result) === true);
-        $this->assertTrue(array_key_exists('css', $result) === true);
-        $this->assertTrue(array_key_exists('devop', $result) === true);
-        $this->assertTrue(array_key_exists('redux', $result) === true);
+        $this->assertArrayHasKey('microservic', $result);
+        $this->assertArrayHasKey('react', $result);
+        $this->assertArrayHasKey('react native', $result);
+        $this->assertArrayHasKey('css', $result);
+        $this->assertArrayHasKey('devop', $result);
+        $this->assertArrayHasKey('redux', $result);
 
         $text = "What we're interested is c#, .net and asp but mainly c# and c#.";
         $keywordExtractor->setWhitelist(['c#', '.net', 'asp']);
