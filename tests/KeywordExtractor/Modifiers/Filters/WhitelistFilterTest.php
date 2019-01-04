@@ -6,43 +6,47 @@ use PHPUnit\Framework\TestCase;
 
 class WhitelistFilterTest extends TestCase
 {
-    public function testModifyText()
+    public function modifyTextProvider()
+    {
+        return [
+            [
+                'leading',
+                '',
+            ],
+            [
+                'team',
+                '',
+            ],
+            [
+                'leading team',
+                '',
+            ],
+            [
+                'c# dev',
+                '',
+            ],
+            [
+                'c#',
+                'c#',
+            ],
+            [
+                'php',
+                'php',
+            ],
+            [
+                'a leading team',
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected)
     {
         $filter = new WhitelistFilter(['php', 'c#', '.net']);
 
-        $inputsOutputs = [
-            [
-                'i' => 'leading',
-                'o' => '',
-            ],
-            [
-                'i' => 'team',
-                'o' => '',
-            ],
-            [
-                'i' => 'leading team',
-                'o' => '',
-            ],
-            [
-                'i' => 'c# dev',
-                'o' => '',
-            ],
-            [
-                'i' => 'c#',
-                'o' => 'c#',
-            ],
-            [
-                'i' => 'php',
-                'o' => 'php',
-            ],
-            [
-                'i' => 'a leading team',
-                'o' => '',
-            ],
-        ];
-
-        foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyToken($inputOutput['i']));
-        }
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
     }
 }

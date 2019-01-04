@@ -6,10 +6,27 @@ use PHPUnit\Framework\TestCase;
 
 class TokenTransformerTest extends TestCase
 {
-    public function testModifyText()
+    public function modifyTextProvider()
+    {
+        return [
+            [
+                ['This', 'is', 'A', 'TEST'],
+                'This is A TEST',
+            ],
+            [
+                ['This', 'is', 'A', 'TEST.'],
+                'This is A TEST.',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($expected, $inputText)
     {
         $transformer = new TokenTransformer();
-        $this->assertEquals(['This', 'is', 'A', 'TEST'], $transformer->modifyToken('This is A TEST'));
-        $this->assertEquals(['This', 'is', 'A', 'TEST.'], $transformer->modifyToken('This is A TEST.'));
+
+        $this->assertEquals($expected, $transformer->modifyToken($inputText));
     }
 }
