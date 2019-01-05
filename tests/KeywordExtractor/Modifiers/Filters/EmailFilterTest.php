@@ -6,31 +6,35 @@ use PHPUnit\Framework\TestCase;
 
 class EmailFilterTest extends TestCase
 {
-    public function testModifyText()
+    public function modifyTextProvider()
+    {
+        return [
+            [
+                'test@example.com.',
+                '.',
+            ],
+            [
+                'this contains an email e.g. test@example.com.',
+                'this contains an email e.g. .',
+            ],
+            [
+                'this contains an email e.g. invalid@email.',
+                'this contains an email e.g. invalid@email.',
+            ],
+            [
+                'this contains two emails valid@gmail.com and valid2@gmail.com',
+                'this contains two emails  and ',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected)
     {
         $filter = new EmailFilter();
 
-        $inputsOutputs = [
-            [
-                'i' => 'test@example.com.',
-                'o' => '.',
-            ],
-            [
-                'i' => 'this contains an email e.g. test@example.com.',
-                'o' => 'this contains an email e.g. .',
-            ],
-            [
-                'i' => 'this contains an email e.g. invalid@email.',
-                'o' => 'this contains an email e.g. invalid@email.',
-            ],
-            [
-                'i' => 'this contains two emails valid@gmail.com and valid2@gmail.com',
-                'o' => 'this contains two emails  and ',
-            ],
-        ];
-
-        foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyToken($inputOutput['i']));
-        }
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
     }
 }

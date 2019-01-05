@@ -6,63 +6,71 @@ use PHPUnit\Framework\TestCase;
 
 class EmptyFilterTest extends TestCase
 {
-    public function testModifyText()
+    public function modifyTextProvider()
     {
-        $filter = new EmptyFilter();
-
-        $inputsOutputs = [
+        return [
             [
-                'i' => '',
-                'o' => '',
+                '',
+                '',
             ],
             [
-                'i' => 0,
-                'o' => 0,
+                0,
+                0,
             ],
             [
-                'i' => '0',
-                'o' => '0',
+                '0',
+                '0',
             ],
             [
-                'i' => '0 ',
-                'o' => '0 ',
+                '0 ',
+                '0 ',
             ],
             [
-                'i' => 'test 0',
-                'o' => 'test 0',
+                'test 0',
+                'test 0',
             ],
             [
-                'i' => '   ',
-                'o' => '',
+                '   ',
+                '',
             ],
         ];
-
-        foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyToken($inputOutput['i']));
-        }
     }
 
-    public function testModifyArray()
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected)
     {
         $filter = new EmptyFilter();
 
-        $inputsOutputs = [
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
+    }
+
+    public function modifyArrayProvider()
+    {
+        return [
             [
-                'i' => [],
-                'o' => [],
+                [],
+                [],
             ],
             [
-                'i' => ['test', 1, 0, '', '0', 'c#'],
-                'o' => [0 => 'test', 1 => 1, 2 => 0, 4 => '0', 5 => 'c#'],
+                ['test', 1, 0, '', '0', 'c#'],
+                [0 => 'test', 1 => 1, 2 => 0, 4 => '0', 5 => 'c#'],
             ],
             [
-                'i' => ['test 0', 1, 0, ' test', '0', ' '],
-                'o' => ['test 0', 1, 0, ' test', '0'],
+                ['test 0', 1, 0, ' test', '0', ' '],
+                ['test 0', 1, 0, ' test', '0'],
             ],
         ];
+    }
 
-        foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyTokens($inputOutput['i']));
-        }
+    /**
+     * @dataProvider modifyArrayProvider
+     */
+    public function testModifyArray($inputText, $expected)
+    {
+        $filter = new EmptyFilter();
+
+        $this->assertEquals($expected, $filter->modifyTokens($inputText));
     }
 }
