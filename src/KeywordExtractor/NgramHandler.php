@@ -3,7 +3,7 @@
 namespace KeywordExtractor;
 
 /**
- * Class NgramHandler
+ * Class NgramHandler.
  */
 class NgramHandler
 {
