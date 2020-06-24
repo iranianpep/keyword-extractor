@@ -3,17 +3,17 @@
 namespace KeywordExtractor;
 
 /**
- * Class Ngram
+ * Class Ngram.
  */
 class Ngram
 {
     /**
-     * @var String $word
+     * @var string
      */
     private $word;
 
     /**
-     * @var array $indexes
+     * @var array
      */
     private $indexes;
 
@@ -24,7 +24,7 @@ class Ngram
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getWord(): string
     {
@@ -32,7 +32,7 @@ class Ngram
     }
 
     /**
-     * @param String $word
+     * @param string $word
      */
     public function setWord(string $word): void
     {
