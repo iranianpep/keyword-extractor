@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php" backupGlobals="false" verbose="true" processIsolation="true">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         stopOnError="true">
   <testsuites>
     <testsuite name="Keyword Extractor Test Suite">
-      <directory suffix="Test.php">tests/KeywordExtractor/</directory>
+      <directory>tests/KeywordExtractor/</directory>
     </testsuite>
   </testsuites>
 
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">src/KeywordExtractor/</directory>
+      <exclude>
+        <directory>vendor</directory>
+      </exclude>
     </whitelist>
   </filter>
 

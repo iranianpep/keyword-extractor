@@ -31,61 +31,6 @@ class KeywordExtractor
      */
     const NGRAM_SIZES = [3, 2, 1];
 
-    const INDEXES_KEY = 'indexes';
-    const WORD_KEY = 'word';
-
-    /**
-     * Generate n-grams
-     * Credits to https://github.com/yooper/php-text-analysis/blob/master/src/NGrams/NGramFactory.php.
-     *
-     * @param array $tokens
-     * @param int   $ngramSize
-     *
-     * @return array
-     */
-    private function generateNgrams(array $tokens, int $ngramSize): array
-    {
-        $length = count($tokens) - $ngramSize + 1;
-
-        if ($length < 1) {
-            return [];
-        }
-
-        $ngrams = [];
-        for ($i = 0; $i < $length; $i++) {
-            $ngrams[] = $this->extractNgram($tokens, $ngramSize, $i);
-        }
-
-        return $ngrams;
-    }
-
-    /**
-     * @param array $tokens
-     * @param       $ngramSize
-     * @param       $currentIndex
-     *
-     * @return array
-     */
-    private function extractNgram(array $tokens, $ngramSize, $currentIndex): array
-    {
-        $word = '';
-        $subIndexes = [];
-        for ($j = 0; $j < $ngramSize; $j++) {
-            $subIndex = $currentIndex + $j;
-            $subIndexes[] = $subIndex;
-
-            if (isset($tokens[$subIndex])) {
-                $word .= $tokens[$subIndex];
-            }
-
-            if ($j < $ngramSize - 1) {
-                $word .= ' ';
-            }
-        }
-
-        return [self::WORD_KEY => $word, self::INDEXES_KEY => $subIndexes];
-    }
-
     /**
      * @return array
      */
@@ -136,21 +81,19 @@ class KeywordExtractor
      */
     private function extractNgramKeywords(array $tokens, int $ngramSize): array
     {
-        foreach ($this->generateNgrams($tokens, $ngramSize) as $wordAndIndexes) {
-            $word = $wordAndIndexes[self::WORD_KEY];
-            $original = $word;
-
-            $indexes = $wordAndIndexes[self::INDEXES_KEY];
-
-            $result = $this->applyModifiers($tokens, $word, $indexes);
+        /**
+         * @var Ngram $ngram
+         */
+        foreach ((new NgramHandler())->generateNgrams($tokens, $ngramSize) as $ngram) {
+            $result = $this->applyModifiers($tokens, $ngram->getWord(), $ngram->getIndexes());
 
             $tokens = $result['tokens'];
-            $word = $result['word'];
+            $modifiedWord = $result['word'];
             $alreadyAdded = $result['alreadyAdded'];
 
             // if the word survives after applying all the filters it's deserved to be added to the keywords!
-            if ($ngramSize === 1 && !empty($word) && $alreadyAdded === false) {
-                $this->addKeyword($word, $original);
+            if ($ngramSize === 1 && !empty($modifiedWord) && $alreadyAdded === false) {
+                $this->addKeyword($modifiedWord, $ngram->getWord());
             }
         }
 
