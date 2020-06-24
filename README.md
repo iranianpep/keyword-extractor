@@ -16,7 +16,7 @@ A package to extract keywords from text
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iranianpep/keyword-extractor/master/LICENSE)
 
 ## Server Requirements
-- PHP >= 7.1
+- PHP >= 7.3
 
 ## Usage
 -  To install ths package:
@@ -53,7 +53,7 @@ array (
 )
 ```
 
-Currently the default modifiers are as follow (they will be applied to the tokens in order):
+Currently, the default modifiers are as follow (they will be applied to the tokens in order):
 ```
 [
     new EmailFilter(),
@@ -73,7 +73,7 @@ Obviously, you can set your own modifiers:
 $keywordExtractor->setModifiers([new PunctuationFilter()]);
 ```
 
-Also whitelist can be used as follow:
+Also, whitelist can be used as follow:
 ```
 $keywordExtractor = new KeywordExtractor();
 $text = 'This is a simple sentence and simple sentence.';
@@ -112,7 +112,7 @@ $keywordExtractor->setBlacklist(['simple']);
 $result = $keywordExtractor->run($text);
 ```
 
-And the result is:
+The result is:
 ```
 array (
   'sentenc' => 

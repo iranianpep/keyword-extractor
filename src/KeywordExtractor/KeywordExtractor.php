@@ -16,6 +16,10 @@ use KeywordExtractor\Modifiers\ModifierInterface;
 use KeywordExtractor\Modifiers\Transformers\LowerCaseTransformer;
 use KeywordExtractor\Modifiers\Transformers\TokenTransformer;
 
+/**
+ * Class KeywordExtractor
+ * @package KeywordExtractor
+ */
 class KeywordExtractor
 {
     private $blacklist;
@@ -36,11 +40,11 @@ class KeywordExtractor
      * Credits to https://github.com/yooper/php-text-analysis/blob/master/src/NGrams/NGramFactory.php.
      *
      * @param array $tokens
-     * @param       $ngramSize
+     * @param int   $ngramSize
      *
      * @return array
      */
-    private function generateNgrams(array $tokens, $ngramSize): array
+    private function generateNgrams(array $tokens, int $ngramSize): array
     {
         $length = count($tokens) - $ngramSize + 1;
 
@@ -286,10 +290,10 @@ class KeywordExtractor
     }
 
     /**
-     * @param $keyword
-     * @param $original
+     * @param string $keyword
+     * @param string $original
      */
-    public function addKeyword($keyword, $original): void
+    public function addKeyword(string $keyword, string $original): void
     {
         $frequency = 1;
         $originals = [];
@@ -309,11 +313,11 @@ class KeywordExtractor
     }
 
     /**
-     * @param $keyword
+     * @param string $keyword
      *
      * @return bool
      */
-    private function keywordExists($keyword): bool
+    private function keywordExists(string $keyword): bool
     {
         return array_key_exists($keyword, $this->getKeywords());
     }
@@ -321,7 +325,7 @@ class KeywordExtractor
     /**
      * @param array $keywords
      */
-    public function setKeywords(array $keywords)
+    public function setKeywords(array $keywords): void
     {
         $this->keywords = $keywords;
     }
