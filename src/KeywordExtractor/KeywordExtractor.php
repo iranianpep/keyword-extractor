@@ -17,8 +17,7 @@ use KeywordExtractor\Modifiers\Transformers\LowerCaseTransformer;
 use KeywordExtractor\Modifiers\Transformers\TokenTransformer;
 
 /**
- * Class KeywordExtractor
- * @package KeywordExtractor
+ * Class KeywordExtractor.
  */
 class KeywordExtractor
 {
