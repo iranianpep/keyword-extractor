@@ -6,39 +6,43 @@ use PHPUnit\Framework\TestCase;
 
 class NumberFilterTest extends TestCase
 {
-    public function testModifyText()
+    public function modifyTextProvider()
+    {
+        return [
+            [
+                '1',
+                '',
+            ],
+            [
+                '123',
+                '',
+            ],
+            [
+                1,
+                '',
+            ],
+            [
+                123,
+                '',
+            ],
+            [
+                'test1',
+                'test1',
+            ],
+            [
+                'test 1',
+                'test 1',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected)
     {
         $filter = new NumberFilter();
 
-        $inputsOutputs = [
-            [
-                'i' => '1',
-                'o' => '',
-            ],
-            [
-                'i' => '123',
-                'o' => '',
-            ],
-            [
-                'i' => 1,
-                'o' => '',
-            ],
-            [
-                'i' => 123,
-                'o' => '',
-            ],
-            [
-                'i' => 'test1',
-                'o' => 'test1',
-            ],
-            [
-                'i' => 'test 1',
-                'o' => 'test 1',
-            ],
-        ];
-
-        foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyToken($inputOutput['i']));
-        }
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
     }
 }

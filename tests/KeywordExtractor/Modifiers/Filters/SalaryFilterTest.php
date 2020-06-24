@@ -6,119 +6,123 @@ use PHPUnit\Framework\TestCase;
 
 class SalaryFilterTest extends TestCase
 {
-    public function testModifyText()
+    public function modifyTextProvider()
+    {
+        return [
+            [
+                'test123',
+                'test123',
+            ],
+            [
+                '123test',
+                '123test',
+            ],
+            [
+                'test123test',
+                'test123test',
+            ],
+            [
+                '12345',
+                '',
+            ],
+            [
+                '12.34',
+                '',
+            ],
+            [
+                '12.3456',
+                '',
+            ],
+            [
+                '$40',
+                '',
+            ],
+            [
+                '$119,921.00',
+                '',
+            ],
+            [
+                '$27.50',
+                '',
+            ],
+            [
+                '$490.5',
+                '',
+            ],
+            [
+                '$5',
+                '',
+            ],
+            [
+                '$65,100',
+                '',
+            ],
+            [
+                '$76,611',
+                '',
+            ],
+            [
+                '$70k',
+                '',
+            ],
+            [
+                '$150k',
+                '',
+            ],
+            [
+                '$27ph',
+                '',
+            ],
+            [
+                '$3b',
+                '',
+            ],
+            [
+                '$5m',
+                '',
+            ],
+            [
+                '$850/day',
+                '',
+            ],
+            [
+                '$150hr',
+                '',
+            ],
+            [
+                '$150hour',
+                '',
+            ],
+            [
+                '$150/hr',
+                '',
+            ],
+            [
+                '$150/hour',
+                '',
+            ],
+            [
+                '150/hour',
+                '',
+            ],
+            [
+                'example/hour',
+                'example/hour',
+            ],
+            [
+                'c#',
+                'c#',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected)
     {
         $filter = new SalaryFilter();
 
-        $inputsOutputs = [
-            [
-                'i' => 'test123',
-                'o' => 'test123',
-            ],
-            [
-                'i' => '123test',
-                'o' => '123test',
-            ],
-            [
-                'i' => 'test123test',
-                'o' => 'test123test',
-            ],
-            [
-                'i' => '12345',
-                'o' => '',
-            ],
-            [
-                'i' => '12.34',
-                'o' => '',
-            ],
-            [
-                'i' => '12.3456',
-                'o' => '',
-            ],
-            [
-                'i' => '$40',
-                'o' => '',
-            ],
-            [
-                'i' => '$119,921.00',
-                'o' => '',
-            ],
-            [
-                'i' => '$27.50',
-                'o' => '',
-            ],
-            [
-                'i' => '$490.5',
-                'o' => '',
-            ],
-            [
-                'i' => '$5',
-                'o' => '',
-            ],
-            [
-                'i' => '$65,100',
-                'o' => '',
-            ],
-            [
-                'i' => '$76,611',
-                'o' => '',
-            ],
-            [
-                'i' => '$70k',
-                'o' => '',
-            ],
-            [
-                'i' => '$150k',
-                'o' => '',
-            ],
-            [
-                'i' => '$27ph',
-                'o' => '',
-            ],
-            [
-                'i' => '$3b',
-                'o' => '',
-            ],
-            [
-                'i' => '$5m',
-                'o' => '',
-            ],
-            [
-                'i' => '$850/day',
-                'o' => '',
-            ],
-            [
-                'i' => '$150hr',
-                'o' => '',
-            ],
-            [
-                'i' => '$150hour',
-                'o' => '',
-            ],
-            [
-                'i' => '$150/hr',
-                'o' => '',
-            ],
-            [
-                'i' => '$150/hour',
-                'o' => '',
-            ],
-            [
-                'i' => '150/hour',
-                'o' => '',
-            ],
-            [
-                'i' => 'example/hour',
-                'o' => 'example/hour',
-            ],
-            [
-                'i' => 'c#',
-                'o' => 'c#',
-            ],
-        ];
-
-        foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyToken($inputOutput['i']));
-        }
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
     }
 }

@@ -6,36 +6,40 @@ use PHPUnit\Framework\TestCase;
 
 class PunctuationFilterTest extends TestCase
 {
-    public function testModifyArray()
+    public function modifyArrayProvider()
+    {
+        return [
+            [
+                ['test.', '.test', '.', '.test.', '', 'node.js?', 'node.js???', 'c#'],
+                ['test', '.test', '', '.test', '', 'node.js', 'node.js', 'c#'],
+            ],
+            [
+                [],
+                [],
+            ],
+            [
+                ['0', 0, '', 1],
+                ['0', 0, '', 1],
+            ],
+            [
+                ['visual studio 2018', 'knockout.js', '- knockout...js?'],
+                ['visual studio 2018', 'knockout.js', '- knockout...js'],
+            ],
+            [
+                ['(visual studio 2018', '(c#', '"c'],
+                ['visual studio 2018', 'c#', 'c'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider modifyArrayProvider
+     */
+    public function testModifyArray($inputText, $expected)
     {
         $filter = new PunctuationFilter();
 
-        $inputsOutputs = [
-            [
-                'i' => ['test.', '.test', '.', '.test.', '', 'node.js?', 'node.js???', 'c#'],
-                'o' => ['test', '.test', '', '.test', '', 'node.js', 'node.js', 'c#'],
-            ],
-            [
-                'i' => [],
-                'o' => [],
-            ],
-            [
-                'i' => ['0', 0, '', 1],
-                'o' => ['0', 0, '', 1],
-            ],
-            [
-                'i' => ['visual studio 2018', 'knockout.js', '- knockout...js?'],
-                'o' => ['visual studio 2018', 'knockout.js', '- knockout...js'],
-            ],
-            [
-                'i' => ['(visual studio 2018', '(c#', '"c'],
-                'o' => ['visual studio 2018', 'c#', 'c'],
-            ],
-        ];
-
-        foreach ($inputsOutputs as $inputOutput) {
-            $this->assertEquals($inputOutput['o'], $filter->modifyTokens($inputOutput['i']));
-        }
+        $this->assertEquals($expected, $filter->modifyTokens($inputText));
     }
 
     public function testGetRightPunctuations()
