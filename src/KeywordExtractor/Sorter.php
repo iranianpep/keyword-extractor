@@ -25,8 +25,9 @@ class Sorter
      * @param string $sortBy
      * @param string $sortDir
      *
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function sort(array $array, string $sortBy, string $sortDir): array
     {
@@ -94,7 +95,7 @@ class Sorter
     }
 
     /**
-     * Calculate and add minOccurrencesDistance to keywords
+     * Calculate and add minOccurrencesDistance to keywords.
      *
      * @param array $array
      *

@@ -10,11 +10,11 @@ use PHPUnit\Framework\TestCase;
 class KeywordExtractorTest extends TestCase
 {
     private $keywordExtractor;
-    
+
     public function setUp(): void
     {
         parent::setUp();
-        
+
         $this->keywordExtractor = new KeywordExtractor();
     }
 
@@ -25,25 +25,25 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simpl' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            3
+                            3,
                         ],
                         'ngram' => 'simple',
-                    ]
+                    ],
                 ],
             ],
             'sentenc' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            4
+                            4,
                         ],
                         'ngram' => 'sentence.',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -58,47 +58,47 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            2
+                            2,
                         ],
                         'ngram' => 'text',
-                    ]
+                    ],
                 ],
             ],
             'visual' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            5
+                            5,
                         ],
                         'ngram' => 'visual',
-                    ]
+                    ],
                 ],
             ],
             'studio' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            6
+                            6,
                         ],
                         'ngram' => 'studio',
-                    ]
+                    ],
                 ],
             ],
             'number' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            12
+                            12,
                         ],
                         'ngram' => 'numbers',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -107,7 +107,7 @@ class KeywordExtractorTest extends TestCase
         $result = $this->keywordExtractor->run($text);
         $this->assertEquals([
             'visual studio 2018' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -116,29 +116,29 @@ class KeywordExtractorTest extends TestCase
                             7,
                         ],
                         'ngram' => 'visual studio 2018',
-                    ]
+                    ],
                 ],
             ],
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            2
+                            2,
                         ],
                         'ngram' => 'text',
-                    ]
+                    ],
                 ],
             ],
             'number' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            12
+                            12,
                         ],
                         'ngram' => 'numbers',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -147,60 +147,60 @@ class KeywordExtractorTest extends TestCase
         $result = $this->keywordExtractor->run($text);
         $this->assertEquals([
             '2018 and 2019' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
                             7,
                             8,
-                            9
+                            9,
                         ],
                         'ngram' => '2018 and 2019',
-                    ]
+                    ],
                 ],
             ],
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            2
+                            2,
                         ],
                         'ngram' => 'text',
-                    ]
+                    ],
                 ],
             ],
             'visual' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            5
+                            5,
                         ],
                         'ngram' => 'visual',
-                    ]
+                    ],
                 ],
             ],
             'studio' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            6
+                            6,
                         ],
                         'ngram' => 'studio',
-                    ]
+                    ],
                 ],
             ],
             'number' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            12
+                            12,
                         ],
                         'ngram' => 'numbers',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -210,25 +210,25 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            3
+                            3,
                         ],
                         'ngram' => 'text',
-                    ]
+                    ],
                 ],
             ],
             'email' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            6
+                            6,
                         ],
                         'ngram' => 'email',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -238,25 +238,25 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            3
+                            3,
                         ],
                         'ngram' => 'text',
-                    ]
+                    ],
                 ],
             ],
             'email' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            6
+                            6,
                         ],
                         'ngram' => 'emails:',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -270,37 +270,37 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simpl' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            3
+                            3,
                         ],
                         'ngram' => 'simple',
                     ],
                     [
                         'indexes' => [
-                            6
+                            6,
                         ],
                         'ngram' => 'simple',
-                    ]
+                    ],
                 ],
             ],
             'sentenc' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            4
+                            4,
                         ],
                         'ngram' => 'sentence',
                     ],
                     [
                         'indexes' => [
-                            7
+                            7,
                         ],
                         'ngram' => 'sentence.',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -310,37 +310,37 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simple' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            3
+                            3,
                         ],
                         'ngram' => 'simple',
                     ],
                     [
                         'indexes' => [
-                            6
+                            6,
                         ],
                         'ngram' => 'simple',
-                    ]
+                    ],
                 ],
             ],
             'sentenc' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            4
+                            4,
                         ],
                         'ngram' => 'sentence',
                     ],
                     [
                         'indexes' => [
-                            7
+                            7,
                         ],
                         'ngram' => 'sentence.',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -350,48 +350,48 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'is' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            1
+                            1,
                         ],
                         'ngram' => 'is',
                     ],
                 ],
             ],
             'simple' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            3
+                            3,
                         ],
                         'ngram' => 'simple',
                     ],
                     [
                         'indexes' => [
-                            6
+                            6,
                         ],
                         'ngram' => 'simple',
                     ],
                 ],
             ],
             'sentenc' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            4
+                            4,
                         ],
                         'ngram' => 'sentence',
                     ],
                     [
                         'indexes' => [
-                            7
+                            7,
                         ],
                         'ngram' => 'sentence.',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -401,7 +401,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simple sentence' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -416,7 +416,7 @@ class KeywordExtractorTest extends TestCase
                             7,
                         ],
                         'ngram' => 'simple sentence.',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -430,25 +430,25 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simpl' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            3
+                            3,
                         ],
                         'ngram' => 'simple',
-                    ]
+                    ],
                 ],
             ],
             'sentenc' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            4
+                            4,
                         ],
                         'ngram' => 'sentence.',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -458,14 +458,14 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'sentenc' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            4
+                            4,
                         ],
                         'ngram' => 'sentence.',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -475,14 +475,14 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'sentenc' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            4
+                            4,
                         ],
                         'ngram' => 'sentence.',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -499,25 +499,25 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'excit' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            0
+                            0,
                         ],
                         'ngram' => 'exciting',
-                    ]
+                    ],
                 ],
             ],
             'opportun' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            1
+                            1,
                         ],
                         'ngram' => 'opportunity',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -528,14 +528,14 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'excit' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            0
+                            0,
                         ],
                         'ngram' => 'exciting',
-                    ]
+                    ],
                 ],
             ],
         ], $result);
@@ -653,45 +653,45 @@ who has great people than this is an opportunity you need to explore further...'
 
         $this->assertEquals([
             'c#' => [
-                'frequency' => 3,
+                'frequency'   => 3,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            4
+                            4,
                         ],
                         'ngram' => 'c#,',
                     ],
                     [
                         'indexes' => [
-                            10
+                            10,
                         ],
                         'ngram' => 'c#',
                     ],
                     [
                         'indexes' => [
-                            12
+                            12,
                         ],
                         'ngram' => 'c#.',
                     ],
                 ],
             ],
             '.net' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            5
+                            5,
                         ],
                         'ngram' => '.net',
                     ],
                 ],
             ],
             'asp' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
-                            7
+                            7,
                         ],
                         'ngram' => 'asp',
                     ],
