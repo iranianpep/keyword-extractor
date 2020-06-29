@@ -57,8 +57,9 @@ class KeywordExtractor
      * @param string $sortBy
      * @param string $sortDir
      *
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function run(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
     {
@@ -230,7 +231,7 @@ class KeywordExtractor
 
     /**
      * @param string $keyword
-     * @param Ngram $originalNgram
+     * @param Ngram  $originalNgram
      */
     public function addKeyword(string $keyword, Ngram $originalNgram): void
     {
@@ -244,12 +245,12 @@ class KeywordExtractor
         }
 
         $occurrences[] = [
-            'ngram' => $originalNgram->getWord(),
+            'ngram'   => $originalNgram->getWord(),
             'indexes' => $originalNgram->getIndexes(),
         ];
 
         $this->keywords[$keyword] = [
-            'frequency' => $frequency,
+            'frequency'   => $frequency,
             'occurrences' => $occurrences,
         ];
     }
