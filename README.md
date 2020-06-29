@@ -31,25 +31,48 @@ $text = 'This is a simple sentence.';
 $result = $keywordExtractor->run($text);
 ```
 
-The result with the default modifiers will be:
+The result with the default modifiers and no sorting values will be:
 ```
-array (
-  'simpl' => 
-  array (
-    'frequency' => 1,
-    'originals' => 
-    array (
-      0 => 'simple',
-    ),
-  ),
-  'sentenc' => 
-  array (
-    'frequency' => 1,
-    'originals' => 
-    array (
-      0 => 'sentence.',
-    ),
-  ),
+Array
+(
+    [simpl] => Array
+        (
+            [frequency] => 1
+            [occurrences] => Array
+                (
+                    [0] => Array
+                        (
+                            [ngram] => simple
+                            [indexes] => Array
+                                (
+                                    [0] => 3
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [sentenc] => Array
+        (
+            [frequency] => 1
+            [occurrences] => Array
+                (
+                    [0] => Array
+                        (
+                            [ngram] => sentence.
+                            [indexes] => Array
+                                (
+                                    [0] => 4
+                                )
+
+                        )
+
+                )
+
+        )
+
 )
 ```
 
@@ -83,24 +106,66 @@ $result = $keywordExtractor->run($text);
 
 Which results in:
 ```
-array (
-  'simple' => 
-  array (
-    'frequency' => 2,
-    'originals' => 
-    array (
-      0 => 'simple',
-    ),
-  ),
-  'sentenc' => 
-  array (
-    'frequency' => 2,
-    'originals' => 
-    array (
-      0 => 'sentence',
-      1 => 'sentence.',
-    ),
-  ),
+Array
+(
+    [simple] => Array
+        (
+            [frequency] => 2
+            [occurrences] => Array
+                (
+                    [0] => Array
+                        (
+                            [ngram] => simple
+                            [indexes] => Array
+                                (
+                                    [0] => 3
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [ngram] => simple
+                            [indexes] => Array
+                                (
+                                    [0] => 6
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [sentenc] => Array
+        (
+            [frequency] => 2
+            [occurrences] => Array
+                (
+                    [0] => Array
+                        (
+                            [ngram] => sentence
+                            [indexes] => Array
+                                (
+                                    [0] => 4
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [ngram] => sentence.
+                            [indexes] => Array
+                                (
+                                    [0] => 7
+                                )
+
+                        )
+
+                )
+
+        )
+
 )
 ```
 
@@ -114,14 +179,71 @@ $result = $keywordExtractor->run($text);
 
 The result is:
 ```
-array (
-  'sentenc' => 
-  array (
-    'frequency' => 1,
-    'originals' => 
-    array (
-      0 => 'sentence.',
-    ),
-  ),
+Array
+(
+    [sentenc] => Array
+        (
+            [frequency] => 1
+            [occurrences] => Array
+                (
+                    [0] => Array
+                        (
+                            [ngram] => sentence.
+                            [indexes] => Array
+                                (
+                                    [0] => 4
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+```
+
+To sort by frequency in descending order:
+```
+$keywordExtractor->run($text, Sorter::SORT_BY_FREQUENCY, Sorter::SORT_DIR_DESC);
+```
+
+To sort by min occurrences distance:
+```
+$text = 'sentence and sentence';
+$result = $this->keywordExtractor->run($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
+
+Array
+(
+    [sentenc] => Array
+        (
+            [frequency] => 2
+            [occurrences] => Array
+                (
+                    [0] => Array
+                        (
+                            [ngram] => sentence
+                            [indexes] => Array
+                                (
+                                    [0] => 0
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [ngram] => sentence
+                            [indexes] => Array
+                                (
+                                    [0] => 2
+                                )
+
+                        )
+
+                )
+
+            [minOccurrencesDistance] => 1
+        )
+
 )
 ```

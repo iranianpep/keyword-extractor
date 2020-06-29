@@ -2,158 +2,261 @@
 
 namespace KeywordExtractor;
 
+use Exception;
 use KeywordExtractor\Modifiers\Filters\EmailFilter;
 use KeywordExtractor\Modifiers\Filters\PunctuationFilter;
 use PHPUnit\Framework\TestCase;
 
 class KeywordExtractorTest extends TestCase
 {
+    private $keywordExtractor;
+    
+    public function setUp(): void
+    {
+        parent::setUp();
+        
+        $this->keywordExtractor = new KeywordExtractor();
+    }
+
     public function testRun()
     {
-        $keywordExtractor = new KeywordExtractor();
         $text = 'This is a simple sentence.';
-        $result = $keywordExtractor->run($text);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'simpl' => [
                 'frequency' => 1,
-                'originals' => [
-                    'simple',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            3
+                        ],
+                        'ngram' => 'simple',
+                    ]
                 ],
             ],
             'sentenc' => [
                 'frequency' => 1,
-                'originals' => [
-                    'sentence.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            4
+                        ],
+                        'ngram' => 'sentence.',
+                    ]
                 ],
             ],
         ], $result);
 
         $text = '';
-        $result = $keywordExtractor->run($text);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([], $result);
 
         $text = '123 this text has got visual studio 2018 and 2019 and more numbers like 12 13 145';
-        $result = $keywordExtractor->run($text);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'text' => [
                 'frequency' => 1,
-                'originals' => [
-                    'text',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            2
+                        ],
+                        'ngram' => 'text',
+                    ]
                 ],
             ],
             'visual' => [
                 'frequency' => 1,
-                'originals' => [
-                    'visual',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            5
+                        ],
+                        'ngram' => 'visual',
+                    ]
                 ],
             ],
             'studio' => [
                 'frequency' => 1,
-                'originals' => [
-                    'studio',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            6
+                        ],
+                        'ngram' => 'studio',
+                    ]
                 ],
             ],
             'number' => [
                 'frequency' => 1,
-                'originals' => [
-                    'numbers',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            12
+                        ],
+                        'ngram' => 'numbers',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setWhitelist(['visual studio 2018']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setWhitelist(['visual studio 2018']);
+        $result = $this->keywordExtractor->run($text);
         $this->assertEquals([
             'visual studio 2018' => [
                 'frequency' => 1,
-                'originals' => [
-                    'visual studio 2018',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            5,
+                            6,
+                            7,
+                        ],
+                        'ngram' => 'visual studio 2018',
+                    ]
                 ],
             ],
             'text' => [
                 'frequency' => 1,
-                'originals' => [
-                    'text',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            2
+                        ],
+                        'ngram' => 'text',
+                    ]
                 ],
             ],
             'number' => [
                 'frequency' => 1,
-                'originals' => [
-                    'numbers',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            12
+                        ],
+                        'ngram' => 'numbers',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setWhitelist(['2018 and 2019']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setWhitelist(['2018 and 2019']);
+        $result = $this->keywordExtractor->run($text);
         $this->assertEquals([
             '2018 and 2019' => [
                 'frequency' => 1,
-                'originals' => [
-                    '2018 and 2019',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            7,
+                            8,
+                            9
+                        ],
+                        'ngram' => '2018 and 2019',
+                    ]
                 ],
             ],
             'text' => [
                 'frequency' => 1,
-                'originals' => [
-                    'text',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            2
+                        ],
+                        'ngram' => 'text',
+                    ]
                 ],
             ],
             'visual' => [
                 'frequency' => 1,
-                'originals' => [
-                    'visual',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            5
+                        ],
+                        'ngram' => 'visual',
+                    ]
                 ],
             ],
             'studio' => [
                 'frequency' => 1,
-                'originals' => [
-                    'studio',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            6
+                        ],
+                        'ngram' => 'studio',
+                    ]
                 ],
             ],
             'number' => [
                 'frequency' => 1,
-                'originals' => [
-                    'numbers',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            12
+                        ],
+                        'ngram' => 'numbers',
+                    ]
                 ],
             ],
         ], $result);
 
         $text = 'This is a text with an email like: example@example.com in it.';
-        $result = $keywordExtractor->run($text);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'text' => [
                 'frequency' => 1,
-                'originals' => [
-                    'text',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            3
+                        ],
+                        'ngram' => 'text',
+                    ]
                 ],
             ],
             'email' => [
                 'frequency' => 1,
-                'originals' => [
-                    'email',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            6
+                        ],
+                        'ngram' => 'email',
+                    ]
                 ],
             ],
         ], $result);
 
         $text = 'This is a text with two emails: example.example@example.com, and another@example.com.';
-        $result = $keywordExtractor->run($text);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'text' => [
                 'frequency' => 1,
-                'originals' => [
-                    'text',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            3
+                        ],
+                        'ngram' => 'text',
+                    ]
                 ],
             ],
             'email' => [
                 'frequency' => 1,
-                'originals' => [
-                    'emails:',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            6
+                        ],
+                        'ngram' => 'emails:',
+                    ]
                 ],
             ],
         ], $result);
@@ -161,80 +264,159 @@ class KeywordExtractorTest extends TestCase
 
     public function testRunWithWhitelist()
     {
-        $keywordExtractor = new KeywordExtractor();
         $text = 'This is a simple sentence and simple sentence.';
-        $keywordExtractor->setWhitelist([]);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setWhitelist([]);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'simpl' => [
                 'frequency' => 2,
-                'originals' => [
-                    'simple',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            3
+                        ],
+                        'ngram' => 'simple',
+                    ],
+                    [
+                        'indexes' => [
+                            6
+                        ],
+                        'ngram' => 'simple',
+                    ]
                 ],
             ],
             'sentenc' => [
                 'frequency' => 2,
-                'originals' => [
-                    'sentence',
-                    'sentence.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            4
+                        ],
+                        'ngram' => 'sentence',
+                    ],
+                    [
+                        'indexes' => [
+                            7
+                        ],
+                        'ngram' => 'sentence.',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setWhitelist(['simple']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setWhitelist(['simple']);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'simple' => [
                 'frequency' => 2,
-                'originals' => [
-                    'simple',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            3
+                        ],
+                        'ngram' => 'simple',
+                    ],
+                    [
+                        'indexes' => [
+                            6
+                        ],
+                        'ngram' => 'simple',
+                    ]
                 ],
             ],
             'sentenc' => [
                 'frequency' => 2,
-                'originals' => [
-                    'sentence',
-                    'sentence.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            4
+                        ],
+                        'ngram' => 'sentence',
+                    ],
+                    [
+                        'indexes' => [
+                            7
+                        ],
+                        'ngram' => 'sentence.',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setWhitelist(['simple', 'is', 'dummy']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setWhitelist(['simple', 'is', 'dummy']);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'is' => [
                 'frequency' => 1,
-                'originals' => [
-                    'is',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            1
+                        ],
+                        'ngram' => 'is',
+                    ],
                 ],
             ],
             'simple' => [
                 'frequency' => 2,
-                'originals' => [
-                    'simple',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            3
+                        ],
+                        'ngram' => 'simple',
+                    ],
+                    [
+                        'indexes' => [
+                            6
+                        ],
+                        'ngram' => 'simple',
+                    ],
                 ],
             ],
             'sentenc' => [
                 'frequency' => 2,
-                'originals' => [
-                    'sentence',
-                    'sentence.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            4
+                        ],
+                        'ngram' => 'sentence',
+                    ],
+                    [
+                        'indexes' => [
+                            7
+                        ],
+                        'ngram' => 'sentence.',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setWhitelist(['simple sentence']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setWhitelist(['simple sentence']);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'simple sentence' => [
                 'frequency' => 2,
-                'originals' => [
-                    'simple sentence',
-                    'simple sentence.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            3,
+                            4,
+                        ],
+                        'ngram' => 'simple sentence',
+                    ],
+                    [
+                        'indexes' => [
+                            6,
+                            7,
+                        ],
+                        'ngram' => 'simple sentence.',
+                    ]
                 ],
             ],
         ], $result);
@@ -242,84 +424,118 @@ class KeywordExtractorTest extends TestCase
 
     public function testRunWithBlacklist()
     {
-        $keywordExtractor = new KeywordExtractor();
         $text = 'This is a simple sentence.';
-        $keywordExtractor->setBlacklist([]);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setBlacklist([]);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'simpl' => [
                 'frequency' => 1,
-                'originals' => [
-                    'simple',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            3
+                        ],
+                        'ngram' => 'simple',
+                    ]
                 ],
             ],
             'sentenc' => [
                 'frequency' => 1,
-                'originals' => [
-                    'sentence.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            4
+                        ],
+                        'ngram' => 'sentence.',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setBlacklist(['simple']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setBlacklist(['simple']);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'sentenc' => [
                 'frequency' => 1,
-                'originals' => [
-                    'sentence.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            4
+                        ],
+                        'ngram' => 'sentence.',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setBlacklist(['simple', 'is', 'dummy']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setBlacklist(['simple', 'is', 'dummy']);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'sentenc' => [
                 'frequency' => 1,
-                'originals' => [
-                    'sentence.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            4
+                        ],
+                        'ngram' => 'sentence.',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setBlacklist(['simple sentence']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setBlacklist(['simple sentence']);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([], $result);
 
         $text = 'Exciting opportunity';
-        $keywordExtractor->setBlacklist([]);
-        $keywordExtractor->setWhitelist([]);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setBlacklist([]);
+        $this->keywordExtractor->setWhitelist([]);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'excit' => [
                 'frequency' => 1,
-                'originals' => [
-                    'exciting',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            0
+                        ],
+                        'ngram' => 'exciting',
+                    ]
                 ],
             ],
             'opportun' => [
                 'frequency' => 1,
-                'originals' => [
-                    'opportunity',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            1
+                        ],
+                        'ngram' => 'opportunity',
+                    ]
                 ],
             ],
         ], $result);
 
-        $keywordExtractor->setBlacklist(['opportun']);
+        $this->keywordExtractor->setBlacklist(['opportun']);
 
-        $result = $keywordExtractor->run($text);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'excit' => [
                 'frequency' => 1,
-                'originals' => [
-                    'exciting',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            0
+                        ],
+                        'ngram' => 'exciting',
+                    ]
                 ],
             ],
         ], $result);
@@ -327,8 +543,6 @@ class KeywordExtractorTest extends TestCase
 
     public function testRunWithWhitelistAndBlackList()
     {
-        $keywordExtractor = new KeywordExtractor();
-
         $text = 'Experience with all of the following technologies is a requirement:
 Linux
 PHP (incl. Composer, PHPUnit, Xdebug)
@@ -347,12 +561,10 @@ C, Python or other programming languages
 PostgreSQL, MongoDB
 PhpStorm, Eclipse or other IDE';
 
-        $keywordExtractor->setWhitelist(['version control', 'php', 'composer', 'google cloud']);
-        $keywordExtractor->setBlacklist(['software', 'etc']);
+        $this->keywordExtractor->setWhitelist(['version control', 'php', 'composer', 'google cloud']);
+        $this->keywordExtractor->setBlacklist(['software', 'etc']);
 
-        //for ($i = 0; $i < 500; $i++) {
-        $result = $keywordExtractor->run($text);
-        //}
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertArrayHasKey('linux', $result);
         $this->assertArrayHasKey('php', $result);
@@ -362,8 +574,8 @@ PhpStorm, Eclipse or other IDE';
 
         $this->assertArrayHasKey('environ', $result);
 
-        $keywordExtractor->setBlacklist(['software', 'etc', 'environments']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setBlacklist(['software', 'etc', 'environments']);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertArrayNotHasKey('environ', $result);
 
@@ -371,9 +583,9 @@ PhpStorm, Eclipse or other IDE';
         java, c#, php, android, python, jquery, c++, ruby-on-rails, c, r, objective-c,
         django, wpf, asp.net-mvc, python-3.x, html5, python-2.7, .htaccess, jsp, oop, go, iis, .htaccess., ios7, f#';
 
-        $keywordExtractor->setBlacklist(['includes', 'keywords']);
-        $keywordExtractor->setWhitelist(['jquery', 'iis']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setBlacklist(['includes', 'keywords']);
+        $this->keywordExtractor->setWhitelist(['jquery', 'iis']);
+        $result = $this->keywordExtractor->run($text);
 
         /*
          * Did not use loop because if one of the tests fail, it's easier to find out which one failed
@@ -422,10 +634,10 @@ If you want to be a part of this exciting and high-octane time, with a great bus
 who has great people than this is an opportunity you need to explore further...';
 
         // reset whitelist and blacklist
-        $keywordExtractor->setBlacklist([]);
-        $keywordExtractor->setWhitelist(['react native']);
+        $this->keywordExtractor->setBlacklist([]);
+        $this->keywordExtractor->setWhitelist(['react native']);
 
-        $result = $keywordExtractor->run($text);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertArrayHasKey('microservic', $result);
         $this->assertArrayHasKey('react', $result);
@@ -435,29 +647,54 @@ who has great people than this is an opportunity you need to explore further...'
         $this->assertArrayHasKey('redux', $result);
 
         $text = "What we're interested is c#, .net and asp but mainly c# and c#.";
-        $keywordExtractor->setWhitelist(['c#', '.net', 'asp']);
-        $keywordExtractor->setBlacklist(['interest', 'c#,']);
-        $result = $keywordExtractor->run($text);
+        $this->keywordExtractor->setWhitelist(['c#', '.net', 'asp']);
+        $this->keywordExtractor->setBlacklist(['interest', 'c#,']);
+        $result = $this->keywordExtractor->run($text);
 
         $this->assertEquals([
             'c#' => [
                 'frequency' => 3,
-                'originals' => [
-                    'c#,',
-                    'c#',
-                    'c#.',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            4
+                        ],
+                        'ngram' => 'c#,',
+                    ],
+                    [
+                        'indexes' => [
+                            10
+                        ],
+                        'ngram' => 'c#',
+                    ],
+                    [
+                        'indexes' => [
+                            12
+                        ],
+                        'ngram' => 'c#.',
+                    ],
                 ],
             ],
             '.net' => [
                 'frequency' => 1,
-                'originals' => [
-                    '.net',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            5
+                        ],
+                        'ngram' => '.net',
+                    ],
                 ],
             ],
             'asp' => [
                 'frequency' => 1,
-                'originals' => [
-                    'asp',
+                'occurrences' => [
+                    [
+                        'indexes' => [
+                            7
+                        ],
+                        'ngram' => 'asp',
+                    ],
                 ],
             ],
         ], $result);
@@ -470,9 +707,83 @@ who has great people than this is an opportunity you need to explore further...'
             new PunctuationFilter(),
         ];
 
-        $keywordExtractor = new KeywordExtractor();
-        $keywordExtractor->setModifiers($modifiers);
+        $this->keywordExtractor->setModifiers($modifiers);
 
-        $this->assertEquals($modifiers, $keywordExtractor->getModifiers());
+        $this->assertEquals($modifiers, $this->keywordExtractor->getModifiers());
+    }
+
+    public function testRunSortedByFrequency()
+    {
+        $text = '2 simple sentences and only one sentence.';
+        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_FREQUENCY);
+
+        $this->assertEquals(2, $result['sentenc']['frequency']);
+
+        // result should be the same
+        $text = '2 sentences and only one simple sentence.';
+        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_FREQUENCY);
+
+        $this->assertEquals(2, $result['sentenc']['frequency']);
+
+        // default is asc
+        $arrayItem = array_shift($result);
+        $this->assertEquals($arrayItem['frequency'], 1);
+
+        $arrayItem = array_shift($result);
+        $this->assertEquals($arrayItem['frequency'], 2);
+
+        $result = $this->keywordExtractor->run(
+            $text,
+            Sorter::SORT_BY_FREQUENCY,
+            Sorter::SORT_DIR_DESC
+        );
+
+        // default is asc
+        $arrayItem = array_shift($result);
+        $this->assertEquals($arrayItem['frequency'], 2);
+
+        $arrayItem = array_shift($result);
+        $this->assertEquals($arrayItem['frequency'], 1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRunSortedByMidOccurrenceDistance()
+    {
+        $text = 'sentence and sentence';
+        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
+
+        $this->assertEquals(1, $result['sentenc']['minOccurrencesDistance']);
+
+        $text = 'sentence sentence';
+        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
+
+        $this->assertEquals(0, $result['sentenc']['minOccurrencesDistance']);
+
+        $text = 'sentence';
+        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
+
+        $this->assertEquals(null, $result['sentenc']['minOccurrencesDistance']);
+
+        $text = 'john james john john to james joe john joe';
+        $result = $this->keywordExtractor->run(
+            $text,
+            Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE
+        );
+
+        $arrayItem = array_shift($result);
+        // john
+        $this->assertEquals(0, $arrayItem['minOccurrencesDistance']);
+
+        $result = $this->keywordExtractor->run(
+            $text,
+            Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE,
+            Sorter::SORT_DIR_DESC
+        );
+
+        $arrayItem = array_shift($result);
+        // james
+        $this->assertEquals(3, $arrayItem['minOccurrencesDistance']);
     }
 }

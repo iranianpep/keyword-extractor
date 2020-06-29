@@ -2,6 +2,7 @@
 
 namespace KeywordExtractor;
 
+use Exception;
 use KeywordExtractor\Modifiers\Filters\BlacklistFilter;
 use KeywordExtractor\Modifiers\Filters\EmailFilter;
 use KeywordExtractor\Modifiers\Filters\IndexBlacklistFilter;
@@ -52,14 +53,17 @@ class KeywordExtractor
     }
 
     /**
-     * @param $string
+     * @param string $string
+     * @param string $sortBy
+     * @param string $sortDir
      *
      * @return array
+     * @throws Exception
      */
-    public function run(string $string): array
+    public function run(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
     {
         // reset the keywords
-        $this->setKeywords([]);
+        $this->keywords = [];
 
         // lowercase and tokenize
         $string = (new LowerCaseTransformer())->modify($string);
@@ -70,7 +74,13 @@ class KeywordExtractor
             $tokens = $this->extractNgramKeywords($tokens, $ngramSize);
         }
 
-        return $this->getKeywords();
+        if (empty($sortBy)) {
+            return $this->keywords;
+        }
+
+        $this->keywords = (new Sorter())->sort($this->keywords, $sortBy, $sortDir);
+
+        return $this->keywords;
     }
 
     /**
@@ -85,7 +95,7 @@ class KeywordExtractor
          * @var Ngram $ngram
          */
         foreach ((new NgramHandler())->generateNgrams($tokens, $ngramSize) as $ngram) {
-            $result = $this->applyModifiers($tokens, $ngram->getWord(), $ngram->getIndexes());
+            $result = $this->applyModifiers($tokens, $ngram);
 
             $tokens = $result['tokens'];
             $modifiedWord = $result['word'];
@@ -93,7 +103,7 @@ class KeywordExtractor
 
             // if the word survives after applying all the filters it's deserved to be added to the keywords!
             if ($ngramSize === 1 && !empty($modifiedWord) && $alreadyAdded === false) {
-                $this->addKeyword($modifiedWord, $ngram->getWord());
+                $this->addKeyword($modifiedWord, $ngram);
             }
         }
 
@@ -101,16 +111,15 @@ class KeywordExtractor
     }
 
     /**
-     * @param $tokens
-     * @param $word
-     * @param $indexes
+     * @param array $tokens
+     * @param Ngram $ngram
      *
      * @return array
      */
-    private function applyModifiers(array $tokens, string $word, array $indexes): array
+    private function applyModifiers(array $tokens, Ngram $ngram): array
     {
         $alreadyAdded = false;
-        $original = $word;
+        $word = $ngram->getWord();
 
         /*
          * @var ModifierInterface
@@ -122,9 +131,9 @@ class KeywordExtractor
             if ($modifier instanceof WhitelistFilter) {
                 if (!empty($word) === true) {
                     // word is whitelisted
-                    $this->addKeyword($word, $original);
+                    $this->addKeyword($word, $ngram);
 
-                    $tokens = (new IndexBlacklistFilter($indexes))->modifyTokens($tokens);
+                    $tokens = (new IndexBlacklistFilter($ngram->getIndexes()))->modifyTokens($tokens);
                     $alreadyAdded = true;
                     break;
                 }
@@ -134,7 +143,7 @@ class KeywordExtractor
             }
 
             if ($modifier instanceof BlacklistFilter && empty($word)) {
-                $tokens = (new IndexBlacklistFilter($indexes))->modifyTokens($tokens);
+                $tokens = (new IndexBlacklistFilter($ngram->getIndexes()))->modifyTokens($tokens);
 
                 // since it's blacklisted, ignore other modifiers
                 break;
@@ -220,37 +229,28 @@ class KeywordExtractor
     }
 
     /**
-     * @return array
-     */
-    private function getKeywords(): array
-    {
-        if (empty($this->keywords)) {
-            return [];
-        }
-
-        return $this->keywords;
-    }
-
-    /**
      * @param string $keyword
-     * @param string $original
+     * @param Ngram $originalNgram
      */
-    public function addKeyword(string $keyword, string $original): void
+    public function addKeyword(string $keyword, Ngram $originalNgram): void
     {
+        // initialise
         $frequency = 1;
-        $originals = [];
+        $occurrences = [];
+
         if ($this->keywordExists($keyword) === true) {
             $frequency = $this->keywords[$keyword]['frequency'] + 1;
-            $originals = $this->keywords[$keyword]['originals'];
+            $occurrences = $this->keywords[$keyword]['occurrences'];
         }
 
-        if (in_array($original, $originals) === false) {
-            $originals[] = $original;
-        }
+        $occurrences[] = [
+            'ngram' => $originalNgram->getWord(),
+            'indexes' => $originalNgram->getIndexes(),
+        ];
 
         $this->keywords[$keyword] = [
             'frequency' => $frequency,
-            'originals' => $originals,
+            'occurrences' => $occurrences,
         ];
     }
 
@@ -261,14 +261,6 @@ class KeywordExtractor
      */
     private function keywordExists(string $keyword): bool
     {
-        return array_key_exists($keyword, $this->getKeywords());
-    }
-
-    /**
-     * @param array $keywords
-     */
-    public function setKeywords(array $keywords): void
-    {
-        $this->keywords = $keywords;
+        return array_key_exists($keyword, $this->keywords);
     }
 }
