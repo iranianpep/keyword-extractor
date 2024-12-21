@@ -22,15 +22,15 @@ use KeywordExtractor\Modifiers\Transformers\TokenTransformer;
  */
 class KeywordExtractor
 {
+    /**
+     * Note: the order is important.
+     */
+    const NGRAM_SIZES = [3, 2, 1];
+
     private $blacklist = [];
     private $whitelist = [];
     private $modifiers;
     private $keywords;
-
-    /**
-     * order is important.
-     */
-    const NGRAM_SIZES = [3, 2, 1];
 
     /**
      * @param string $string
