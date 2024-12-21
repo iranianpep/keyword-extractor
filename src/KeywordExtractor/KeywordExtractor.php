@@ -22,8 +22,8 @@ use KeywordExtractor\Modifiers\Transformers\TokenTransformer;
  */
 class KeywordExtractor
 {
-    private $blacklist;
-    private $whitelist;
+    private $blacklist = [];
+    private $whitelist = [];
     private $modifiers;
     private $keywords;
 
@@ -163,10 +163,6 @@ class KeywordExtractor
      */
     public function getBlacklist(): array
     {
-        if (!isset($this->blacklist)) {
-            return [];
-        }
-
         return $this->blacklist;
     }
 
@@ -183,10 +179,6 @@ class KeywordExtractor
      */
     public function getWhitelist(): array
     {
-        if (!isset($this->whitelist)) {
-            return [];
-        }
-
         return $this->whitelist;
     }
 
