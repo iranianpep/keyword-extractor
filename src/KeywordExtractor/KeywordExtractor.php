@@ -72,9 +72,7 @@ class KeywordExtractor
      */
     private function extractNgramKeywords(array $tokens, int $ngramSize): array
     {
-        /**
-         * @var Ngram $ngram
-         */
+        /** @var Ngram $ngram */
         foreach ((new NgramHandler())->generateNgrams($tokens, $ngramSize) as $ngram) {
             $result = $this->applyModifiers($tokens, $ngram);
 
@@ -102,9 +100,7 @@ class KeywordExtractor
         $alreadyAdded = false;
         $word = $ngram->getWord();
 
-        /*
-         * @var ModifierInterface
-         */
+        /** @var ModifierInterface */
         foreach ($this->getModifiers() as $modifier) {
             $toBeModified = $word;
             $word = $modifier->modify($word);
