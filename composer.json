@@ -4,7 +4,10 @@
   "homepage": "https://github.com/iranianpep/keyword-extractor",
   "license": "MIT",
   "authors": [
-    { "name": "Ehsan Abbasi", "email": "ehsan.abb@gmail.com" }
+    {
+      "name": "Ehsan Abbasi",
+      "email": "ehsan.abb@gmail.com"
+    }
   ],
   "require": {
     "php": ">=7.1",
@@ -21,7 +24,9 @@
     }
   },
   "autoload-dev": {
-    "psr-4": {"KeywordExtractor\\": "tests/KeywordExtractor"}
+    "psr-4": {
+      "KeywordExtractor\\": "tests/KeywordExtractor"
+    }
   },
   "scripts": {
     "test": "./vendor/bin/phpunit --no-coverage",
