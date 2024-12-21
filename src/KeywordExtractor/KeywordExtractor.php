@@ -33,26 +33,6 @@ class KeywordExtractor
     const NGRAM_SIZES = [3, 2, 1];
 
     /**
-     * @return array
-     */
-    private function getDefaultModifiers(): array
-    {
-        return [
-            new UrlFilter(),
-            new EmailFilter(),
-            new PunctuationFilter(),
-            new WhitelistFilter($this->getWhitelist()),
-            new BlacklistFilter($this->getBlacklist()),
-            new StopWordFilter(),
-            new NumberFilter(),
-            new SalaryFilter(),
-            new StemFilter(),
-            // run the blacklist even after stemming too
-            new BlacklistFilter($this->getBlacklist()),
-        ];
-    }
-
-    /**
      * @param string $string
      * @param string $sortBy
      * @param string $sortDir
@@ -200,6 +180,26 @@ class KeywordExtractor
         }
 
         return $this->modifiers;
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultModifiers(): array
+    {
+        return [
+            new UrlFilter(),
+            new EmailFilter(),
+            new PunctuationFilter(),
+            new WhitelistFilter($this->getWhitelist()),
+            new BlacklistFilter($this->getBlacklist()),
+            new StopWordFilter(),
+            new NumberFilter(),
+            new SalaryFilter(),
+            new StemFilter(),
+            // run the blacklist even after stemming too
+            new BlacklistFilter($this->getBlacklist()),
+        ];
     }
 
     /**
