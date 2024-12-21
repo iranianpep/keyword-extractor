@@ -16,7 +16,7 @@ class EmailFilterTest extends TestCase
         $this->assertEquals($expected, $filter->modifyToken($inputText));
     }
 
-    public function modifyTextProvider(): array
+    public static function modifyTextProvider(): array
     {
         return [
             [

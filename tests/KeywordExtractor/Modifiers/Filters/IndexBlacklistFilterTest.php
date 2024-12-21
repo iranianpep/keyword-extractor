@@ -19,7 +19,7 @@ class IndexBlacklistFilterTest extends TestCase
         );
     }
 
-    public function modifyTokensProvider(): array
+    public static function modifyTokensProvider(): array
     {
         return [
             [

@@ -16,7 +16,7 @@ class PunctuationFilterTest extends TestCase
         $this->assertEquals($expected, $filter->modifyTokens($inputText));
     }
 
-    public function modifyArrayProvider(): array
+    public static function modifyArrayProvider(): array
     {
         return [
             [
