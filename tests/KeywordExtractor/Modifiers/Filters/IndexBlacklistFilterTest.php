@@ -24,28 +24,28 @@ class IndexBlacklistFilterTest extends TestCase
         return [
             [
                 [
-                    'words' => [1, 2, 'test', '1test', ''],
+                    'words'   => [1, 2, 'test', '1test', ''],
                     'indexes' => [1, 3],
                 ],
                 [0 => 1, 2 => 'test', 4 => ''],
             ],
             [
                 [
-                    'words' => [1, 2, 'test', '1test', ''],
+                    'words'   => [1, 2, 'test', '1test', ''],
                     'indexes' => [0, 1, 2, 3, 4, 5, 6],
                 ],
                 [],
             ],
             [
                 [
-                    'words' => [],
+                    'words'   => [],
                     'indexes' => [0, 1, 2, 3, 4, 5, 6],
                 ],
                 [],
             ],
             [
                 [
-                    'words' => [1, 2, 'test', '1test', ''],
+                    'words'   => [1, 2, 'test', '1test', ''],
                     'indexes' => [],
                 ],
                 [1, 2, 'test', '1test', ''],

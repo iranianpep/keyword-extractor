@@ -25,7 +25,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simpl' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -36,7 +36,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'sentenc' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -58,7 +58,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -69,7 +69,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'visual' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -80,7 +80,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'studio' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -91,7 +91,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'number' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -107,7 +107,7 @@ class KeywordExtractorTest extends TestCase
         $result = $this->keywordExtractor->run($text);
         $this->assertEquals([
             'visual studio 2018' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -120,7 +120,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -131,7 +131,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'number' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -147,7 +147,7 @@ class KeywordExtractorTest extends TestCase
         $result = $this->keywordExtractor->run($text);
         $this->assertEquals([
             '2018 and 2019' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -160,7 +160,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -171,7 +171,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'visual' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -182,7 +182,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'studio' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -193,7 +193,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'number' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -210,7 +210,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -221,7 +221,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'email' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -238,7 +238,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'text' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -249,7 +249,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'email' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -270,7 +270,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simpl' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -287,7 +287,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'sentenc' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -310,7 +310,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simple' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -327,7 +327,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'sentenc' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -350,7 +350,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'is' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -361,7 +361,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'simple' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -378,7 +378,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'sentenc' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -401,7 +401,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simple sentence' => [
-                'frequency' => 2,
+                'frequency'   => 2,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -430,7 +430,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'simpl' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -441,7 +441,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'sentenc' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -458,7 +458,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'sentenc' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -475,7 +475,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'sentenc' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -499,7 +499,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'excit' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -510,7 +510,7 @@ class KeywordExtractorTest extends TestCase
                 ],
             ],
             'opportun' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -528,7 +528,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->assertEquals([
             'excit' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -653,7 +653,7 @@ who has great people than this is an opportunity you need to explore further...'
 
         $this->assertEquals([
             'c#' => [
-                'frequency' => 3,
+                'frequency'   => 3,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -676,7 +676,7 @@ who has great people than this is an opportunity you need to explore further...'
                 ],
             ],
             '.net' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
@@ -687,7 +687,7 @@ who has great people than this is an opportunity you need to explore further...'
                 ],
             ],
             'asp' => [
-                'frequency' => 1,
+                'frequency'   => 1,
                 'occurrences' => [
                     [
                         'indexes' => [
