@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class UtilityTest extends TestCase
 {
-    public function testFindMinDiff()
+    public function testFindMinDiff(): void
     {
         $minDiff = (new Utility())->findMinDiff([1, 2, 3, 4]);
         $this->assertEquals(1, $minDiff);

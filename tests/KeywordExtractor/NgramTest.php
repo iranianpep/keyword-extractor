@@ -15,12 +15,12 @@ class NgramTest extends TestCase
         $this->ngram = new Ngram('simple', [3]);
     }
 
-    public function testGetWord()
+    public function testGetWord(): void
     {
         $this->assertEquals('simple', $this->ngram->getWord());
     }
 
-    public function testGetIndexes()
+    public function testGetIndexes(): void
     {
         $this->assertEquals([3], $this->ngram->getIndexes());
     }

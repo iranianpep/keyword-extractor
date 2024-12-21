@@ -6,7 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 class NumberFilterTest extends TestCase
 {
-    public function modifyTextProvider()
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected): void
+    {
+        $filter = new NumberFilter();
+
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
+    }
+
+    public function modifyTextProvider(): array
     {
         return [
             [
@@ -34,15 +44,5 @@ class NumberFilterTest extends TestCase
                 'test 1',
             ],
         ];
-    }
-
-    /**
-     * @dataProvider modifyTextProvider
-     */
-    public function testModifyText($inputText, $expected)
-    {
-        $filter = new NumberFilter();
-
-        $this->assertEquals($expected, $filter->modifyToken($inputText));
     }
 }

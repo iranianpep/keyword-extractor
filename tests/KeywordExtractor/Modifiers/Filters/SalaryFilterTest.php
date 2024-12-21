@@ -6,7 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 class SalaryFilterTest extends TestCase
 {
-    public function modifyTextProvider()
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected): void
+    {
+        $filter = new SalaryFilter();
+
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
+    }
+
+    public function modifyTextProvider(): array
     {
         return [
             [
@@ -114,15 +124,5 @@ class SalaryFilterTest extends TestCase
                 'c#',
             ],
         ];
-    }
-
-    /**
-     * @dataProvider modifyTextProvider
-     */
-    public function testModifyText($inputText, $expected)
-    {
-        $filter = new SalaryFilter();
-
-        $this->assertEquals($expected, $filter->modifyToken($inputText));
     }
 }
