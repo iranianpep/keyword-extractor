@@ -22,5 +22,9 @@
   },
   "autoload-dev": {
     "psr-4": {"KeywordExtractor\\": "tests/KeywordExtractor"}
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit --no-coverage",
+    "test-coverage": "./vendor/bin/phpunit --coverage-html build/coverage"
   }
 }
