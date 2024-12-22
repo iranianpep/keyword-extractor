@@ -6,7 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 class PunctuationFilterTest extends TestCase
 {
-    public function modifyArrayProvider()
+    /**
+     * @dataProvider modifyArrayProvider
+     */
+    public function testModifyArray($inputText, $expected): void
+    {
+        $filter = new PunctuationFilter();
+
+        $this->assertEquals($expected, $filter->modifyTokens($inputText));
+    }
+
+    public static function modifyArrayProvider(): array
     {
         return [
             [
@@ -32,17 +42,7 @@ class PunctuationFilterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider modifyArrayProvider
-     */
-    public function testModifyArray($inputText, $expected)
-    {
-        $filter = new PunctuationFilter();
-
-        $this->assertEquals($expected, $filter->modifyTokens($inputText));
-    }
-
-    public function testGetRightPunctuations()
+    public function testGetRightPunctuations(): void
     {
         $filter = new PunctuationFilter();
         $punctuations = ['.', ','];
@@ -51,7 +51,7 @@ class PunctuationFilterTest extends TestCase
         $this->assertEquals($punctuations, $filter->getRightPunctuations());
     }
 
-    public function testGetLeftPunctuations()
+    public function testGetLeftPunctuations(): void
     {
         $filter = new PunctuationFilter();
         $punctuations = ['.', ','];

@@ -6,7 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 class UrlFilterTest extends TestCase
 {
-    public function modifyTextProvider()
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected): void
+    {
+        $filter = new UrlFilter();
+
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
+    }
+
+    public static function modifyTextProvider(): array
     {
         return [
             [
@@ -46,15 +56,5 @@ class UrlFilterTest extends TestCase
                 'example.example',
             ],
         ];
-    }
-
-    /**
-     * @dataProvider modifyTextProvider
-     */
-    public function testModifyText($inputText, $expected)
-    {
-        $filter = new UrlFilter();
-
-        $this->assertEquals($expected, $filter->modifyToken($inputText));
     }
 }

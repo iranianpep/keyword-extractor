@@ -6,7 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 class EmptyFilterTest extends TestCase
 {
-    public function modifyTextProvider()
+    /**
+     * @dataProvider modifyTextProvider
+     */
+    public function testModifyText($inputText, $expected): void
+    {
+        $filter = new EmptyFilter();
+
+        $this->assertEquals($expected, $filter->modifyToken($inputText));
+    }
+
+    public static function modifyTextProvider(): array
     {
         return [
             [
@@ -37,16 +47,16 @@ class EmptyFilterTest extends TestCase
     }
 
     /**
-     * @dataProvider modifyTextProvider
+     * @dataProvider modifyArrayProvider
      */
-    public function testModifyText($inputText, $expected)
+    public function testModifyArray($inputText, $expected): void
     {
         $filter = new EmptyFilter();
 
-        $this->assertEquals($expected, $filter->modifyToken($inputText));
+        $this->assertEquals($expected, $filter->modifyTokens($inputText));
     }
 
-    public function modifyArrayProvider()
+    public static function modifyArrayProvider(): array
     {
         return [
             [
@@ -62,15 +72,5 @@ class EmptyFilterTest extends TestCase
                 ['test 0', 1, 0, ' test', '0'],
             ],
         ];
-    }
-
-    /**
-     * @dataProvider modifyArrayProvider
-     */
-    public function testModifyArray($inputText, $expected)
-    {
-        $filter = new EmptyFilter();
-
-        $this->assertEquals($expected, $filter->modifyTokens($inputText));
     }
 }

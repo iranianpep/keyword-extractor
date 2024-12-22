@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractModifierTest extends TestCase
 {
-    public function testModify()
+    public function testModify(): void
     {
         $filter = new NumberFilter();
 

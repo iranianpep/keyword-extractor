@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class LowerCaseTransformerTest extends TestCase
 {
-    public function testModifyText()
+    public function testModifyText(): void
     {
         $transformer = new LowerCaseTransformer();
 

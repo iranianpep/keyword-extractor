@@ -3,7 +3,7 @@
 namespace KeywordExtractor\Modifiers\Transformers;
 
 use KeywordExtractor\Modifiers\AbstractModifier;
-use NlpTools\Tokenizers\WhitespaceTokenizer;
+use KeywordExtractor\Modifiers\Tokenizers\WhitespaceTokenizer;
 
 class TokenTransformer extends AbstractModifier
 {

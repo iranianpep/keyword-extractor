@@ -8,7 +8,7 @@ class EmptyFilter extends AbstractModifier
 {
     public function modifyToken($token)
     {
-        if ($token === '' || ctype_space($token)) {
+        if ($token === '' || preg_match('/^\s+$/u', $token)) {
             return '';
         }
 

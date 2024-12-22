@@ -18,7 +18,7 @@ class KeywordExtractorTest extends TestCase
         $this->keywordExtractor = new KeywordExtractor();
     }
 
-    public function testRun()
+    public function testRun(): void
     {
         $text = 'This is a simple sentence.';
         $result = $this->keywordExtractor->run($text);
@@ -262,7 +262,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
     }
 
-    public function testRunWithWhitelist()
+    public function testRunWithWhitelist(): void
     {
         $text = 'This is a simple sentence and simple sentence.';
         $this->keywordExtractor->setWhitelist([]);
@@ -422,7 +422,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
     }
 
-    public function testRunWithBlacklist()
+    public function testRunWithBlacklist(): void
     {
         $text = 'This is a simple sentence.';
         $this->keywordExtractor->setBlacklist([]);
@@ -541,7 +541,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
     }
 
-    public function testRunWithWhitelistAndBlackList()
+    public function testRunWithWhitelistAndBlackList(): void
     {
         $text = 'Experience with all of the following technologies is a requirement:
 Linux
@@ -700,7 +700,7 @@ who has great people than this is an opportunity you need to explore further...'
         ], $result);
     }
 
-    public function testGetModifiers()
+    public function testGetModifiers(): void
     {
         $modifiers = [
             new EmailFilter(),
@@ -712,7 +712,7 @@ who has great people than this is an opportunity you need to explore further...'
         $this->assertEquals($modifiers, $this->keywordExtractor->getModifiers());
     }
 
-    public function testRunSortedByFrequency()
+    public function testRunSortedByFrequency(): void
     {
         $text = '2 simple sentences and only one sentence.';
         $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_FREQUENCY);
@@ -749,7 +749,7 @@ who has great people than this is an opportunity you need to explore further...'
     /**
      * @throws Exception
      */
-    public function testRunSortedByMidOccurrenceDistance()
+    public function testRunSortedByMidOccurrenceDistance(): void
     {
         $text = 'sentence and sentence';
         $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);

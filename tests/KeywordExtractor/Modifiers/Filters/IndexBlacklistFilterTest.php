@@ -6,7 +6,20 @@ use PHPUnit\Framework\TestCase;
 
 class IndexBlacklistFilterTest extends TestCase
 {
-    public function modifyTokensProvider()
+    /**
+     * @dataProvider modifyTokensProvider
+     */
+    public function testModifyTokens($inputTexts, $expected): void
+    {
+        $filter = new IndexBlacklistFilter($inputTexts['indexes']);
+
+        $this->assertEquals(
+            $expected,
+            $filter->modifyTokens($inputTexts['words'])
+        );
+    }
+
+    public static function modifyTokensProvider(): array
     {
         return [
             [
@@ -40,20 +53,7 @@ class IndexBlacklistFilterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider modifyTokensProvider
-     */
-    public function testModifyTokens($inputTexts, $expected)
-    {
-        $filter = new IndexBlacklistFilter($inputTexts['indexes']);
-
-        $this->assertEquals(
-            $expected,
-            $filter->modifyTokens($inputTexts['words'])
-        );
-    }
-
-    public function testModifyToken()
+    public function testModifyToken(): void
     {
         $filter = new IndexBlacklistFilter([1, 2, 3]);
 

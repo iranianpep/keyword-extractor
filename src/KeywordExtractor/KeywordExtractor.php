@@ -22,35 +22,15 @@ use KeywordExtractor\Modifiers\Transformers\TokenTransformer;
  */
 class KeywordExtractor
 {
-    private $blacklist;
-    private $whitelist;
-    private $modifiers;
-    private $keywords;
-
     /**
-     * order is important.
+     * Note: the order is important.
      */
     const NGRAM_SIZES = [3, 2, 1];
 
-    /**
-     * @return array
-     */
-    private function getDefaultModifiers(): array
-    {
-        return [
-            new UrlFilter(),
-            new EmailFilter(),
-            new PunctuationFilter(),
-            new WhitelistFilter($this->getWhitelist()),
-            new BlacklistFilter($this->getBlacklist()),
-            new StopWordFilter(),
-            new NumberFilter(),
-            new SalaryFilter(),
-            new StemFilter(),
-            // run the blacklist even after stemming too
-            new BlacklistFilter($this->getBlacklist()),
-        ];
-    }
+    private $blacklist = [];
+    private $whitelist = [];
+    private $modifiers;
+    private $keywords;
 
     /**
      * @param string $string
@@ -92,9 +72,7 @@ class KeywordExtractor
      */
     private function extractNgramKeywords(array $tokens, int $ngramSize): array
     {
-        /**
-         * @var Ngram $ngram
-         */
+        /** @var Ngram $ngram */
         foreach ((new NgramHandler())->generateNgrams($tokens, $ngramSize) as $ngram) {
             $result = $this->applyModifiers($tokens, $ngram);
 
@@ -122,9 +100,7 @@ class KeywordExtractor
         $alreadyAdded = false;
         $word = $ngram->getWord();
 
-        /*
-         * @var ModifierInterface
-         */
+        /** @var ModifierInterface */
         foreach ($this->getModifiers() as $modifier) {
             $toBeModified = $word;
             $word = $modifier->modify($word);
@@ -163,10 +139,6 @@ class KeywordExtractor
      */
     public function getBlacklist(): array
     {
-        if (!isset($this->blacklist)) {
-            return [];
-        }
-
         return $this->blacklist;
     }
 
@@ -183,10 +155,6 @@ class KeywordExtractor
      */
     public function getWhitelist(): array
     {
-        if (!isset($this->whitelist)) {
-            return [];
-        }
-
         return $this->whitelist;
     }
 
@@ -208,6 +176,26 @@ class KeywordExtractor
         }
 
         return $this->modifiers;
+    }
+
+    /**
+     * @return array
+     */
+    private function getDefaultModifiers(): array
+    {
+        return [
+            new UrlFilter(),
+            new EmailFilter(),
+            new PunctuationFilter(),
+            new WhitelistFilter($this->getWhitelist()),
+            new BlacklistFilter($this->getBlacklist()),
+            new StopWordFilter(),
+            new NumberFilter(),
+            new SalaryFilter(),
+            new StemFilter(),
+            // run the blacklist even after stemming too
+            new BlacklistFilter($this->getBlacklist()),
+        ];
     }
 
     /**
