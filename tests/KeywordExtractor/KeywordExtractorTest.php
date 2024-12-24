@@ -700,7 +700,6 @@ who has great people than this is an opportunity you need to explore further...'
         ], $result);
     }
 
-
     /**
      * @dataProvider provideCasesForGetKeywords
      */
