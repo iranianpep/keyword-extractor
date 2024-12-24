@@ -92,6 +92,7 @@ class KeywordExtractor
 
     /**
      * @param array{indexes: number, ngram: string} $occurrences
+     *
      * @return string
      */
     private function findShortest(array $occurrences): string
