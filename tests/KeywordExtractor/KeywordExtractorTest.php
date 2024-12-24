@@ -700,34 +700,35 @@ who has great people than this is an opportunity you need to explore further...'
         ], $result);
     }
 
-    public function testGetKeywords(): void
+
+    /**
+     * @dataProvider provideCasesForGetKeywords
+     */
+    public function testGetKeywords(string $inputText, array $expected): void
     {
         $service = new KeywordExtractor();
 
-        $text = 'This is a simple sentence sentence of sentences.';
-        $service->run($text);
+        $service->run($inputText);
 
-        $this->assertSame(['simple', 'sentence'], $service->getKeywords());
+        $this->assertSame($expected, $service->getKeywords());
     }
 
-    public function testGetKeywordsForEmptyString(): void
+    public static function provideCasesForGetKeywords(): array
     {
-        $service = new KeywordExtractor();
-
-        $text = '';
-        $service->run($text);
-
-        $this->assertEmpty($service->getKeywords());
-    }
-
-    public function testGetKeywordsCapitalized()
-    {
-        $service = new KeywordExtractor();
-
-        $text = 'Sentence is this, a simple sentence sentence of sentences.';
-        $service->run($text);
-
-        $this->assertSame(['sentence', 'simple'], $service->getKeywords());
+        return [
+            'an empty string' => [
+                '',
+                [],
+            ],
+            'a string with regular words' => [
+                'This is a simple sentence sentence of sentences.',
+                ['simple', 'sentence'],
+            ],
+            'a string with a capitalized word' => [
+                'Sentence is this, a simple sentence of sentences.',
+                ['sentence', 'simple'],
+            ],
+        ];
     }
 
     public function testGetModifiers(): void
