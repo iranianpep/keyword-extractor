@@ -710,6 +710,16 @@ who has great people than this is an opportunity you need to explore further...'
         $this->assertSame(['simple', 'sentence'], $service->getKeywords());
     }
 
+    public function testGetKeywordsForEmptyString(): void
+    {
+        $service = new KeywordExtractor();
+
+        $text = '';
+        $service->run($text);
+
+        $this->assertEmpty($service->getKeywords());
+    }
+
     public function testGetKeywordsCapitalized()
     {
         $service = new KeywordExtractor();

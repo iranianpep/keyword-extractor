@@ -79,6 +79,10 @@ class KeywordExtractor
      */
     private function retrieveKeywords(): array
     {
+        if (count($this->keywords) === 0) {
+            return [];
+        }
+
         $keywords = array_reduce($this->keywords, function ($flattened, $structure) {
             $shortest = $this->findShortest($structure['occurrences']);
             $trimmed = $trimmed = preg_replace('/^[^\p{L}0-9]+|[^\p{L}0-9]+\z/u', '', $shortest);
