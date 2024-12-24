@@ -700,6 +700,26 @@ who has great people than this is an opportunity you need to explore further...'
         ], $result);
     }
 
+    public function testGetKeywords(): void
+    {
+        $service = new KeywordExtractor();
+
+        $text = 'This is a simple sentence sentence of sentences.';
+        $service->run($text);
+
+        $this->assertSame(['simple', 'sentence'], $service->getKeywords());
+    }
+
+    public function testGetKeywordsCapitalized()
+    {
+        $service = new KeywordExtractor();
+
+        $text = 'Sentence is this, a simple sentence sentence of sentences.';
+        $service->run($text);
+
+        $this->assertSame(['sentence', 'simple'], $service->getKeywords());
+    }
+
     public function testGetModifiers(): void
     {
         $modifiers = [

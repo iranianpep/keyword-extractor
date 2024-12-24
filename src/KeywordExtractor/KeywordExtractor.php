@@ -64,6 +64,49 @@ class KeywordExtractor
         return $this->keywords;
     }
 
+    public function getKeywords(): array
+    {
+        return $this->retrieveKeywords();
+    }
+
+    /**
+     * Retrieve flattened and clean keywords. The process includes the following steps:
+     * - flatten the keywords
+     * - trim punctuation marks
+     * - remove duplicates
+     *
+     * @return array
+     */
+    private function retrieveKeywords(): array
+    {
+        $keywords = array_reduce($this->keywords, function ($flattened, $structure) {
+            $shortest = $this->findShortest($structure['occurrences']);
+            $trimmed = $trimmed = preg_replace('/^[^\p{L}0-9]+|[^\p{L}0-9]+\z/u', '', $shortest);
+            $flattened[] = $trimmed;
+
+            return $flattened;
+        });
+
+        return $keywords;
+    }
+
+    /**
+     * @param array{indexes: number, ngram: string} $occurrences
+     * @return string
+     */
+    private function findShortest(array $occurrences): string
+    {
+        $first = array_pop($occurrences);
+
+        return array_reduce($occurrences, function ($shortest, $occurrence) {
+            if (strlen($occurrence['ngram']) < strlen($shortest)) {
+                $shortest = $occurrence['ngram'];
+            }
+
+            return $shortest;
+        }, $first['ngram']);
+    }
+
     /**
      * @param array $tokens
      * @param int   $ngramSize
