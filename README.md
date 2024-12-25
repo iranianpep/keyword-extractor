@@ -18,8 +18,9 @@ A package to extract keywords from text
 ## Server Requirements
 - PHP >= 7.4
 
-## Usage
--  To install ths package:
+## Installation
+
+You can install the package via composer:
 ```
 composer require keyword-extractor/keyword-extractor
 ```
