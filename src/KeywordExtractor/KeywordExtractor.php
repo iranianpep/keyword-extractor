@@ -64,8 +64,10 @@ class KeywordExtractor
         return $this->keywords;
     }
 
-    public function getKeywords(): array
+    public function extractKeywordsOnly(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
     {
+        $this->run($string, $sortBy, $sortDir);
+
         return $this->retrieveKeywords();
     }
 

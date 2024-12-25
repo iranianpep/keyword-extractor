@@ -707,9 +707,9 @@ who has great people than this is an opportunity you need to explore further...'
     {
         $service = new KeywordExtractor();
 
-        $service->run($inputText);
+        $keywords = $service->extractKeywordsOnly($inputText);
 
-        $this->assertSame($expected, $service->getKeywords());
+        $this->assertSame($expected, $keywords);
     }
 
     public static function provideCasesForGetKeywords(): array
