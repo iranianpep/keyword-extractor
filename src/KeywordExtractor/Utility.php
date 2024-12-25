@@ -7,7 +7,7 @@ class Utility
     /**
      * @param array $array
      *
-     * @return int
+     * @return int|null
      */
     public function findMinDiff(array $array): ?int
     {
