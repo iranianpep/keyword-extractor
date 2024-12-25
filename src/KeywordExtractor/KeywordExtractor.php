@@ -79,7 +79,7 @@ class KeywordExtractor
      */
     private function retrieveKeywords(): array
     {
-        if (count($this->keywords) === 0) {
+        if (empty($this->keywords)) {
             return [];
         }
 
