@@ -29,8 +29,8 @@ composer require keyword-extractor/keyword-extractor
 ## Usage
 
 The `KeywordExtractor` provides the following public methods:
-- [extract](#usage-of-extract)($text, $sortBy, $sortDir)               # provide extracted keywords with additional information
-- [extractKeywordsOnly](#usage-of-extractkeywordsonly)($text, $sortBy, $sortDir)   # provide extracted keywords only
+- extract($text, $sortBy, $sortDir) - provides keywords with additional information ([usage](#usage-of-extract))
+- extractKeywordsOnly($text, $sortBy, $sortDir) - provides keywords only ([usage](#usage-of-extractkeywordsonly))
 
 ### Usage of extract()
 
