@@ -247,3 +247,8 @@ Array
 
 )
 ```
+
+
+## License
+
+The MIT License (MIT). Please see the [License file](LICENSE) for more information.
