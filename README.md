@@ -16,7 +16,7 @@ A package to extract keywords from text
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iranianpep/keyword-extractor/master/LICENSE)
 
 ## Server Requirements
-- PHP >= 7.3
+- PHP >= 7.4
 
 ## Usage
 -  To install ths package:
