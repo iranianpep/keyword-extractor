@@ -41,7 +41,7 @@ class KeywordExtractor
      *
      * @return array
      */
-    public function run(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
+    public function extract(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
     {
         // reset the keywords
         $this->keywords = [];
@@ -66,7 +66,7 @@ class KeywordExtractor
 
     public function extractKeywordsOnly(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
     {
-        $this->run($string, $sortBy, $sortDir);
+        $this->extract($string, $sortBy, $sortDir);
 
         return $this->retrieveKeywords();
     }

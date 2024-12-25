@@ -21,7 +21,7 @@ class KeywordExtractorTest extends TestCase
     public function testRun(): void
     {
         $text = 'This is a simple sentence.';
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'simpl' => [
@@ -49,12 +49,12 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $text = '';
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([], $result);
 
         $text = '123 this text has got visual studio 2018 and 2019 and more numbers like 12 13 145';
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'text' => [
@@ -104,7 +104,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $this->keywordExtractor->setWhitelist(['visual studio 2018']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
         $this->assertEquals([
             'visual studio 2018' => [
                 'frequency'   => 1,
@@ -144,7 +144,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $this->keywordExtractor->setWhitelist(['2018 and 2019']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
         $this->assertEquals([
             '2018 and 2019' => [
                 'frequency'   => 1,
@@ -206,7 +206,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $text = 'This is a text with an email like: example@example.com in it.';
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'text' => [
@@ -234,7 +234,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $text = 'This is a text with two emails: example.example@example.com, and another@example.com.';
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'text' => [
@@ -266,7 +266,7 @@ class KeywordExtractorTest extends TestCase
     {
         $text = 'This is a simple sentence and simple sentence.';
         $this->keywordExtractor->setWhitelist([]);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'simpl' => [
@@ -306,7 +306,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $this->keywordExtractor->setWhitelist(['simple']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'simple' => [
@@ -346,7 +346,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $this->keywordExtractor->setWhitelist(['simple', 'is', 'dummy']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'is' => [
@@ -397,7 +397,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $this->keywordExtractor->setWhitelist(['simple sentence']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'simple sentence' => [
@@ -426,7 +426,7 @@ class KeywordExtractorTest extends TestCase
     {
         $text = 'This is a simple sentence.';
         $this->keywordExtractor->setBlacklist([]);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'simpl' => [
@@ -454,7 +454,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $this->keywordExtractor->setBlacklist(['simple']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'sentenc' => [
@@ -471,7 +471,7 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $this->keywordExtractor->setBlacklist(['simple', 'is', 'dummy']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'sentenc' => [
@@ -488,14 +488,14 @@ class KeywordExtractorTest extends TestCase
         ], $result);
 
         $this->keywordExtractor->setBlacklist(['simple sentence']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([], $result);
 
         $text = 'Exciting opportunity';
         $this->keywordExtractor->setBlacklist([]);
         $this->keywordExtractor->setWhitelist([]);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'excit' => [
@@ -524,7 +524,7 @@ class KeywordExtractorTest extends TestCase
 
         $this->keywordExtractor->setBlacklist(['opportun']);
 
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'excit' => [
@@ -564,7 +564,7 @@ PhpStorm, Eclipse or other IDE';
         $this->keywordExtractor->setWhitelist(['version control', 'php', 'composer', 'google cloud']);
         $this->keywordExtractor->setBlacklist(['software', 'etc']);
 
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertArrayHasKey('linux', $result);
         $this->assertArrayHasKey('php', $result);
@@ -575,7 +575,7 @@ PhpStorm, Eclipse or other IDE';
         $this->assertArrayHasKey('environ', $result);
 
         $this->keywordExtractor->setBlacklist(['software', 'etc', 'environments']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertArrayNotHasKey('environ', $result);
 
@@ -585,7 +585,7 @@ PhpStorm, Eclipse or other IDE';
 
         $this->keywordExtractor->setBlacklist(['includes', 'keywords']);
         $this->keywordExtractor->setWhitelist(['jquery', 'iis']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         /*
          * Did not use loop because if one of the tests fail, it's easier to find out which one failed
@@ -637,7 +637,7 @@ who has great people than this is an opportunity you need to explore further...'
         $this->keywordExtractor->setBlacklist([]);
         $this->keywordExtractor->setWhitelist(['react native']);
 
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertArrayHasKey('microservic', $result);
         $this->assertArrayHasKey('react', $result);
@@ -649,7 +649,7 @@ who has great people than this is an opportunity you need to explore further...'
         $text = "What we're interested is c#, .net and asp but mainly c# and c#.";
         $this->keywordExtractor->setWhitelist(['c#', '.net', 'asp']);
         $this->keywordExtractor->setBlacklist(['interest', 'c#,']);
-        $result = $this->keywordExtractor->run($text);
+        $result = $this->keywordExtractor->extract($text);
 
         $this->assertEquals([
             'c#' => [
@@ -745,13 +745,13 @@ who has great people than this is an opportunity you need to explore further...'
     public function testRunSortedByFrequency(): void
     {
         $text = '2 simple sentences and only one sentence.';
-        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_FREQUENCY);
+        $result = $this->keywordExtractor->extract($text, Sorter::SORT_BY_FREQUENCY);
 
         $this->assertEquals(2, $result['sentenc']['frequency']);
 
         // result should be the same
         $text = '2 sentences and only one simple sentence.';
-        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_FREQUENCY);
+        $result = $this->keywordExtractor->extract($text, Sorter::SORT_BY_FREQUENCY);
 
         $this->assertEquals(2, $result['sentenc']['frequency']);
 
@@ -762,7 +762,7 @@ who has great people than this is an opportunity you need to explore further...'
         $arrayItem = array_shift($result);
         $this->assertEquals($arrayItem['frequency'], 2);
 
-        $result = $this->keywordExtractor->run(
+        $result = $this->keywordExtractor->extract(
             $text,
             Sorter::SORT_BY_FREQUENCY,
             Sorter::SORT_DIR_DESC
@@ -782,22 +782,22 @@ who has great people than this is an opportunity you need to explore further...'
     public function testRunSortedByMidOccurrenceDistance(): void
     {
         $text = 'sentence and sentence';
-        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
+        $result = $this->keywordExtractor->extract($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
 
         $this->assertEquals(1, $result['sentenc']['minOccurrencesDistance']);
 
         $text = 'sentence sentence';
-        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
+        $result = $this->keywordExtractor->extract($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
 
         $this->assertEquals(0, $result['sentenc']['minOccurrencesDistance']);
 
         $text = 'sentence';
-        $result = $this->keywordExtractor->run($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
+        $result = $this->keywordExtractor->extract($text, Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE);
 
         $this->assertEquals(null, $result['sentenc']['minOccurrencesDistance']);
 
         $text = 'john james john john to james joe john joe';
-        $result = $this->keywordExtractor->run(
+        $result = $this->keywordExtractor->extract(
             $text,
             Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE
         );
@@ -806,7 +806,7 @@ who has great people than this is an opportunity you need to explore further...'
         // john
         $this->assertEquals(0, $arrayItem['minOccurrencesDistance']);
 
-        $result = $this->keywordExtractor->run(
+        $result = $this->keywordExtractor->extract(
             $text,
             Sorter::SORT_BY_MIN_OCCURRENCE_DISTANCE,
             Sorter::SORT_DIR_DESC
