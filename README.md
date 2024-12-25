@@ -25,11 +25,20 @@ You can install the package via composer:
 composer require keyword-extractor/keyword-extractor
 ```
 
-- Extract the keywords:
+
+## Usage
+
+The `KeywordExtractor` provides the following public methods:
+- [extract](#usage-of-extract)($text, $sortBy, $sortDir)               # provide extracted keywords with additional information
+- [extractKeywordsOnly](#usage-of-extractkeywordsonly)($text, $sortBy, $sortDir)   # provide extracted keywords only
+
+### Usage of extract()
+
+Extracting keywords:
 ```
 $keywordExtractor = new KeywordExtractor();
 $text = 'This is a simple sentence.';
-$result = $keywordExtractor->run($text);
+$result = $keywordExtractor->extract($text);
 ```
 
 The result with the default modifiers and no sorting values will be:
@@ -48,13 +57,9 @@ Array
                                 (
                                     [0] => 3
                                 )
-
                         )
-
                 )
-
         )
-
     [sentenc] => Array
         (
             [frequency] => 1
@@ -67,13 +72,9 @@ Array
                                 (
                                     [0] => 4
                                 )
-
                         )
-
                 )
-
         )
-
 )
 ```
 
@@ -121,9 +122,7 @@ Array
                                 (
                                     [0] => 3
                                 )
-
                         )
-
                     [1] => Array
                         (
                             [ngram] => simple
@@ -131,13 +130,9 @@ Array
                                 (
                                     [0] => 6
                                 )
-
                         )
-
                 )
-
         )
-
     [sentenc] => Array
         (
             [frequency] => 2
@@ -150,9 +145,7 @@ Array
                                 (
                                     [0] => 4
                                 )
-
                         )
-
                     [1] => Array
                         (
                             [ngram] => sentence.
@@ -160,13 +153,9 @@ Array
                                 (
                                     [0] => 7
                                 )
-
                         )
-
                 )
-
         )
-
 )
 ```
 
@@ -194,13 +183,9 @@ Array
                                 (
                                     [0] => 4
                                 )
-
                         )
-
                 )
-
         )
-
 )
 ```
 
@@ -228,9 +213,7 @@ Array
                                 (
                                     [0] => 0
                                 )
-
                         )
-
                     [1] => Array
                         (
                             [ngram] => sentence
@@ -238,15 +221,30 @@ Array
                                 (
                                     [0] => 2
                                 )
-
                         )
-
                 )
-
             [minOccurrencesDistance] => 1
         )
-
 )
+```
+
+### Usage of extractKeywordsOnly()
+
+Extracting keywords only:
+```
+$keywordExtractor = new KeywordExtractor();
+$text = 'This is a simple sentence.';
+$result = $keywordExtractor->extractKeywordsOnly($text);
+```
+
+The result will be:
+```php
+array(2) {
+  [0]=>
+  string(6) "simple"
+  [1]=>
+  string(8) "sentence"
+}
 ```
 
 
