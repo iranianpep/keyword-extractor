@@ -27,10 +27,10 @@ class KeywordExtractor
      */
     const NGRAM_SIZES = [3, 2, 1];
 
-    private $blacklist = [];
-    private $whitelist = [];
-    private $modifiers;
-    private $keywords;
+    private array $blacklist = [];
+    private array $whitelist = [];
+    private array $modifiers;
+    private array $keywords;
 
     /**
      * @param string $string
