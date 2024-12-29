@@ -27,10 +27,10 @@ class KeywordExtractor
      */
     const NGRAM_SIZES = [3, 2, 1];
 
-    private $blacklist = [];
-    private $whitelist = [];
-    private $modifiers;
-    private $keywords;
+    private array $blacklist = [];
+    private array $whitelist = [];
+    private array $modifiers;
+    private array $keywords;
 
     /**
      * @param string $string
@@ -41,7 +41,7 @@ class KeywordExtractor
      *
      * @return array
      */
-    public function run(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
+    public function extract(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
     {
         // reset the keywords
         $this->keywords = [];
@@ -64,8 +64,10 @@ class KeywordExtractor
         return $this->keywords;
     }
 
-    public function getKeywords(): array
+    public function extractKeywordsOnly(string $string, string $sortBy = '', string $sortDir = Sorter::SORT_DIR_ASC): array
     {
+        $this->extract($string, $sortBy, $sortDir);
+
         return $this->retrieveKeywords();
     }
 

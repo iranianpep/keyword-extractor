@@ -16,19 +16,29 @@ A package to extract keywords from text
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iranianpep/keyword-extractor/master/LICENSE)
 
 ## Server Requirements
-- PHP >= 7.3
+- PHP >= 7.4
 
-## Usage
--  To install ths package:
+## Installation
+
+You can install the package via composer:
 ```
 composer require keyword-extractor/keyword-extractor
 ```
 
-- Extract the keywords:
+
+## Usage
+
+The `KeywordExtractor` provides the following public methods:
+- **extract($text, $sortBy, $sortDir)** - provides keywords with additional information ([usage](#usage-of-extract))
+- **extractKeywordsOnly($text, $sortBy, $sortDir)** - provides keywords only ([usage](#usage-of-extractkeywordsonly))
+
+### Usage of extract()
+
+Extracting keywords:
 ```
 $keywordExtractor = new KeywordExtractor();
 $text = 'This is a simple sentence.';
-$result = $keywordExtractor->run($text);
+$result = $keywordExtractor->extract($text);
 ```
 
 The result with the default modifiers and no sorting values will be:
@@ -47,13 +57,9 @@ Array
                                 (
                                     [0] => 3
                                 )
-
                         )
-
                 )
-
         )
-
     [sentenc] => Array
         (
             [frequency] => 1
@@ -66,13 +72,9 @@ Array
                                 (
                                     [0] => 4
                                 )
-
                         )
-
                 )
-
         )
-
 )
 ```
 
@@ -120,9 +122,7 @@ Array
                                 (
                                     [0] => 3
                                 )
-
                         )
-
                     [1] => Array
                         (
                             [ngram] => simple
@@ -130,13 +130,9 @@ Array
                                 (
                                     [0] => 6
                                 )
-
                         )
-
                 )
-
         )
-
     [sentenc] => Array
         (
             [frequency] => 2
@@ -149,9 +145,7 @@ Array
                                 (
                                     [0] => 4
                                 )
-
                         )
-
                     [1] => Array
                         (
                             [ngram] => sentence.
@@ -159,13 +153,9 @@ Array
                                 (
                                     [0] => 7
                                 )
-
                         )
-
                 )
-
         )
-
 )
 ```
 
@@ -193,13 +183,9 @@ Array
                                 (
                                     [0] => 4
                                 )
-
                         )
-
                 )
-
         )
-
 )
 ```
 
@@ -227,9 +213,7 @@ Array
                                 (
                                     [0] => 0
                                 )
-
                         )
-
                     [1] => Array
                         (
                             [ngram] => sentence
@@ -237,13 +221,33 @@ Array
                                 (
                                     [0] => 2
                                 )
-
                         )
-
                 )
-
             [minOccurrencesDistance] => 1
         )
-
 )
 ```
+
+### Usage of extractKeywordsOnly()
+
+Extracting keywords only:
+```
+$keywordExtractor = new KeywordExtractor();
+$text = 'This is a simple sentence.';
+$result = $keywordExtractor->extractKeywordsOnly($text);
+```
+
+The result will be:
+```php
+array(2) {
+  [0]=>
+  string(6) "simple"
+  [1]=>
+  string(8) "sentence"
+}
+```
+
+
+## License
+
+The MIT License (MIT). Please see the [License file](LICENSE) for more information.
